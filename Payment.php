@@ -86,16 +86,21 @@ require "connect.php";
               <H4>Your Booking Details</H4>
               <div class="row justify-content-start">
                 <div class="col-4" style="width: 30vh;">
+               
+
                   <p>Check-in</p>
                   <h5 style="margin-top:2vh;margin-bottom: 1vh;">Thu, May 23, 2024</h5>
                   <p>From 2:00 PM</p>
+                  <br>
+                  <p>Room type:</p>
+                  <p><b>Deluxe room</b></p>
                   <br>
                   <p>Total length of stay:</p>
                   <p><b>2 nights</b></p>
                 </div>
                 <div class="col-4" style="width: 30vh;">
                   <p>Check-out</p>
-                  <h5 style="margin-top:2vh;margin-bottom: 1vh;">Thu, May 25, 2024</h5>
+                  <h5 style="margin-top:2vh;margin-bottom: 1vh;">Sat, May 25, 2024</h5>
                   <p>7:00 AM - 12:00 PM</p>
             </section>
             <section class="price">
@@ -105,9 +110,7 @@ require "connect.php";
                   <div class="col-4" style="width: 30vh;">
                     <p>Original price</p>
                     <p>Limited-time Deal</p>
-                    <br>
-                    <p>Total length of stay:</p>
-                    <p><b>2 nights</b></p>
+     
                   </div>
                   <div class="col-4 kanan" id="tes" style="width: 30vh;">
                     <p>Rp 7,800,000</p>
@@ -250,7 +253,11 @@ require "connect.php";
                 </div>
                 <p style="padding-top: 5vh;">By proceeding with this booking, I agree to SOA’s Terms of Use and Privacy Policy.</p>
                 <div class="col text-end"> <!-- text-end class aligns content to the right -->
-                  <button type="button" style="margin-top: 1vh; margin-right:0.5vh" class="btn btn-primary"><i class="fas fa-lock" style="margin-right:8px"></i>BOOK NOW!</button>
+                  <button type="button" style="margin-top: 1vh; margin-right: 0.5vh; font-size: 14px;" class="btn btn-primary" onclick="window.location.href='PaymentConfirmation.php';">
+                    <i class="fas fa-lock" style="margin-right: 8px;"></i>
+                    BOOK NOW!
+                  </button>
+
                 </div>
             </section>
           </div>
