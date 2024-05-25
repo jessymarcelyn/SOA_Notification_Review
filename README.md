@@ -1,5 +1,5 @@
 # SOA_Notification_Review
-SOA Notification, Review & Rating*
+SOA Notification, Review & Payment*
 
 - C14210065 Jessy Marcelyn Winoto
 - C14210009 Nathalia Devita Wijaya
