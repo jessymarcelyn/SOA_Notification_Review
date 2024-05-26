@@ -37,6 +37,7 @@
                 <tr>
                     <th>Title</th>
                     <th>Content</th>
+                    <th>Type</th>
                     <th>Start Timestamp</th>
                     <th>End Timestamp</th>
                     <th>Actions</th>
@@ -45,6 +46,7 @@
             <tbody id="notificationTableBody">
                 <td>Contoh1</td>
                 <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic, sunt. Fugiat, delectus! Accusantium tempore itaque consequuntur illo magni sed modi harum exercitationem perspiciatis debitis ad, amet nam, aut molestiae laborum.</td>
+                <td>Promosi</td>
                 <td>2024/05/24</td>
                 <td>2024/05/29</td>
                 <td>
@@ -72,6 +74,13 @@
                         <div class="mb-3">
                             <label for="content" class="form-label">Content</label>
                             <textarea class="form-control" id="content" name="content" rows="4" placeholder="Enter notification content"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="type" class="form-label">Type</label>
+                            <select class="form-control" id="type" name="type">
+                                <option value="promosi">Promosi</option>
+                                <option value="pembayaran">Pembayaran</option>
+                            </select>
                         </div>
                         <div class="mb-3">
                             <label for="image" class="form-label">Image</label>
