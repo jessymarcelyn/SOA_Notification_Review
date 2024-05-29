@@ -89,7 +89,24 @@ class DatabaseWrapper:
         self.connection.commit()
         cursor.close()
         return True
+
+    def change_payment_status(self, id_pembayaran, status):
+        cursor = self.connection.cursor(dictionary=True)
+        sql = "UPDATE pembayaran SET status = %s WHERE id_pembayaran = %s"
+        cursor.execute(sql, (status, id_pembayaran))
+        self.connection.commit()
+        result = cursor.fetchone()
+        cursor.close()
+        return result
     
+    def delete_pembayaran_by_id(self, id_pembayaran):
+        cursor = self.connection.cursor(dictionary=True)
+        sql = "DELETE FROM pembayaran WHERE id_pembayaran = %s"
+        cursor.execute(sql, (id_pembayaran,))
+        result = cursor.fetchone()
+        cursor.close()
+        return result
+
     
 class Database(DependencyProvider):
 

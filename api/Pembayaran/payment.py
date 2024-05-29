@@ -40,3 +40,33 @@ class PaymentService:
     def insert_pembayaran(self, id_pesanan, id_user, jenis_pembayaran, sub_total, pajak, total_bayar, nama_penyedia, nomer_kartu, nomor_rekening, nomor_telp):
         pembayaran = self.database.insert_pembayaran(id_pesanan, id_user, jenis_pembayaran, sub_total, pajak, total_bayar, nama_penyedia, nomer_kartu, nomor_rekening, nomor_telp)
         return pembayaran
+    
+    @rpc
+    def change_payment_status(self, id_pembayaran, status):
+        # input_payment = self.database.get_pembayaran_by_id_pembayaran(id_pembayaran)
+        # if input_payment is None:
+        #     return {
+        #         'code': 404,
+        #         "data": "Payment ID invalid"
+        #     }
+    
+        room = self.database.change_payment_status(id_pembayaran, status)
+        return {
+            'code': 200,
+            'data': room
+        }
+    
+    @rpc
+    def delete_pembayaran_by_id(self, id_pembayaran):
+        input_payment = self.database.get_pembayaran_by_id_pembayaran(id_pembayaran)
+        if input_payment is None:
+            return {
+                'code': 404,
+                "data": "ID Pembayaran invalid"
+            }
+        
+        pembayaran = self.database.delete_pembayaran_by_id(id_pembayaran)
+        return {
+            'code': 200,
+            'data': pembayaran
+        }
