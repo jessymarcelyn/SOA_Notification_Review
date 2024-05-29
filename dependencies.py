@@ -35,8 +35,8 @@ class DatabaseWrapper:
     def get_notif_TimeAnnounce(self, timeAnnounce):
         cursor = self.connection.cursor(dictionary=True)
         result = []
-        sql = "SELECT * FROM notifikasi WHERE timestamp_announce = {}" .format((timeAnnounce))
-        cursor.execute(sql)
+        sql = "SELECT * FROM notifikasi WHERE timestamp_announce = %s"
+        cursor.execute(sql, (timeAnnounce,))
         for row in cursor.fetchall():
             result.append({
                 'id_notif': row['id_notif'],
