@@ -1,7 +1,7 @@
 from nameko.rpc import rpc
 import dependencies
 
-class Notifervice:
+class Notifservice:
 
     name = 'notif_service'
 
