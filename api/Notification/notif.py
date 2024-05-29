@@ -16,14 +16,6 @@ class Notifervice:
         }
     
     @rpc
-    def get_notif_TimeAnnounce(self, timestamp_announce):
-        notifs = self.database.get_notif_TimeAnnounce(timestamp_announce)
-        return {
-            'code' : 200,
-            'data' : notifs
-        }
-    
-    @rpc
     def get_notif_ID(self, idNotif):
         notif = self.database.get_notif_ID(idNotif)
         return {

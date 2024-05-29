@@ -8,16 +8,6 @@ class GatewayService:
 
     notif_rpc = RpcProxy('notif_service')
 
- #GET notif berdasarkan timestamp_announce
-    def get_notif_TimeAnnounce(self, request,timestamp):
-        # timestamp_str = timestamp.strftime('%Y-%m-%d %H:%M:%S')
-        timestamp_dt = datetime.datetime.strptime(timestamp, '%Y-%m-%d %H:%M:%S')
-        # Format objek datetime menjadi string dengan metode strftime
-        timestamp_str = timestamp_dt.strftime('%Y-%m-%d %H:%M:%S')
-        # Panggil metode untuk mendapatkan notifikasi
-        notifs = self.notif_rpc.get_notif_TimeAnnounce(timestamp_str)
-        return json.dumps(notifs)
-
     #GET notif berdasarkan id_notif
     @http('GET', '/notif/<int:idNotif>')
     def get_notif_ID(self, request, idNotif):

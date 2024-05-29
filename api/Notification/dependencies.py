@@ -19,6 +19,7 @@ class DatabaseWrapper:
     def __init__(self, connection):
         self.connection = connection
 
+    #GET all notif
     def get_all_notif(self):
         cursor = self.connection.cursor(dictionary=True)
         result = []
@@ -31,8 +32,8 @@ class DatabaseWrapper:
                 'tipe_notif': row['tipe_notif'],
                 'judul': row['judul'],
                 'deskripsi': row['deskripsi'],
-                'timestamp_masuk': row['timestamp_masuk'],
-                'timestamp_announce': row['timestamp_announce'],
+                'timestamp_masuk': row['timestamp_masuk'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_masuk'], datetime) else row['timestamp_masuk'],
+                'timestamp_announce': row['timestamp_announce'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_announce'], datetime) else row['timestamp_announce'],
                 'status': row['status'],
                 'link': row['link'],
                 'foto': row['foto'],
@@ -40,27 +41,28 @@ class DatabaseWrapper:
         cursor.close()
         return result
     
-    def get_notif_TimeAnnounce(self, timeAnnounce):
-        cursor = self.connection.cursor(dictionary=True)
-        result = []
-        sql = "SELECT * FROM notifikasi WHERE timestamp_announce = %s"
-        cursor.execute(sql, (timeAnnounce,))
-        for row in cursor.fetchall():
-            result.append({
-                'id_notif': row['id_notif'],
-                'id_user': row['id_user'],
-                'tipe_notif': row['tipe_notif'],
-                'judul': row['judul'],
-                'deskripsi': row['deskripsi'],
-                'timestamp_masuk': row['timestamp_masuk'],
-                'timestamp_announce': row['timestamp_announce'],
-                'status': row['status'],
-                'link': row['link'],
-                'foto': row['foto'],
-            })
-        cursor.close()
-        return result
+    # def get_notif_TimeAnnounce(self, timeAnnounce):
+    #     cursor = self.connection.cursor(dictionary=True)
+    #     result = []
+    #     sql = "SELECT * FROM notifikasi WHERE timestamp_announce = %s"
+    #     cursor.execute(sql, (timeAnnounce,))
+    #     for row in cursor.fetchall():
+    #         result.append({
+    #             'id_notif': row['id_notif'],
+    #             'id_user': row['id_user'],
+    #             'tipe_notif': row['tipe_notif'],
+    #             'judul': row['judul'],
+    #             'deskripsi': row['deskripsi'],
+    #             'timestamp_masuk': row['timestamp_masuk'],
+    #             'timestamp_announce': row['timestamp_announce'],
+    #             'status': row['status'],
+    #             'link': row['link'],
+    #             'foto': row['foto'],
+    #         })
+    #     cursor.close()
+    #     return result
     
+    #GET notif berdasarkan id_notif
     def get_notif_ID(self, idNotif):
         cursor = self.connection.cursor(dictionary=True)
         result = []
@@ -73,8 +75,8 @@ class DatabaseWrapper:
                 'tipe_notif': row['tipe_notif'],
                 'judul': row['judul'],
                 'deskripsi': row['deskripsi'],
-                # 'timestamp_masuk': row['timestamp_masuk'],
-                # 'timestamp_announce': row['timestamp_announce'],
+                'timestamp_masuk': row['timestamp_masuk'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_masuk'], datetime) else row['timestamp_masuk'],
+                'timestamp_announce': row['timestamp_announce'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_announce'], datetime) else row['timestamp_announce'],
                 'status': row['status'],
                 'link': row['link'],
                 'foto': row['foto'],
@@ -82,6 +84,7 @@ class DatabaseWrapper:
         cursor.close()
         return result
     
+    #GET notif berdasarkan id_user
     def get_notif_IDUser(self, idUser):
         cursor = self.connection.cursor(dictionary=True)
         result = []
@@ -94,8 +97,8 @@ class DatabaseWrapper:
                 'tipe_notif': row['tipe_notif'],
                 'judul': row['judul'],
                 'deskripsi': row['deskripsi'],
-                # 'timestamp_masuk': row['timestamp_masuk'],
-                # 'timestamp_announce': row['timestamp_announce'],
+                'timestamp_masuk': row['timestamp_masuk'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_masuk'], datetime) else row['timestamp_masuk'],
+                'timestamp_announce': row['timestamp_announce'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_announce'], datetime) else row['timestamp_announce'],
                 'status': row['status'],
                 'link': row['link'],
                 'foto': row['foto'],
@@ -103,6 +106,7 @@ class DatabaseWrapper:
         cursor.close()
         return result
     
+    #GET notif berdasarkan status 0/1
     def get_notif_status(self, status):
         cursor = self.connection.cursor(dictionary=True)
         result = []
@@ -115,8 +119,8 @@ class DatabaseWrapper:
                 'tipe_notif': row['tipe_notif'],
                 'judul': row['judul'],
                 'deskripsi': row['deskripsi'],
-                # 'timestamp_masuk': row['timestamp_masuk'],
-                # 'timestamp_announce': row['timestamp_announce'],
+                'timestamp_masuk': row['timestamp_masuk'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_masuk'], datetime) else row['timestamp_masuk'],
+                'timestamp_announce': row['timestamp_announce'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_announce'], datetime) else row['timestamp_announce'],
                 'status': row['status'],
                 'link': row['link'],
                 'foto': row['foto'],
@@ -124,6 +128,7 @@ class DatabaseWrapper:
         cursor.close()
         return result
     
+    #DELETE notif berdasarkan id_notif
     def delete_notif(self, idNotif):
         cursor = self.connection.cursor(dictionary=True)
         sql = "DELETE from notifikasi WHERE id_notif = {}".format((idNotif))
@@ -153,29 +158,28 @@ class DatabaseWrapper:
             result.append(row)
         cursor.close()
         return json.dumps(result, cls=DateTimeEncoder)
-    # def get_notif_judul(self, judul):
-    #     cursor = self.connection.cursor(dictionary=True)
-    #     result = []
-    #     sql = "SELECT * FROM notifikasi WHERE judul = %s"
-    #     cursor.execute(sql, (judul,))
-    #     for row in cursor.fetchall():
-    #         # result.append(row)
-    #         result.append({
-    #             'id_notif': row['id_notif']
-    #         })
-    #     cursor.close()
-    #     return result
     
     #GET notif berdasarkan timestamp
     def get_notif_timestamp(self, timestamp):
         cursor = self.connection.cursor(dictionary=True)
         result = []
-        sql = "SELECT * FROM notifikasi WHERE timestamp_announce = %s"
+        sql = "SELECT * FROM notifikasi WHERE timestamp_announce = %s" 
         cursor.execute(sql, (timestamp,))
         for row in cursor.fetchall():
-            result.append(row)
+            result.append({
+                'id_notif': row['id_notif'],
+                'id_user': row['id_user'],
+                'tipe_notif': row['tipe_notif'],
+                'judul': row['judul'],
+                'deskripsi': row['deskripsi'],
+                'timestamp_masuk': row['timestamp_masuk'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_masuk'], datetime) else row['timestamp_masuk'],
+                'timestamp_announce': row['timestamp_announce'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_announce'], datetime) else row['timestamp_announce'],
+                'status': row['status'],
+                'link': row['link'],
+                'foto': row['foto'],
+            })
         cursor.close()
-        return json.dumps(result, cls=DateTimeEncoder)
+        return (result)
     
     # Add notification
     def add_notif(self, id_user, tipe_notif, jenis, judul, deskripsi, timestamp_masuk, timestamp_announce, status, link, foto):
