@@ -1,12 +1,11 @@
 from nameko.rpc import rpc
-
-import dependenciesPembayaran
+import dependencies
 
 class PaymentService:
 
     name = 'payment_service'
 
-    database = dependenciesPembayaran.Database()
+    database = dependencies.Database()
 
     @rpc
     def hello(self):

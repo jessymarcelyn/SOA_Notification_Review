@@ -5,7 +5,6 @@ from mysql.connector import Error
 from mysql.connector import pooling
 
 class DatabaseWrapper:
-
     connection = None
 
     def __init__(self, connection):
@@ -85,24 +84,27 @@ class DatabaseWrapper:
     
     
 class Database(DependencyProvider):
+
     connection_pool = None
-    
+
     def __init__(self):
         try:
+            #database pool itu buka banyak koneksi.
             self.connection_pool = mysql.connector.pooling.MySQLConnectionPool(
-            pool_name="database_pool",
-            pool_size=5,
-            pool_reset_session=True,
-            host='localhost',
-            database='soa',
-            user='root',
-            password=''
+                pool_name="database_pool",
+                pool_size=10,
+                pool_reset_session=True,
+                host='localhost',
+                database='soa',
+                user='root',
+                password=''
             )
         except Error as e :
             print ("Error while connecting to MySQL using Connection pool ", e)
-            
-        def get_dependency(self, worker_ctx):
-         return DatabaseWrapper(self.connection_pool.get_connection())
+
+    def get_dependency(self, worker_ctx):
+        return DatabaseWrapper(self.connection_pool.get_connection())
+     
 
     
     
