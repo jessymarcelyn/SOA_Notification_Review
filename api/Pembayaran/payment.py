@@ -1,12 +1,12 @@
 from nameko.rpc import rpc
 
-import dependenciesNotif
+import dependenciesPembayaran
 
 class PaymentService:
 
     name = 'payment_service'
 
-    database = dependenciesNotif.Database()
+    database = dependenciesPembayaran.Database()
 
     @rpc
     def hello(self):
@@ -23,7 +23,7 @@ class PaymentService:
         return pembayaran
     
     @rpc
-    def get_all_pembayaran_by_id_user(self, id_user):
+    def get_all_pembayaran_by_id_user(self,  id_user):
         pembayaran = self.database.get_all_pembayaran_by_id_user(id_user)
         return pembayaran
     
