@@ -10,9 +10,11 @@ class GatewayService:
     notif_rpc = RpcProxy('notif_service')
 
     #GET notif berdasarkan timestamp_announce
-    @http('GET', '/notif/<timestamp:timestamp_announce>')
+    @http('GET', '/notif/time/<timestamp>')
     def get_notif_TimeAnnounce(self, request,timestamp_announce):
-        notifs = self.notif_rpc.get_notif_TimeAnnounce(timestamp_announce)
+        timestamp_str = timestamp.strftime('%Y-%m-%d %H:%M:%S')
+        # notifs = self.notif_rpc.get_notif_TimeAnnounce(timestamp_announce)
+        notifs = self.notif_rpc.get_notif_TimeAnnounce(timestamp_str)
         return json.dumps(notifs)
 
     #GET notif berdasarkan id_notif
@@ -28,7 +30,7 @@ class GatewayService:
         return json.dumps(notifs)
 
     #GET notif berdasarkan id user
-    @http('GET', '/notif/<int:idUser>')
+    @http('GET', '/notif/user/<int:idUser>')
     def get_notif_IDUser(self, request, idUser):
         notifs = self.notif_rpc.get_notif_IDUser(idUser)
         return json.dumps(notifs)
@@ -41,13 +43,13 @@ class GatewayService:
     #     return notif['code'],json.dumps(notif['data'])
     
     #Delete berdasarkan id_notif
-    @http('DELETE', '/room/<int:idNotif>')
+    @http('DELETE', '/notif/<int:idNotif>')
     def delete_notif(self, request, idNotif):
         notif = self.hotel_rpc.delete_notif(idNotif)
         return notif['code'],json.dumps(notif['data'])
 
     #GET notif berdasarkan status
-    @http('GET', '/notif/<int:status>')
+    @http('GET', '/notif/status/<int:status>')
     def get_notif_status(self, request, status):
         notifs = self.notif_rpc.get_notif_status(status)
         return json.dumps(notifs)
