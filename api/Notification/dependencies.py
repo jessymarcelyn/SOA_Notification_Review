@@ -3,7 +3,15 @@ from nameko.extensions import DependencyProvider
 import mysql.connector
 from mysql.connector import Error
 from mysql.connector import pooling
+import json
+from datetime import datetime
 
+class DateTimeEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, datetime):
+            return obj.isoformat()
+        return json.JSONEncoder.default(self, obj)
+    
 class DatabaseWrapper:
 
     connection = None
@@ -124,19 +132,67 @@ class DatabaseWrapper:
         cursor.close()
         return f"{idNotif} is deleted."
     
-
-    def __del__(self):
-       self.connection.close()
-
-    # def update_notif_ID(self, idNotif):
+    #GET notif berdasarkan tipe_notif
+    def get_notif_type(self, tipe_notif):
+        cursor = self.connection.cursor(dictionary=True)
+        result = []
+        sql = "SELECT * FROM notifikasi WHERE tipe_notif = %s"
+        cursor.execute(sql, (tipe_notif,))
+        for row in cursor.fetchall():
+            result.append(row)
+        cursor.close()
+        return json.dumps(result, cls=DateTimeEncoder)
+    
+    #GET notif berdasarkan judul
+    def get_notif_judul(self, judul):
+        cursor = self.connection.cursor(dictionary=True)
+        result = []
+        sql = "SELECT * FROM notifikasi WHERE judul = %s"
+        cursor.execute(sql, (judul,))
+        for row in cursor.fetchall():
+            result.append(row)
+        cursor.close()
+        return json.dumps(result, cls=DateTimeEncoder)
+    # def get_notif_judul(self, judul):
     #     cursor = self.connection.cursor(dictionary=True)
-    #     sql = "UPDATE notifikasi SET timestamp_announce = {}  WHERE id_notif = {}".format(())
-    #     cursor.execute(sql)
-    #     self.connection.commit()
+    #     result = []
+    #     sql = "SELECT * FROM notifikasi WHERE judul = %s"
+    #     cursor.execute(sql, (judul,))
+    #     for row in cursor.fetchall():
+    #         # result.append(row)
+    #         result.append({
+    #             'id_notif': row['id_notif']
+    #         })
     #     cursor.close()
-    #     return f"{idNotif} room status is changed."
-
-
+    #     return result
+    
+    #GET notif berdasarkan timestamp
+    def get_notif_timestamp(self, timestamp):
+        cursor = self.connection.cursor(dictionary=True)
+        result = []
+        sql = "SELECT * FROM notifikasi WHERE timestamp_announce = %s"
+        cursor.execute(sql, (timestamp,))
+        for row in cursor.fetchall():
+            result.append(row)
+        cursor.close()
+        return json.dumps(result, cls=DateTimeEncoder)
+    
+    # Add notification
+    def add_notif(self, id_user, tipe_notif, jenis, judul, deskripsi, timestamp_masuk, timestamp_announce, status, link, foto):
+        try:
+            cursor = self.connection.cursor(dictionary=True)
+            sql = """
+            INSERT INTO notifikasi (
+                id_user, tipe_notif, jenis, judul, deskripsi, timestamp_masuk, 
+                timestamp_announce, status, link, foto
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """
+            cursor.execute(sql, (id_user, tipe_notif, jenis, judul, deskripsi, timestamp_masuk, timestamp_announce, status, link, foto))
+            self.connection.commit()
+            cursor.close()
+            return True
+        except Exception as e:
+            return {"error": str(e)}
 
 class Database(DependencyProvider):
 
@@ -144,12 +200,13 @@ class Database(DependencyProvider):
 
     def __init__(self):
         try:
+            #database pool itu buka banyak koneksi.
             self.connection_pool = mysql.connector.pooling.MySQLConnectionPool(
                 pool_name="database_pool",
                 pool_size=10,
                 pool_reset_session=True,
                 host='localhost',
-                database='SOA',
+                database='soa',
                 user='root',
                 password=''
             )
