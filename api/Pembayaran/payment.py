@@ -36,11 +36,7 @@ class PaymentService:
         pembayaran = self.database.get_all_pembayaran_by_jenis_pembayaran(jenis_pembayaran)
         return pembayaran
     
-    # @rpc
-    # def create_pembayaran(self, id_pesanan, id_user, sub_total, jenis_pembayaran, nomor_telp):
-    #     # if jenis_pembayaran == "OVO":
-            
-    #     #  id_pesanan, id_user, jenis_pembayaran, sub_total, pajak, total_bayar, nama_penyedia, nomer_kartu, nomor_rekening, nomor_telp
-         
-    #     pembayaran = self.database.create_pembayaran(id_pesanan, id_user, jenis_pembayaran, total_pembayaran, status_pembayaran)
-    #     return pembayaran
+    @rpc
+    def insert_pembayaran(self, id_pesanan, id_user, jenis_pembayaran, sub_total, pajak, total_bayar, nama_penyedia, nomer_kartu, nomor_rekening, nomor_telp):
+        pembayaran = self.database.insert_pembayaran(id_pesanan, id_user, jenis_pembayaran, sub_total, pajak, total_bayar, nama_penyedia, nomer_kartu, nomor_rekening, nomor_telp)
+        return pembayaran
