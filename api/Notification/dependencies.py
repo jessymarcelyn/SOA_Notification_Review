@@ -90,7 +90,7 @@ class DatabaseWrapper:
         result = []
         sql = "SELECT * FROM notifikasi WHERE id_user = {}" .format((idUser))
         cursor.execute(sql)
-        if row:
+        if cursor.fetchall():
             for row in cursor.fetchall():
                 result.append({
                     'id_notif': row['id_notif'],
