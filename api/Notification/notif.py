@@ -104,8 +104,16 @@ class Notifservice:
             }
     
     @rpc
-    def get_notif_timestamp(self, timestamp_announce):
-        notifs = self.database.get_notif_timestamp(timestamp_announce)
+    def get_notif_timestampA(self, timestamp_announce):
+        notifs = self.database.get_notif_timestampA(timestamp_announce)
+        return {
+            'code': 200,
+            'data': notifs
+        }
+    
+    @rpc
+    def get_notif_timestampM(self, timestamp_masuk):
+        notifs = self.database.get_notif_timestampM(timestamp_masuk)
         return {
             'code': 200,
             'data': notifs

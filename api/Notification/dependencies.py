@@ -145,9 +145,20 @@ class DatabaseWrapper:
         sql = "SELECT * FROM notifikasi WHERE tipe_notif = %s"
         cursor.execute(sql, (tipe_notif,))
         for row in cursor.fetchall():
-            result.append(row)
+            result.append({
+                'id_notif': row['id_notif'],
+                'id_user': row['id_user'],
+                'tipe_notif': row['tipe_notif'],
+                'judul': row['judul'],
+                'deskripsi': row['deskripsi'],
+                'timestamp_masuk': row['timestamp_masuk'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_masuk'], datetime) else row['timestamp_masuk'],
+                'timestamp_announce': row['timestamp_announce'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_announce'], datetime) else row['timestamp_announce'],
+                'status': row['status'],
+                'link': row['link'],
+                'foto': row['foto'],
+            })
         cursor.close()
-        return json.dumps(result, cls=DateTimeEncoder)
+        return (result)
     
     #GET notif berdasarkan judul
     def get_notif_judul(self, judul):
@@ -156,15 +167,48 @@ class DatabaseWrapper:
         sql = "SELECT * FROM notifikasi WHERE judul = %s"
         cursor.execute(sql, (judul,))
         for row in cursor.fetchall():
-            result.append(row)
+            result.append({
+                'id_notif': row['id_notif'],
+                'id_user': row['id_user'],
+                'tipe_notif': row['tipe_notif'],
+                'judul': row['judul'],
+                'deskripsi': row['deskripsi'],
+                'timestamp_masuk': row['timestamp_masuk'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_masuk'], datetime) else row['timestamp_masuk'],
+                'timestamp_announce': row['timestamp_announce'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_announce'], datetime) else row['timestamp_announce'],
+                'status': row['status'],
+                'link': row['link'],
+                'foto': row['foto'],
+            })
         cursor.close()
-        return json.dumps(result, cls=DateTimeEncoder)
+        return (result)
     
-    #GET notif berdasarkan timestamp
-    def get_notif_timestamp(self, timestamp):
+    #GET notif berdasarkan timestamp announce
+    def get_notif_timestampA(self, timestamp):
         cursor = self.connection.cursor(dictionary=True)
         result = []
         sql = "SELECT * FROM notifikasi WHERE timestamp_announce = %s" 
+        cursor.execute(sql, (timestamp,))
+        for row in cursor.fetchall():
+            result.append({
+                'id_notif': row['id_notif'],
+                'id_user': row['id_user'],
+                'tipe_notif': row['tipe_notif'],
+                'judul': row['judul'],
+                'deskripsi': row['deskripsi'],
+                'timestamp_masuk': row['timestamp_masuk'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_masuk'], datetime) else row['timestamp_masuk'],
+                'timestamp_announce': row['timestamp_announce'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_announce'], datetime) else row['timestamp_announce'],
+                'status': row['status'],
+                'link': row['link'],
+                'foto': row['foto'],
+            })
+        cursor.close()
+        return (result)
+    
+    #GET notif berdasarkan timestamp masuk
+    def get_notif_timestampM(self, timestamp):
+        cursor = self.connection.cursor(dictionary=True)
+        result = []
+        sql = "SELECT * FROM notifikasi WHERE timestamp_masuk = %s" 
         cursor.execute(sql, (timestamp,))
         for row in cursor.fetchall():
             result.append({
@@ -198,6 +242,7 @@ class DatabaseWrapper:
             return True
         except Exception as e:
             return {"error": str(e)}
+    
 
 class Database(DependencyProvider):
 

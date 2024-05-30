@@ -57,10 +57,16 @@ class GatewayService:
         notifs = self.notif_rpc.get_notif_judul(judul)
         return json.dumps(notifs)
     
-    # GET notif berdasarkan timestamp
-    @http('GET', '/notif/timestamp/<string:timestamp>')
-    def get_notif_timestamp(self, request, timestamp):
-        notifs = self.notif_rpc.get_notif_timestamp(str(timestamp))  # Convert datetime to string
+    # GET notif berdasarkan timestamp announce
+    @http('GET', '/notif/timestampA/<string:timestamp>')
+    def get_notif_timestampA(self, request, timestamp):
+        notifs = self.notif_rpc.get_notif_timestampA(str(timestamp))  # Convert datetime to string
+        return json.dumps(notifs)
+    
+    # GET notif berdasarkan timestamp masuk
+    @http('GET', '/notif/timestampM/<string:timestamp>')
+    def get_notif_timestampM(self, request, timestamp):
+        notifs = self.notif_rpc.get_notif_timestampM(str(timestamp))  # Convert datetime to string
         return json.dumps(notifs)
     
     # create a new notification
