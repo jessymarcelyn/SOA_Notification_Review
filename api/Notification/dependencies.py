@@ -82,7 +82,11 @@ class DatabaseWrapper:
                 'foto': row['foto'],
             })
         cursor.close()
-        return result
+        # return result
+        if result:
+            return result[0]  # Asumsikan hanya ada satu notifikasi dengan ID tertentu
+        else:
+            return None
     
     #GET notif berdasarkan id_user
     def get_notif_IDUser(self, idUser):
@@ -105,7 +109,11 @@ class DatabaseWrapper:
                 'foto': row['foto'],
             })
         cursor.close()
-        return result
+        if result:
+            return result[0]  # Asumsikan hanya ada satu notifikasi dengan ID tertentu
+        else:
+            return None
+        # return result
     
     #GET notif berdasarkan status 0/1
     def get_notif_status(self, status):

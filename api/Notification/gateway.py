@@ -2,6 +2,7 @@ from nameko.rpc import RpcProxy
 from nameko.web.handlers import http
 import json
 import datetime 
+from werkzeug.wrappers import Response
 
 class GatewayService:
     name = 'gateway'
@@ -12,7 +13,12 @@ class GatewayService:
     @http('GET', '/notif/<int:idNotif>')
     def get_notif_ID(self, request, idNotif):
         notif = self.notif_rpc.get_notif_ID(idNotif)
-        return json.dumps(notif)
+        # return json.dumps(notif)
+        if notif:
+            return Response(json.dumps(notif), status=200, mimetype='application/json')
+        else:
+            return Response(json.dumps('No Notification found with this ID'), status=404, mimetype='application/json')
+
 
     #GET semua notif
     @http('GET', '/notif')
@@ -24,7 +30,11 @@ class GatewayService:
     @http('GET', '/notif/user/<int:idUser>')
     def get_notif_IDUser(self, request, idUser):
         notifs = self.notif_rpc.get_notif_IDUser(idUser)
-        return json.dumps(notifs)
+        # return json.dumps(notifs)
+        if notifs:
+            return Response(json.dumps(notifs), status=200, mimetype='application/json')
+        else:
+            return Response(json.dumps('No Notification found with this User ID'), status=404, mimetype='application/json')
 
     #PUT berdasarkan id_notif 
     # @http('PUT', '/notif/<int:idNotif>')
@@ -93,5 +103,5 @@ class GatewayService:
             return 200, json.dumps(notif)
         except Exception as e:
             return 500, json.dumps({"error": str(e)})
-    #GET semua notif
+    
     

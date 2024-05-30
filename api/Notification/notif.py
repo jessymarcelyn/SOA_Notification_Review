@@ -18,24 +18,32 @@ class Notifservice:
     @rpc
     def get_notif_ID(self, idNotif):
         notif = self.database.get_notif_ID(idNotif)
-        return {
-            'code' : 200,
-            'data' : notif
-        }
+        # if notif:
+        #     return {
+        #         'code' : 200,
+        #         'data' : notif
+        #     }
+        # else :
+        #     return {
+        #         'code' : 404,
+        #         'data' : 'No Notification found with this ID'
+        #     }
+        return notif
     
     @rpc
     def get_notif_IDUser(self, idUser):
         notifs = self.database.get_notif_IDUser(idUser)
-        if notifs:
-            return {
-                'code' : 200,
-                'data' : notifs
-            }
-        else :
-            return {
-                'code' : 404,
-                'data' : 'No Notification found with this ID'
-            }
+        # if notifs:
+        #     return {
+        #         'code' : 200,
+        #         'data' : notifs
+        #     }
+        # else :
+        #     return {
+        #         'code' : 404,
+        #         'data' : 'No Notification found with this ID'
+        #     }
+        return notifs
 
     @rpc
     def get_notif_status(self, status):
@@ -84,9 +92,15 @@ class Notifservice:
     @rpc
     def get_notif_type(self, tipe_notif):
         notifs = self.database.get_notif_type(tipe_notif)
-        return {
-                'code': 200,
-                'data': notifs
+        if notifs:
+            return {
+                'code' : 200,
+                'data' : notifs
+            }
+        else :
+            return {
+                'code' : 404,
+                'data' : 'No Notification found with this ID'
             }
     
     @rpc
@@ -106,18 +120,30 @@ class Notifservice:
     @rpc
     def get_notif_timestampA(self, timestamp_announce):
         notifs = self.database.get_notif_timestampA(timestamp_announce)
-        return {
-            'code': 200,
-            'data': notifs
-        }
+        if notifs:
+            return {
+                'code' : 200,
+                'data' : notifs
+            }
+        else :
+            return {
+                'code' : 404,
+                'data' : 'No Notification found with this ID'
+            }
     
     @rpc
     def get_notif_timestampM(self, timestamp_masuk):
         notifs = self.database.get_notif_timestampM(timestamp_masuk)
-        return {
-            'code': 200,
-            'data': notifs
-        }
+        if notifs:
+            return {
+                'code' : 200,
+                'data' : notifs
+            }
+        else :
+            return {
+                'code' : 404,
+                'data' : 'No Notification found with this ID'
+            }
 
     # Add notification
     @rpc
