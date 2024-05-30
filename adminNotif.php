@@ -39,7 +39,7 @@
                     <th>Content</th>
                     <th>Type</th>
                     <th>Start Timestamp</th>
-                    <th>End Timestamp</th>
+                    <!-- <th>End Timestamp</th> -->
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -48,7 +48,7 @@
                 <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic, sunt. Fugiat, delectus! Accusantium tempore itaque consequuntur illo magni sed modi harum exercitationem perspiciatis debitis ad, amet nam, aut molestiae laborum.</td>
                 <td>Promosi</td>
                 <td>2024/05/24</td>
-                <td>2024/05/29</td>
+                <!-- <td>2024/05/29</td> -->
                 <td>
                     <button type="button" class="btn btn-warning btn-sm me-2"><a href="editNotif.php">Edit</a></button>
                     <button type="button" class="btn btn-danger btn-sm">Delete</button>
