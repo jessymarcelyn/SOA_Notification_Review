@@ -10,7 +10,7 @@ class DateTimeEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, datetime):
             return obj.isoformat()
-        return json.JSONEncoder.default(self, obj)
+        return super().default(obj) 
     
 class DatabaseWrapper:
     connection = None
@@ -53,21 +53,7 @@ class DatabaseWrapper:
         sql = "SELECT * from pembayaran"
         cursor.execute(sql)
         for row in cursor.fetchall():
-            result.append({
-                'id_pembayaran': row['id_pembayaran'],
-                'id_user': row['id_user'],
-                'id_pesanan': row['id_pesanan'],
-                'timestamp': row['timestamp'],
-                'sub_total': row['sub_total'],
-                'pajak': row['pajak'],
-                'total_bayar': row['total_bayar'],
-                'jenis_pembayaran': row['jenis_pembayaran'],
-                'nama_penyedia': row['nama_penyedia'],
-                'nomer_kartu': row['nomer_kartu'],
-                'nomer_rekening': row['nomer_rekening'],
-                'nomer_telp': row['nomer_telp'],
-                'status': row['status'],
-            })
+            result.append(row)
         cursor.close()
         return json.dumps(result, cls=DateTimeEncoder)
     
@@ -101,11 +87,11 @@ class DatabaseWrapper:
     
     def delete_pembayaran_by_id(self, id_pembayaran):
         cursor = self.connection.cursor(dictionary=True)
-        sql = "DELETE FROM pembayaran WHERE id_pembayaran = %s"
-        cursor.execute(sql, (id_pembayaran,))
-        result = cursor.fetchone()
+        sql = "DELETE from pembayaran WHERE id_pembayaran = {}".format((id_pembayaran))
+        cursor.execute(sql)
+        self.connection.commit()
         cursor.close()
-        return result
+        return f"{id_pembayaran} is deleted."
 
     
 class Database(DependencyProvider):

@@ -58,8 +58,8 @@ class PaymentService:
     
     @rpc
     def delete_pembayaran_by_id(self, id_pembayaran):
-        input_payment = self.database.get_pembayaran_by_id_pembayaran(id_pembayaran)
-        if input_payment is None:
+        exist = self.database.get_pembayaran_by_id_pembayaran(id_pembayaran)
+        if not exist:
             return {
                 'code': 404,
                 "data": "ID Pembayaran invalid"

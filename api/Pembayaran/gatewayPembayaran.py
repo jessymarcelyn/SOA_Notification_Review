@@ -14,12 +14,12 @@ class GatewayPaymentService:
         pembayaran = self.payment_rpc.get_pembayaran_by_id_pesanan(id_pesanan)
         return json.dumps(pembayaran)
     
-    @http('GET', '/pembayaran/idpembayaran/<int:id_pembayaran>')
+    @http('GET', '/pembayaran/<int:id_pembayaran>')
     def get_pembayaran_by_id_pembayaran(self, request, id_pembayaran):
         pembayaran = self.payment_rpc.get_pembayaran_by_id_pembayaran(id_pembayaran)
         return json.dumps(pembayaran)
     
-    @http('GET', '/pembayaran/iduser/<int:id_user>')
+    @http('GET', '/pembayaran/user/<int:id_user>')
     def get_all_pembayaran_by_id_user(self, request, id_user):
         pembayaran = self.payment_rpc.get_all_pembayaran_by_id_user(id_user)
         return json.dumps(pembayaran)
