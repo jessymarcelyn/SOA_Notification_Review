@@ -41,12 +41,18 @@
                 <input type="file" class="form-control" id="attachment" name="image" accept="image/*">
             </div>
             <div class="mb-3">
+                <label for="type" class="form-label">Type</label>
+                <select class="form-control" id="type" name="type">
+                    <option value="promosi">Promosi</option>
+                    <option value="pembayaran">Pembayaran</option>
+                </select>
+            <!-- </div>
                 <label for="start-timestamp" class="form-label">Start Timestamp</label>
                 <input type="datetime-local" class="form-control" id="start-timestamp" name="start-timestamp">
-            </div>
+            </div> -->
             <div class="mb-3">
-                <label for="end-timestamp" class="form-label">End Timestamp</label>
-                <input type="datetime-local" class="form-control" id="end-timestamp" name="end-timestamp">
+                <label for="announce-timestamp" class="form-label">Announce Timestamp</label>
+                <input type="datetime-local" class="form-control" id="announce-timestamp" name="announce-timestamp">
             </div>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><a href="adminNotif.php">Cancel</a></button>
                 <button type="button" class="btn btn-primary">Save Changes</button>
