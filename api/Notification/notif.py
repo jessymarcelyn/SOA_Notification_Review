@@ -26,18 +26,31 @@ class Notifservice:
     @rpc
     def get_notif_IDUser(self, idUser):
         notifs = self.database.get_notif_IDUser(idUser)
-        return {
-            'code' : 200,
-            'data' : notifs
-        }
-    
+        if notifs:
+            return {
+                'code' : 200,
+                'data' : notifs
+            }
+        else :
+            return {
+                'code' : 404,
+                'data' : 'No Notification found with this ID'
+            }
+
     @rpc
     def get_notif_status(self, status):
         notifs = self.database.get_notif_status(status)
-        return {
-            'code' : 200,
-            'data' : notifs
-        }
+        if notifs:
+            return {
+                'code' : 200,
+                'data' : notifs
+            }
+        else:
+            return {
+                'code' : 404,
+                'data' : 'No Notification found with this ID'
+            }
+
     
     # @rpc
     # def update_notif_ID(self, idNotif):

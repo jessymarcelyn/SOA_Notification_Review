@@ -90,19 +90,20 @@ class DatabaseWrapper:
         result = []
         sql = "SELECT * FROM notifikasi WHERE id_user = {}" .format((idUser))
         cursor.execute(sql)
-        for row in cursor.fetchall():
-            result.append({
-                'id_notif': row['id_notif'],
-                'id_user': row['id_user'],
-                'tipe_notif': row['tipe_notif'],
-                'judul': row['judul'],
-                'deskripsi': row['deskripsi'],
-                'timestamp_masuk': row['timestamp_masuk'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_masuk'], datetime) else row['timestamp_masuk'],
-                'timestamp_announce': row['timestamp_announce'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_announce'], datetime) else row['timestamp_announce'],
-                'status': row['status'],
-                'link': row['link'],
-                'foto': row['foto'],
-            })
+        if row:
+            for row in cursor.fetchall():
+                result.append({
+                    'id_notif': row['id_notif'],
+                    'id_user': row['id_user'],
+                    'tipe_notif': row['tipe_notif'],
+                    'judul': row['judul'],
+                    'deskripsi': row['deskripsi'],
+                    'timestamp_masuk': row['timestamp_masuk'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_masuk'], datetime) else row['timestamp_masuk'],
+                    'timestamp_announce': row['timestamp_announce'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_announce'], datetime) else row['timestamp_announce'],
+                    'status': row['status'],
+                    'link': row['link'],
+                    'foto': row['foto'],
+                })
         cursor.close()
         return result
     
