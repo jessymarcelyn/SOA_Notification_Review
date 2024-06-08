@@ -1,5 +1,4 @@
 from nameko.extensions import DependencyProvider
-
 import mysql.connector
 from mysql.connector import Error
 from mysql.connector import pooling
@@ -26,28 +25,29 @@ class DatabaseWrapper:
     #     self.connection = connection
     #     self.cipher_suite = Fernet(encryption_key)
 
-    @staticmethod
-    def generate_key():
-        return Fernet.generate_key()
+    # @staticmethod
+    # def generate_key():
+    #     return Fernet.generate_key()
 
-    def encrypt_value(self, value):
-        return self.cipher_suite.encrypt(value.encode()).decode()
+    # def encrypt_value(self, value):
+    #     return self.cipher_suite.encrypt(value.encode()).decode()
 
-    def decrypt_value(self, encrypted_value):
-        return self.cipher_suite.decrypt(encrypted_value.encode()).decode()
+    # def decrypt_value(self, encrypted_value):
+    #     return self.cipher_suite.decrypt(encrypted_value.encode()).decode()
 
-    def hash_value(self, value):
-        return hashlib.sha256(value.encode()).hexdigest()
+    # def hash_value(self, value):
+    #     return hashlib.sha256(value.encode()).hexdigest()
     
     #GET berdasarkan id_transaksi
     def get_byIDTrans(self, idTrans):
         cursor = self.connection.cursor(dictionary=True)
         result = []
-        sql = "SELECT * FROM transbca WHERE id = {}" .format((idTrans))
+        sql = "SELECT * FROM transmandiri WHERE id_trans = {}" .format((idTrans))
         cursor.execute(sql)
         for row in cursor.fetchall():
+            # unhashed_no_rek = self.decrypt_value(row['no_rek'])
             result.append({
-                'id' : row['id'],
+                'id_trans' : row['id_trans'],
                 'timestamp_trans' : row['timestamp_trans'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_trans'], datetime) else row['timestamp_trans'],
                 'no_rek' : row['no_rek'],
                 'nominal' : row['nominal'],
@@ -64,7 +64,7 @@ class DatabaseWrapper:
     def get_status_byIDTrans(self, idTrans):
         cursor = self.connection.cursor(dictionary=True)
         result = []
-        sql = "SELECT status FROM transbca WHERE id = {}" .format((idTrans))
+        sql = "SELECT status FROM transmandiri WHERE id_trans = {}" .format((idTrans))
         cursor.execute(sql)
         for row in cursor.fetchall():
             result.append({
@@ -81,15 +81,15 @@ class DatabaseWrapper:
     def set_failed (self, idTrans):
         status = 'failed'
         cursor = self.connection.cursor(dictionary=True)
-        sql = "UPDATE transbca SET status = %s, timestamp_trans = NOW() WHERE id = %s" 
+        sql = "UPDATE transmandiri SET status = %s, timestamp_trans = NOW() WHERE id_trans = %s" 
         cursor.execute(sql, (status, idTrans))
         self.connection.commit()
-        cursor.close()   
+        cursor.close()
         
     #GET untuk cek timestamp > 2 menit berdasarkan id_trans
     def get_timestamp_byIDTrans(self, idTrans):
         cursor = self.connection.cursor(dictionary=True)
-        sql = "SELECT timestamp_trans, status FROM transbca WHERE id = {}" .format((idTrans))
+        sql = "SELECT timestamp_trans, status FROM transmandiri WHERE id_trans = {}" .format((idTrans))
         cursor.execute(sql)
         row = cursor.fetchone()
         cursor.close()
@@ -111,17 +111,16 @@ class DatabaseWrapper:
 
     # Add Transaksi into tabel transaksi transfer bank
     def create_trans(self, no_rek, nominal, va):
-        hashed_noRek = self.hash_value(no_rek)
-        # hashed_va = self.hash_value(va)
+        # hashed_noRek = self.hash_value(no_rek)
         status = 'ongoing'
         try:
             cursor = self.connection.cursor(dictionary=True)
             sql = """
-            INSERT INTO transbca (
+            INSERT INTO transmandiri (
                 no_rek, nominal, va, status, timestamp_trans
             ) VALUES (%s, %s, %s, %s, NOW())
             """
-            cursor.execute(sql, (hashed_noRek, nominal, va, status))
+            cursor.execute(sql, (no_rek, nominal, va, status))
             self.connection.commit()
             cursor.close()
             return True
@@ -130,12 +129,13 @@ class DatabaseWrapper:
 
     # Pay transaksi and set status to success
     def pay_trans(self, idTrans):
+        status = 'success'
         cursor = self.connection.cursor(dictionary=True)
-        sql = "UPDATE transbca SET status = 'success', timestamp_trans = NOW()  WHERE id = {}" .format((idTrans))
-        cursor.execute(sql)
+        sql = "UPDATE transmandiri SET status = %s , timestamp_trans = NOW()  WHERE id_trans = %s"
+        cursor.execute(sql, (status, idTrans ))
         self.connection.commit()
         cursor.close()
-        return {"Status updated to success. Payment is already paid."}
+        return {"status": "Status updated to success. Payment is already paid."}
 
 class Database(DependencyProvider):
 
@@ -158,3 +158,10 @@ class Database(DependencyProvider):
 
     def get_dependency(self, worker_ctx):
         return DatabaseWrapper(self.connection_pool.get_connection())
+
+    # def get_dependency(self, worker_ctx):
+    #     # encryption_key = b'your-encryption-key'  # Ensure this is securely managed
+    #     # from cryptography.fernet import Fernet
+    #     encryption_key = Fernet.generate_key()
+    #     print(encryption_key.decode())
+    #     # return DatabaseWrapper(self.connection_pool.get_connection(), encryption_key)
