@@ -27,8 +27,8 @@ class Transferservice:
 
     # Update berdasarkget__byIDTransaksiid_pesanan (timestamp, jenis_pembayaran, nama_penyedia)
     @rpc
-    def update__byIDPesanan(self, IDPesanan, timestamp, jenis_pembayaran, nama_penyedia):
-        trans = self.database.update__byIDPesanan(IDPesanan, timestamp, jenis_pembayaran, nama_penyedia)
+    def update__byIDTransaksi(self, IDTransaksi, timestamp, jenis_pembayaran, nama_penyedia):
+        trans = self.database.update__byIDTransaksi(IDTransaksi, timestamp, jenis_pembayaran, nama_penyedia)
         return {
             'code' : 200,
             'data' : trans
