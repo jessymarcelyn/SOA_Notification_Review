@@ -1,9 +1,9 @@
 from nameko.rpc import rpc
 import dependencies
 
-class Transferservice:
+class TransferBCAservice:
 
-    name = 'transfer_service'
+    name = 'transferBCA_service'
 
     database = dependencies.Database()
 

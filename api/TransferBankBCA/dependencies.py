@@ -135,7 +135,7 @@ class DatabaseWrapper:
         cursor.execute(sql)
         self.connection.commit()
         cursor.close()
-        return {"Status updated to success. Payment is already paid."}
+        return {'status': "Status updated to success. Payment is already paid."}
 
 class Database(DependencyProvider):
 

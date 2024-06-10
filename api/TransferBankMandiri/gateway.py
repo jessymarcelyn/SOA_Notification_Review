@@ -7,7 +7,7 @@ from werkzeug.wrappers import Response
 class GatewayService:
     name = 'gateway'
 
-    mandiri_rpc = RpcProxy('transfer_service')
+    mandiri_rpc = RpcProxy('transferMandiri_service')
 
     #GET status berdasarkan id_transaksi
     @http('GET', '/transMandiri/status/<int:idTrans>')

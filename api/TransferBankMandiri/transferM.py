@@ -3,7 +3,7 @@ import dependencies
 
 class Transferservice:
 
-    name = 'transfer_service'
+    name = 'transferMandiri_service'
 
     database = dependencies.Database()
 
