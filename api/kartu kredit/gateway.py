@@ -33,7 +33,7 @@ class GatewayPaymentService:
     #         response = {'valid': False}
     #     return Response(json.dumps(response), mimetype='application/json')
     
-    #cek apakah nomer kartu dan cvv sesuai dan apakah limit tidak lebih (HARUSE NTIK GANTI ID PESANAN)
+    #cek apakah nomer kartu dan cvv sesuai dan apakah limit tidak lebih
     @http('GET', '/kartu_kredit/<string:nomer_kartu>/cvv/<string:cvv>/nominal/<int:nominal>')
     def cek_card_cvv(self, request, nomer_kartu, cvv, nominal):
         kartu = self.kartu_rpc.cek_card_cvv(nomer_kartu,cvv, nominal)
@@ -48,7 +48,7 @@ class GatewayPaymentService:
     def create_transaksi(self, request):
         data = json.loads(request.get_data(as_text=True))
         transaksi  = self.kartu_rpc.create_transaksi(data['nomer_kartu'], data['nominal'], data['status'])
-        return json.dumps(transaksi)
+        return transaksi['code'],json.dumps(transaksi['data'])
     
     #get OTP berdasarkan id_transaksi
     @http('GET', '/kartu_kredit/transaksi/<int:id_transaksi>')
@@ -82,18 +82,7 @@ class GatewayPaymentService:
         else:
             return kartu['code'],json.dumps(kartu['data'])
     
-    #update limit berdasarkan nomer kartu
-    @http('PUT', '/kartu_kredit/<string:nomer_kartu>/nominal/<int:nominal>')
-    def update_card_limit(self, request, nomer_kartu, nominal):
-        kartu = self.kartu_rpc.cek_nomer_kartu(nomer_kartu)
-        if kartu:
-            transaksi = self.kartu_rpc.update_card_limit(nomer_kartu, nominal)
-            return transaksi['code'],json.dumps(transaksi['data'])
-        else:
-            return kartu['code'],json.dumps(kartu['data'])
-
-    
-    #update status berdasarkan id_transaksi
+    #update status dan limit berdasarkan id_transaksi
     @http('PUT', '/kartu_kredit/transaksi/<int:id_transaksi>/status/<string:status>')
     def update_status_transaksi(self, request, id_transaksi, status):
         cek_id_transaksi = self.kartu_rpc.cek_id_transaksi(id_transaksi)

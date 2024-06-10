@@ -17,7 +17,7 @@ class KartuService:
             success = self.database.create_kartu(nama, nomer_kartu, cvv, expired_year, expired_month, limit_maks, limit_terpakai, status)
             if success:
                 return {
-                    'code': 201,
+                    'code': 200,
                     'data': 'Card created successfully'
                 }
             else:
@@ -73,9 +73,8 @@ class KartuService:
         print("success {}".format(success))
         if success:
             return {
-                'code': 201,
-                'data': 'Transaction created successfully',
-                'otp': success
+                'code': 200,
+                'data': success
             }
         else:
             return {
@@ -122,29 +121,6 @@ class KartuService:
                 'data': False
             }
             
-    #update limit berdasarkan nomer kartu
-    @rpc
-    def update_card_limit(self, nomer_kartu, nominal):
-        if not self.database.cek_nomer_kartu(nomer_kartu):  # Periksa apakah kartu tidak ada dalam database
-            return {
-                'code': 404,
-                'data': 'Card number is not in the database'
-            }
-        else :
-    
-            # Kartu ada dalam database, lanjutkan dengan pembaruan limit
-            success = self.database.update_card_limit(nomer_kartu, nominal)
-            if success:
-                return {
-                    'code': 201,
-                    'data': 'Card limit updated successfully'
-                }
-            else:
-                return {
-                    'code': 500,
-                    'data': 'Failed to update card limit'
-                }
-    
     # cek apakah id_transaksi ada        
     @rpc
     def cek_id_transaksi(self, id_transaksi):
@@ -156,13 +132,13 @@ class KartuService:
             }
         return id_exists
     
-    #update status transaksi berdasarkan id_transaksi
+    #update status dan limit transaksi berdasarkan id_transaksi
     @rpc
     def update_status_transaksi(self, id_transaksi, status):
         if not self.database.cek_id_transaksi(id_transaksi):  # Periksa apakah kartu tidak ada dalam database
             return {
                 'code': 404,
-                'data': 'id_transaksi is not in the database'
+                'data': False
             }
         else :
     
@@ -171,11 +147,11 @@ class KartuService:
             if success:
                 return {
                     'code': 200,
-                    'data': 'Card status updated successfully'
+                    'data': success
                 }
             else:
                 return {
                     'code': 500,
-                    'data': 'Failed to update card status'
+                    'data': False
                 }
                 

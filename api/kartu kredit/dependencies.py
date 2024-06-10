@@ -6,12 +6,38 @@ from datetime import datetime
 import random
 import string
 import numpy as np
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from cryptography.hazmat.backends import default_backend
+import os
+import base64
 
+class EncryptionHelper:
+    def __init__(self, key):
+        self.key = key
+
+    def encrypt(self, plaintext):
+        iv = os.urandom(16)  # Generate a random 16-byte IV
+        cipher = Cipher(algorithms.AES(self.key), modes.CFB(iv), backend=default_backend())
+        encryptor = cipher.encryptor()
+        ciphertext = encryptor.update(plaintext.encode()) + encryptor.finalize()
+        encrypted_data = iv + ciphertext
+        return base64.b64encode(encrypted_data).decode('utf-8')  # Encode as base64
+
+    def decrypt(self, ciphertext):
+        encrypted_data = base64.b64decode(ciphertext)  # Decode from base64
+        iv = encrypted_data[:16]
+        actual_ciphertext = encrypted_data[16:]
+        cipher = Cipher(algorithms.AES(self.key), modes.CFB(iv), backend=default_backend())
+        decryptor = cipher.decryptor()
+        decrypted_text = decryptor.update(actual_ciphertext) + decryptor.finalize()
+        return decrypted_text.decode('utf-8')
+    
 class DatabaseWrapper:
     connection = None
 
-    def __init__(self, connection):
+    def __init__(self, connection, encryption_key):
         self.connection = connection
+        self.encryption_helper = EncryptionHelper(encryption_key)
 
     def hash_nomer_kartu(self, nomer_kartu):
         # Use SHA-256 hash algorithm
@@ -150,24 +176,28 @@ class DatabaseWrapper:
         print("masuk")
         cursor = self.connection.cursor(dictionary=True)
         otp = self.generate_otp()
+        encrypted_otp = self.encryption_helper.encrypt(otp)
+        
         print("otp {}".format(otp))
-        hashed_otp = self.hash_nomer_kartu(otp)
+        print("encrypted_otp {}".format(encrypted_otp))
+        # print("decrypted_otp {}".format(decrypted_otp))
+        # hashed_otp = self.hash_nomer_kartu(otp)
         hashed_nomer_kartu = self.hash_nomer_kartu(nomer_kartu)
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         sql = ("INSERT INTO transaksi_kartu (nomer_kartu, nominal, status, otp, timestamp, otp_timestamp) "
                "VALUES (%s, %s, %s, %s, %s, %s)")
 
-        val = (hashed_nomer_kartu, nominal, status, hashed_otp, timestamp, timestamp)
+        val = (hashed_nomer_kartu, nominal, status, encrypted_otp, timestamp, timestamp)
         try:
             cursor.execute(sql, val)
             self.connection.commit()
             cursor.close()
-            return True, otp  # Return success and original OTP
+            return otp
         except mysql.connector.Error as err:
             print(f"Error: {err}")
             cursor.close()
-            return False, None
+            return None
     
     # get OTP berdasarkan id_transaksi
     def get_otp(self, id_transaksi):
@@ -178,8 +208,9 @@ class DatabaseWrapper:
         cursor.close()
         
         otp = result[0].get('otp')
+        decrypted_otp = self.encryption_helper.decrypt(otp)
         
-        return otp
+        return decrypted_otp
     
     # cek OTP berdasarkan id_transaksi dan otp user
     def cek_otp(self, id_transaksi, otp):
@@ -190,8 +221,9 @@ class DatabaseWrapper:
         cursor.close()
         
         otpDatabase = result[0].get('otp')
+        decrypted_otp = self.encryption_helper.decrypt(otpDatabase)
         
-        if(otp == otpDatabase):
+        if(decrypted_otp == otp):
             return True
         else:
             return False
@@ -200,9 +232,10 @@ class DatabaseWrapper:
     def change_otp(self, id_transaksi):
         cursor = self.connection.cursor(dictionary=True)
         sql = ("UPDATE transaksi_kartu SET otp = %s, otp_timestamp = %s WHERE id_transaksi= %s")
-        otp = "eee"
+        otp = self.generate_otp()
+        encrypted_otp = self.encryption_helper.encrypt(otp)
         timestamp = datetime.now()
-        val = (otp, timestamp, id_transaksi)
+        val = (encrypted_otp, timestamp, id_transaksi)
         
         print("otp {}".format(otp))
         
@@ -217,35 +250,6 @@ class DatabaseWrapper:
             cursor.close()
             return False
 
-    
-    def update_card_limit(self, nomer_kartu, nominal):
-        print("masuk")
-        cursor = self.connection.cursor(dictionary=True)
-        hashed_nomer_kartu = self.hash_nomer_kartu(nomer_kartu)
-        sql1 = "SELECT * FROM kartu WHERE nomer_kartu = %s"
-        cursor.execute(sql1, (hashed_nomer_kartu,))
-        result = cursor.fetchall()
-
-        limit_terpakai = result[0].get('limit_terpakai')
-        total = limit_terpakai + nominal
-        
-        print("limit_terpakai {}".format(limit_terpakai))
-        print("total {}".format(total))
-                
-        sql = ("UPDATE kartu SET limit_terpakai = %s WHERE nomer_kartu= %s")
-
-        #     cursor.execute(sql, (status, id_pembayaran))
-        val = (total, hashed_nomer_kartu)
-        try:
-            cursor.execute(sql, val)
-            self.connection.commit()
-            cursor.close()
-            return True
-        except mysql.connector.Error as err:
-            print(f"Error: {err}")
-            cursor.close()
-            return False
-
     #cek_nomer_kartu untuk update_card_limit
     def cek_id_transaksi(self, id_transaksi):
         cursor = self.connection.cursor(dictionary=True)
@@ -255,31 +259,101 @@ class DatabaseWrapper:
         cursor.close()
         return True if result else False
     
+        
+    def update_card_limit(self, id_transaksi):
+        print("masuk")
+        cursor = self.connection.cursor(dictionary=True)
+
+        try:
+            # Fetch transaction details
+            sql1 = "SELECT * FROM transaksi_kartu WHERE id_transaksi = %s"
+            cursor.execute(sql1, (id_transaksi,))
+            result = cursor.fetchall()
+
+            if not result:
+                print("Transaction not found.")
+                return False
+
+            nomer_kartu = result[0].get('nomer_kartu')
+            nominal = result[0].get('nominal')
+
+            # Fetch card details
+            sql2 = "SELECT * FROM kartu WHERE nomer_kartu = %s"
+            cursor.execute(sql2, (nomer_kartu,))
+            result2 = cursor.fetchall()
+
+            if not result2:
+                print("Card not found.")
+                return False
+
+            limit_terpakai = result2[0].get('limit_terpakai')
+
+            # Calculate new limit usage
+            total = limit_terpakai + nominal
+
+            print("limit_terpakai {}".format(limit_terpakai))
+            print("total {}".format(total))
+
+            # Update card limit usage
+            sql = "UPDATE kartu SET limit_terpakai = %s WHERE nomer_kartu = %s"
+            val = (total, nomer_kartu)
+
+            cursor.execute(sql, val)
+            self.connection.commit()
+
+            return True
+
+        except mysql.connector.Error as err:
+            print(f"Error: {err}")
+            return False
+
+        finally:
+            cursor.close()
+
     def update_status_transaksi(self, id_transaksi, status):
         print("masuk")
         cursor = self.connection.cursor(dictionary=True)
-        sql= "SELECT * FROM transaksi_kartu WHERE id_transaksi = %s"
-        cursor.execute(sql, (id_transaksi,))
-        result = cursor.fetchall()
-                
-        sql = ("UPDATE transaksi_kartu SET status = %s WHERE id_transaksi = %s")
-        print("id_transaksi {}".format(id_transaksi))
-        print("status {}".format(status))
 
-        val = (status, id_transaksi)
         try:
+            # Check if the transaction exists
+            sql = "SELECT * FROM transaksi_kartu WHERE id_transaksi = %s"
+            cursor.execute(sql, (id_transaksi,))
+            result = cursor.fetchall()
+
+            if not result:
+                print("Transaction not found.")
+                return False
+
+            # Update the transaction status
+            sql = "UPDATE transaksi_kartu SET status = %s WHERE id_transaksi = %s"
+            val = (status, id_transaksi)
+
             cursor.execute(sql, val)
             self.connection.commit()
-            cursor.close()
-            return True
+            
+            print("id_transaksi {}".format(id_transaksi))
+            print("status {}".format(status))
+            
+            update_card_limit = self.update_card_limit(id_transaksi)
+            if update_card_limit :
+                return True
+            else:
+                return False
+
+
+
+
         except mysql.connector.Error as err:
             print(f"Error: {err}")
-            cursor.close()
             return False
+
+        finally:
+            cursor.close()
+
 
     
 class Database(DependencyProvider):
-
+    encryption_key = b'\x01\x23\x45\x67\x89\xab\xcd\xef\x01\x23\x45\x67\x89\xab\xcd\xef\x01\x23\x45\x67\x89\xab\xcd\xef\x01\x23\x45\x67\x89\xab\xcd\xef'
     connection_pool = None
 
     def __init__(self):
@@ -298,7 +372,8 @@ class Database(DependencyProvider):
             print ("Error while connecting to MySQL using Connection pool ", e)
 
     def get_dependency(self, worker_ctx):
-        return DatabaseWrapper(self.connection_pool.get_connection())
+        connection = self.connection_pool.get_connection()
+        return DatabaseWrapper(connection, self.encryption_key)
      
 
     
