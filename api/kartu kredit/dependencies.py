@@ -5,6 +5,7 @@ import hashlib
 from datetime import datetime
 import random
 import string
+import numpy as np
 
 class DatabaseWrapper:
     connection = None
@@ -140,25 +141,22 @@ class DatabaseWrapper:
         else:
             return False
                 
-    def generate_otp(length=6):
-        """Generates a random alphanumeric OTP of the specified length."""
-        chars = string.ascii_uppercase + string.digits
-        otp = ''.join(random.choice(chars) for _ in range(length))  # Use the loop counter (length) here
-        return otp
+    def generate_otp(self, length=6):
+        otp = np.random.randint(0, 10, length)
+        otp_str = ''.join(map(str, otp))
+        return otp_str
 
-    #create skalian buat otp BLM BISA GENERATE RANDOM OTP
     def create_transaksi(self, nomer_kartu, nominal, status):
         print("masuk")
         cursor = self.connection.cursor(dictionary=True)
-        otp = "asdads"
+        otp = self.generate_otp()
         print("otp {}".format(otp))
         hashed_otp = self.hash_nomer_kartu(otp)
         hashed_nomer_kartu = self.hash_nomer_kartu(nomer_kartu)
-        timestamp = datetime.now()
-
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         sql = ("INSERT INTO transaksi_kartu (nomer_kartu, nominal, status, otp, timestamp, otp_timestamp) "
-            "VALUES (%s, %s, %s, %s, %s, %s)")
+               "VALUES (%s, %s, %s, %s, %s, %s)")
 
         val = (hashed_nomer_kartu, nominal, status, hashed_otp, timestamp, timestamp)
         try:

@@ -70,6 +70,7 @@ class KartuService:
     @rpc
     def create_transaksi(self, nomer_kartu, nominal, status):
         success = self.database.create_transaksi(nomer_kartu, nominal, status)
+        print("success {}".format(success))
         if success:
             return {
                 'code': 201,
