@@ -58,7 +58,12 @@ class PaymentService:
         no_telp = self.database.get_no_telp_by_transaksi(id_transaksi)
         return no_telp
 
-        
+    @rpc
+    def get_timestamp(self, id_transaksi):
+        timestamp = self.database.get_timestamp_by_transaksi(id_transaksi)
+        return timestamp
+
+    
 
 
 
