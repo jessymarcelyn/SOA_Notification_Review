@@ -4,7 +4,7 @@ import json
 import datetime 
 from werkzeug.wrappers import Response
 
-from digitalPayment.gateway import bayar
+# from digitalPayment.gateway import bayar
 
 class GatewayService:
     name = 'gateway'
@@ -29,7 +29,7 @@ class GatewayService:
         else:
             return Response(json.dumps('No Transaction found with this ID'), status=404, mimetype='application/json')
         
-    # Update berdasarkan id_pesanan (timestamp, jenis_pembayaran, nama_penyedia)
+    # Update berdasarkan id_pesanan (jenis_pembayaran, nama_penyedia)
     @http('PUT', '/Tpembayaran/updateTrans/<int:IDTransaksi>')
     def update__byIDTransaksi(self, request, IDTransaksi):
         exist = self.TransP_rpc.get__byIDTransaksi(IDTransaksi)
