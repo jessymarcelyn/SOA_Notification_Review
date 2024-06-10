@@ -334,14 +334,7 @@ class DatabaseWrapper:
             print("id_transaksi {}".format(id_transaksi))
             print("status {}".format(status))
             
-            update_card_limit = self.update_card_limit(id_transaksi)
-            if update_card_limit :
-                return True
-            else:
-                return False
-
-
-
+            return True
 
         except mysql.connector.Error as err:
             print(f"Error: {err}")

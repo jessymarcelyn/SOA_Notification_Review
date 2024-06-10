@@ -135,23 +135,32 @@ class KartuService:
     #update status dan limit transaksi berdasarkan id_transaksi
     @rpc
     def update_status_transaksi(self, id_transaksi, status):
-        if not self.database.cek_id_transaksi(id_transaksi):  # Periksa apakah kartu tidak ada dalam database
+        # Check if the transaction exists
+        if not self.database.cek_id_transaksi(id_transaksi):
             return {
                 'code': 404,
                 'data': False
             }
-        else :
-    
-            # Kartu ada dalam database, lanjutkan dengan pembaruan limit
-            success = self.database.update_status_transaksi(id_transaksi, status)
-            if success:
-                return {
-                    'code': 200,
-                    'data': success
-                }
-            else:
+
+        success = self.database.update_status_transaksi(id_transaksi, status)
+        
+        if not success:
+            return {
+                'code': 500,
+                'data': False
+            }
+
+        if status.lower() == 'success':
+            limit_success = self.database.update_card_limit(id_transaksi)
+            if not limit_success:
                 return {
                     'code': 500,
                     'data': False
                 }
+        
+        return {
+            'code': 200,
+            'data': True
+        }
+
                 
