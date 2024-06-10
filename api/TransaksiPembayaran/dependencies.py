@@ -67,7 +67,7 @@ class DatabaseWrapper:
     def update__byIDTransaksi(self, IDTransaksi, timestamp, jenis_pembayaran, nama_penyedia):
 
         cursor = self.connection.cursor(dictionary=True)
-        sql = "UPDATE trans_pembayaran SET timestamp = %s, jenis_pembayaran = %s, nama_penyedia = %s, status = 'success' WHERE id_transaksi = %s"
+        sql = "UPDATE trans_pembayaran SET timestamp = NOW(), jenis_pembayaran = %s, nama_penyedia = %s, status = 'success' WHERE id_transaksi = %s"
         cursor.execute(sql, (timestamp, jenis_pembayaran, nama_penyedia, IDTransaksi))
         self.connection.commit()
         cursor.close() 

@@ -36,7 +36,7 @@ class GatewayService:
         if exist:
             try:
                 data = json.loads(request.get_data(as_text=True))
-                timestamp = data.get('timestamp')
+                # timestamp = data.get('timestamp')
                 jenis_pembayaran = data.get('jenis')
                 nama_penyedia = data.get('nama_penyedia')
                 # no_kartu = data.get('no_kartu')
@@ -55,7 +55,7 @@ class GatewayService:
                     #     update = self.TransP_rpc.update__byIDTransaksi(IDTransaksi, timestamp, jenis_pembayaran, nama_penyedia)
                     # else:
                     #     return Response(json.dumps('Missing Value! Please make sure you have insert all the needed value'), status=404, mimetype='application/json')
-                update = self.TransP_rpc.update__byIDTransaksi(IDTransaksi, timestamp, jenis_pembayaran, nama_penyedia)
+                update = self.TransP_rpc.update__byIDTransaksi(IDTransaksi, jenis_pembayaran, nama_penyedia)
                 return Response(json.dumps(update), status=200, mimetype='application/json')
             except Exception as e:
                 return 500, json.dumps({"error": str(e)})

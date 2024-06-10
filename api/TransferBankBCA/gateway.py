@@ -4,6 +4,8 @@ import json
 import datetime 
 from werkzeug.wrappers import Response
 
+from TransaksiPembayaran.gateway import update__byIDTransaksi
+
 class GatewayService:
     name = 'gateway'
 
@@ -56,6 +58,7 @@ class GatewayService:
     def pay_trans(self, request, idTrans):
         exist = self.bca_rpc.get_byIDTrans(idTrans)
         if exist :
+            # update__byIDTransaksi(idTrans,'Transfer Bank', 'BCA') belum fix
             pay = self.bca_rpc.pay_trans(idTrans)
             return Response(json.dumps(pay), status=200, mimetype='application/json')
         else:
