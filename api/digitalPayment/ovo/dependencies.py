@@ -170,9 +170,15 @@ class DatabaseWrapper:
             return True
         else:
             return False
+        
+    def get_timestamp(self, id_transaksi):
+        cursor = self.connection.cursor(dictionary=True)
+        sql = "SELECT timestamp FROM transaksiovo WHERE id = %s"
+        cursor.execute(sql, (id_transaksi,))
+        result = cursor.fetchone()
+        return result['timestamp']  # Return only timestamp
 
 
-  
 
     
     

@@ -21,7 +21,7 @@ class GatewayPaymentService:
         return json.dumps(pembayaran)
          
     @http('GET', '/ovo/status/<string:id_transaksi>') #return status pembayaran
-    def get_status_pembayaran_by_id_pemesanan(self, request, id_transaksi):
+    def get_status_pembayaran_by_id_transaksi(self, request, id_transaksi):
         pembayaran = self.ovo_rpc.get_status_transaksi(id_transaksi)
         return json.dumps(pembayaran)
     
@@ -31,4 +31,8 @@ class GatewayPaymentService:
         pembayaran = self.ovo_rpc.bayar(data['id_transaksi'], data['pin'])
         return json.dumps(pembayaran)
     
+    @http('GET', '/ovo/timestamp/<string:id_transaksi>')
+    def get_timestamp_by_id_transaksi(self, request, id_transaksi):
+        timestamp = self.ovo_rpc.get_timestamp(id_transaksi)
+        return json.dumps(timestamp)
     
