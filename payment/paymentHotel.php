@@ -24,7 +24,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <link rel="stylesheet" href="../css/paymentHotel.css">
+    <link rel="stylesheet" href="../css/payment.css">
 
 </head>
 <script>
@@ -107,14 +107,13 @@
                         <div id="rincian">
                             <h4>Your Price Summary</h4>
                         </div>
-                        <div id="totalHarga">
-                            <div class="row justify-content-start">
+                        <div id="totalHarga" >
+                            <div class="row justify-content-start" style="padding-top:1vh">
                                 <div class="col-6">
-                                    <br>
                                     <h4 style="padding-left:2vh">Total</h4>
                                 </div>
                                 <div class="col-6 kanan" style="padding-right:4vh">
-                                    <br>
+                                    
                                     <h4 style="margin-left:-1.5vh">Rp 6,000,000</h4>
                                 </div>
                             </div>
@@ -128,7 +127,7 @@
                         <div class="accordion accordion-flush" id="accordionFlushExample">
                             <div class="accordion-item">
                                 <h2 class="accordion-header">
-                                    <button class="accordion-button collapsed" style="background-color:#95c7f3;" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                    <button class="accordion-button collapsed" style="background-color:rgb(205, 232, 254);" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
                                         <div class="row justify-content-between">
                                             <div class="col-6">
                                                 <p>Credit/ Debit Card</p>
@@ -166,7 +165,11 @@
                                                     <label>
                                                         <p>Expiry date <span class="asterisk" style="color:red;">*</span></p>
                                                     </label>
-                                                    <input type="text" class="form-control" name="name" required style="width:70%">
+                                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                                        <input type="text" class="form-control" name="expiry-month" placeholder="MM" required style="width: 30%;">
+                                                        <span style="font-size: 1.5em;">/</span>
+                                                        <input type="text" class="form-control" name="expiry-year" placeholder="YYYY" required style="width: 40%;">
+                                                    </div>
                                                 </div>
                                                 <div class="col-6">
                                                     <label>
@@ -180,7 +183,7 @@
                                 </div>
                                 <div class="accordion-item">
                                     <h2 class="accordion-header">
-                                        <button class="accordion-button collapsed" style="background-color:#95c7f3; " type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                                        <button class="accordion-button collapsed" style="background-color:rgb(205, 232, 254); " type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
                                             <div class="row justify-content-between">
                                                 <div class="col-6">
                                                     <p>Digital Payment</p>
@@ -194,16 +197,28 @@
                                     </h2>
                                     <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
                                         <div class="accordion-body" style="border: 1px solid #ccc;">
-                                            <label>
-                                                <p>Enter your mobile number (without country code) <span class="asterisk" style="color:red">*</span></p>
-                                            </label>
-                                            <input type="text" class="form-control" name="name" required>
+                                            <div class="container text">
+                                                <label>
+                                                    <p>Choose provider <span class="asterisk" style="color:red">*</span></p>
+                                                </label>
+                                                <select class="form-select" aria-label="Default select example" style="font-size: 13px;">
+
+                                                    <option value="bca" data-image="icon/bca.png" selected>OVO</option>
+                                                    <option value="mandiri" data-image="icon/mandiri.png">GOPAY</option>
+                                                    <!-- <option value="bri" data-image="icon/bri.png">BRI</option>
+                        <option value="bni" data-image="icon/bni.png">BNI</option> -->
+                                                </select>
+                                                <label style="margin-top:1vh">
+                                                    <p>Enter your mobile number (without country code) <span class="asterisk" style="color:red">*</span></p>
+                                                </label>
+                                                <input type="text" class="form-control" name="name" required>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="accordion-item">
                                     <h2 class="accordion-header">
-                                        <button class="accordion-button collapsed" style="background-color:#95c7f3;" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                                        <button class="accordion-button collapsed" style="background-color:rgb(205, 232, 254);" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
                                             <div class="row justify-content-between">
                                                 <div class="col-6">
                                                     <p>Bank Transfer</p>
@@ -219,12 +234,17 @@
                                     </h2>
                                     <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
                                         <div class="accordion-body " style="border: 1px solid #ccc;">
-                                            <select class="form-select" aria-label="Default select example" style="font-size: 13px;">
-                                                <option value="bca" data-image="icon/bca.png" selected>BCA</option>
-                                                <option value="mandiri" data-image="icon/mandiri.png">Mandiri</option>
-                                                <!-- <option value="bri" data-image="icon/bri.png">BRI</option>
+                                            <div class="container text">
+                                                <label>
+                                                    <p>Choose bank <span class="asterisk" style="color:red">*</span></p>
+                                                </label>
+                                                <select class="form-select" aria-label="Default select example" style="font-size: 13px;">
+                                                    <option value="bca" data-image="icon/bca.png" selected>BCA</option>
+                                                    <option value="mandiri" data-image="icon/mandiri.png">Mandiri</option>
+                                                    <!-- <option value="bri" data-image="icon/bri.png">BRI</option>
                         <option value="bni" data-image="icon/bni.png">BNI</option> -->
-                                            </select>
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -242,6 +262,10 @@
                 </div>
             </div>
         </div>
+    </div>
+    </div>
+    </div>
+    </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

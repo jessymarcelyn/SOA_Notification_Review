@@ -127,6 +127,7 @@ h5 {
 
 #totalHarga{
     background-color: rgb(205, 232, 254);
+    padding: 2vh;
 }
 #rincian{
     padding-bottom: 2vh;
@@ -134,6 +135,8 @@ h5 {
 #priceInfo{
     margin-top: 1vh;
 }
+
+
 
 
 .bookForm {
