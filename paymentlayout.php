@@ -34,6 +34,31 @@
   <link rel="stylesheet" href="css/payment.css">
 
 </head>
+<script>
+  $(document).ready(function () {
+    $("#toggleDetails").click(function () {
+      $("#priceInfo").toggle();
+      var text = $(this).text();
+      $(this).text(text == "Hide Details" ? "Show Details" : "Hide Details");
+    });
+    const selectElement = document.getElementById("mySelect");
+
+    const options = selectElement.options;
+
+    for (let i = 0; i < options.length; i++) {
+      const option = options[i];
+      const imageUrl = option.dataset.image;
+
+      if (imageUrl) {
+        const image = document.createElement("img");
+        image.src = imageUrl;
+        image.style.marginRight = "5px"; // Adjust margin as needed
+
+        option.parentNode.insertBefore(image, option);
+      }
+    }
+  });
+</script>
 <body>
   
   <div class="container">
