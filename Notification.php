@@ -37,37 +37,116 @@ require "connect.php";
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
     integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  
   <link rel="stylesheet" href="css/notification.css">
 
 </head>
 
 
 <body>
+  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#successNotif">
+    TEST MODAL
+  </button>
+  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#failedNotif">
+    TEST MODAL
+  </button>
   <div class="notif-content m-5">
     <nav>
       <div class="nav nav-tabs" id="nav-tab" role="tablist">
         <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button"
-          role="tab" aria-controls="nav-home" aria-selected="true">Home</button>
+          role="tab" aria-controls="nav-home" aria-selected="true">Keuangan</button>
         <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button"
-          role="tab" aria-controls="nav-profile" aria-selected="false">Profile</button>
-        <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button"
-          role="tab" aria-controls="nav-contact" aria-selected="false">Contact</button>
+          role="tab" aria-controls="nav-profile" aria-selected="false">Info Booking</button>
+
       </div>
     </nav>
 
     <div class="tab-content border-0" id="myTabContent">
       <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-      <div class="list-group pt-2 " >
+        <div class="list-group pt-2 ">
+          <a href="#" class="list-group-item list-group-item-action list-group-item-primary border-0">
+            <div class="row g-1">
+
+              <div class="col px-0 text ">
+                <div class="d-flex justify-content-between">
+                  <h5 class="mb-1">Pembayaran anda sedang di proses</h5>
+                  <small>2025-05-12 12:23</small>
+              
+                </div>
+                <p class="mb-1">Silahkan masukan pin anda melalui link berikut</p>
+              </div>
+            </div>
+          </a>
+
+          <a href="#" class="list-group-item list-group-item-action '.$color.' border-0">
+            <div class="row g-1">
+
+              <div class="col px-0 text ">
+                <div class="d-flex justify-content-between">
+                  <h5 class="mb-1">Pembayaran anda sedang di proses</h5>
+                  <small>2025-05-12 12:23</small>
+
+                </div>
+                <p class="mb-1">Silahkan masukan pin anda melalui link berikut</p>
+              </div>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action '.$color.' border-0">
+            <div class="row g-1">
+
+              <div class="col px-0 text ">
+                <div class="d-flex justify-content-between">
+                  <h5 class="mb-1">Pembayaran anda sedang di proses</h5>
+                  <small>2025-05-12 12:23</small>
+                </div>
+                <p class="mb-1">Silahkan masukan pin anda melalui link berikut</p>
+              </div>
+            </div>
+          </a>
+        </div>
 
       </div>
+      <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+        <div class="list-group pt-2 ">
+          <a href="#" class="list-group-item list-group-item-action '.$color.' border-0">
+            <div class="row g-1">
 
-      </div>
-      <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab"> 
-      <div class="list-group pt-2 " >
+              <div class="col px-0 text ">
+                <div class="d-flex justify-content-between">
+                  <h5 class="mb-1">Perubahan keberangkatan pesawat</h5>
+                </div>
+                <p class="mb-1">Pesawat yang anda pesan mengalami perubahan jadwal keberangkatan menjadi pukul 18:00</p>
+                <small>2025-05-12 11:23</small>
+              </div>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action '.$color.' border-0">
+            <div class="row g-1">
 
-</div>
+              <div class="col px-0 text ">
+                <div class="d-flex justify-content-between">
+                  <h5 class="mb-1">Perubahan keberangkatan pesawat</h5>
+                </div>
+                <p class="mb-1">Pesawat yang anda pesan mengalami perubahan jadwal keberangkatan menjadi pukul 18:00</p>
+                <small>2025-05-12 11:23</small>
+              </div>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action '.$color.' border-0">
+            <div class="row g-1">
+
+              <div class="col px-0 text ">
+                <div class="d-flex justify-content-between">
+                  <h5 class="mb-1">Perubahan keberangkatan pesawat</h5>
+                </div>
+                <p class="mb-1">Pesawat yang anda pesan mengalami perubahan jadwal keberangkatan menjadi pukul 18:00</p>
+                <small>2025-05-12 11:23</small>
+              </div>
+            </div>
+          </a>
+        </div>
       </div>
-      <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
     </div>
   </div>
 
@@ -77,10 +156,12 @@ require "connect.php";
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header position-relative border-0">
+        <div class="bg-danger position-absolute top-0 start-50 translate-middle" style="width: 50px; height: 50px; border-radius: 50%;"></div>
+
           <span class="modal-close-icon position-absolute top-0 start-50 translate-middle fa-inverse">
             <i class="fas fa-times fa-2x fa-inverse"></i>
           </span>
-          <div class="close-bg bg-danger position-absolute top-0 start-50 translate-middle"></div>
+          <!-- <div class="close-bg bg-danger position-absolute top-0 start-50 translate-middle"></div> -->
         </div>
         <div class="modal-body mt-3">
           <div class="text-center">
@@ -103,10 +184,11 @@ require "connect.php";
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header position-relative border-0">
+        <div class="bg-success position-absolute top-0 start-50 translate-middle" style="width: 50px; height: 50px; border-radius: 50%;"></div>
+
           <span class="modal-close-icon position-absolute top-0 start-50 translate-middle fa-inverse">
             <i class="fas fa-check fa-2x fa-inverse"></i>
           </span>
-          <div class="close-bg bg-success position-absolute top-0 start-50 translate-middle"></div>
         </div>
         <div class="modal-body mt-3">
           <div class="text-center">
@@ -129,48 +211,53 @@ require "connect.php";
 
 <script>
   // var type_notif = 1;
-
-  $(document).ready(function(){
-    var type_notif = 1;
-
-    // Fungsi untuk memuat notifikasi dengan type_notif yang ditentukan
-    function loadNotifications(type) {
-      $.ajax({
-        url: 'fetch-notification.php',
-        method: 'POST',
-        data: { type_notif: type },
-        success: function(response){
-          // Mengganti konten dari tab pane yang aktif dengan data notifikasi yang baru
-          $('.tab-pane.active').find('.list-group').html(response);
-        }
-      });
-    }
-
-    // Memuat notifikasi dengan type_notif = 1 saat halaman dimuat pertama kali
-    loadNotifications(type_notif);
-    // Event listener untuk setiap kali tab diubah
-    $('.nav-link').on('click', function(){
-      // Mengambil id tab yang aktif
-      var activeTab = $(this).attr('data-bs-target');
-      console.log(type_notif);
-      console.log(activeTab);
-
-      if(activeTab=="#nav-home"){
-        type_notif = 1;
-      }
-      else if(activeTab=="#nav-profile"){
-        type_notif = 0;
-      }
-      // Melakukan request AJAX untuk mengambil data notifikasi dengan type_notif = 2
-      $.ajax({
-        url: 'fetch-notification.php', // Ubah sesuai dengan file yang berisi script PHP untuk mengambil notifikasi
-        method: 'POST',
-        data: { type_notif:  type_notif}, // Mengirim parameter type_notif
-        success: function(response){
-          // Mengganti konten dari tab pane yang aktif dengan data notifikasi yang baru
-          $(activeTab).find('.list-group').html(response);
-        }
+  $(document).ready(function () {
+      $('.list-group-item').on('click', function () {
+        $(this).removeClass('list-group-item-primary');
+        // $(this).addClass('list-group-item-light');
       });
     });
+  $(document).ready(function () {
+    // var type_notif = 1;
+
+    // Fungsi untuk memuat notifikasi dengan type_notif yang ditentukan
+    // function loadNotifications(type) {
+    //   $.ajax({
+    //     url: 'fetch-notification.php',
+    //     method: 'POST',
+    //     data: { type_notif: type },
+    //     success: function (response) {
+    //       // Mengganti konten dari tab pane yang aktif dengan data notifikasi yang baru
+    //       $('.tab-pane.active').find('.list-group').html(response);
+    //     }
+    //   });
+    // }
+
+    // // Memuat notifikasi dengan type_notif = 1 saat halaman dimuat pertama kali
+    // loadNotifications(type_notif);
+    // Event listener untuk setiap kali tab diubah
+    // $('.nav-link').on('click', function () {
+    //   // Mengambil id tab yang aktif
+    //   var activeTab = $(this).attr('data-bs-target');
+    //   console.log(type_notif);
+    //   console.log(activeTab);
+
+    //   if (activeTab == "#nav-home") {
+    //     type_notif = 1;
+    //   }
+    //   else if (activeTab == "#nav-profile") {
+    //     type_notif = 0;
+    //   }
+    //   // Melakukan request AJAX untuk mengambil data notifikasi dengan type_notif = 2
+    //   $.ajax({
+    //     url: 'fetch-notification.php', // Ubah sesuai dengan file yang berisi script PHP untuk mengambil notifikasi
+    //     method: 'POST',
+    //     data: { type_notif: type_notif }, // Mengirim parameter type_notif
+    //     success: function (response) {
+    //       // Mengganti konten dari tab pane yang aktif dengan data notifikasi yang baru
+    //       $(activeTab).find('.list-group').html(response);
+    //     }
+    //   });
+    // });
   });
 </script>

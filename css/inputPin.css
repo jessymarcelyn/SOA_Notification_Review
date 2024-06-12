@@ -1,0 +1,103 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.full-screen{
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2vh;
+    /* align-items: center; */
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: aliceblue;
+    padding: 20px;
+    width: 500px; /* Menentukan lebar */
+    margin: 0 auto; /* Membuat content berada di tengah */
+    border-radius: 10px;
+}
+
+
+#pinInputs {
+    /* display: flex; */
+    gap: 15px;
+    /* bottom: 0; */
+    margin-top: 50px;
+    margin-bottom: 100px;
+}
+
+.pin-box {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.keyboard {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #f8f9fa;
+    padding: 10px;
+    display: none;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+.key {
+    padding: 20px;
+    font-size: 24px;
+    cursor: pointer;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.key:hover {
+    background-color: #ddd;
+}
+
+.btn.kirim{
+    width: 17vw;
+}
+.btn:disabled {
+    background-color: #ccc;
+    border-color: #ccc;
+    color: #666;
+  }
+
+
+@media (max-width: 576px) {
+    .full-screen{
+       background-color: aliceblue;
+    }
+    .content{
+        background-color: None;
+    }
+    .keyboard {
+      display: grid;
+    }
+
+    #submitPin {
+        display: none;
+      }
+
+      #pinInputs {
+        opacity: 1;
+        visibility: visible;
+    }
+  }

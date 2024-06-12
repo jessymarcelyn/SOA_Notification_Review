@@ -96,7 +96,7 @@ h5 {
 }
 
 .hotel {
-  width: 330px;
+  /* width: 330px; */
   border: 1px solid #ccc;
   padding: 10px;
   border-radius: 5px;
@@ -105,7 +105,7 @@ h5 {
 .bookDetail {
   margin-top: 20px;
   /* width: 120%; */
-  width: 330px;
+  /* width: 330px; */
   border: 1px solid #ccc;
   padding: 10px;
   border-radius: 5px;
@@ -113,15 +113,15 @@ h5 {
 }
 
 .price {
-  margin-top: 20px;
-  width: 330px;
+  /* margin-top: 20px; */
+  /* width: 330px; */
   border: 1px solid #ccc;
   padding: 10px;
   border-radius: 5px;
   text-align: left;
 }
 
-.price .col-4.kanan{
+.price .col-6.kanan{
     text-align: right;
 }
 
@@ -137,7 +137,8 @@ h5 {
 
 
 .bookForm {
-    width: 530px;
+    /* width: 530px; */
+    margin-top: 20px;
     border: 1px solid #95c7f3;
     padding: 10px;
     border-radius: 5px;
@@ -162,4 +163,15 @@ h5 {
     margin-right: 10px;
   }
 
+@media screen and (max-width: 720px) {
+  /* .col-6.kanan,
+  .col-6.kiri {
+    width: 100%;
+  }
+   */
+
+   .price{
+    margin-top: 20px;
+   }
+}
 
