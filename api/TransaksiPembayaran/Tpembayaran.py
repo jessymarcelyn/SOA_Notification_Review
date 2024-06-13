@@ -25,10 +25,10 @@ class Transferservice:
             'data' : trans
         }
 
-    # Update berdasarkget__byIDTransaksiid_pesanan ( jenis_pembayaran, nama_penyedia)
+    # Update berdasarkget__byIDTransaksiid_pesanan ( jenis_pembayaran, nama_penyedia, status)
     @rpc
-    def update__byIDTransaksi(self, IDTransaksi, jenis_pembayaran, nama_penyedia):
-        trans = self.database.update__byIDTransaksi(IDTransaksi, jenis_pembayaran, nama_penyedia)
+    def update__byIDTransaksi(self, IDTransaksi, jenis_pembayaran, nama_penyedia, status):
+        trans = self.database.update__byIDTransaksi(IDTransaksi, jenis_pembayaran, nama_penyedia, status)
         return {
             'code' : 200,
             'data' : trans

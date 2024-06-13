@@ -38,7 +38,8 @@ class GatewayService:
                 # timestamp = data.get('timestamp')
                 jenis_pembayaran = data.get('jenis')
                 nama_penyedia = data.get('nama_penyedia')
-                update = self.TransP_rpc.update__byIDTransaksi(IDTransaksi, jenis_pembayaran, nama_penyedia)
+                status = data.get('status')
+                update = self.TransP_rpc.update__byIDTransaksi(IDTransaksi, jenis_pembayaran, nama_penyedia, status)
                 return Response(json.dumps(update), status=200, mimetype='application/json')
             except Exception as e:
                 return 500, json.dumps({"error": str(e)})
@@ -98,7 +99,8 @@ class GatewayService:
             # api_url = f'http://127.0.0.1:8000/Tpembayaran/updateTrans/{idTrans}'
             payload = {
                 'jenis': 'Transfer Bank',
-                'nama_penyedia': 'BCA'
+                'nama_penyedia': 'BCA',
+                'status' : 'success'
             }       
             response = requests.put(api_url, json=payload)
             if response.status_code == 200:
@@ -161,7 +163,8 @@ class GatewayService:
             api_url = f'http://localhost:8000/Tpembayaran/updateTrans/{idTrans}'
             payload = {
                 'jenis': 'Transfer Bank',
-                'nama_penyedia': 'BCA'
+                'nama_penyedia': 'BCA',
+                'status' : 'success'
             }       
             response = requests.put(api_url, json=payload)
             if response.status_code == 200:

@@ -64,11 +64,11 @@ class DatabaseWrapper:
         else:
             return None
         
-    def update__byIDTransaksi(self, IDTransaksi, jenis_pembayaran, nama_penyedia):
+    def update__byIDTransaksi(self, IDTransaksi, jenis_pembayaran, nama_penyedia, status):
 
         cursor = self.connection.cursor(dictionary=True)
-        sql = "UPDATE trans_pembayaran SET timestamp = NOW(), jenis_pembayaran = %s, nama_penyedia = %s, status = 'success' WHERE id_transaksi = %s"
-        cursor.execute(sql, (jenis_pembayaran, nama_penyedia, IDTransaksi))
+        sql = "UPDATE trans_pembayaran SET timestamp = NOW(), jenis_pembayaran = %s, nama_penyedia = %s, status = %s WHERE id_transaksi = %s"
+        cursor.execute(sql, (jenis_pembayaran, nama_penyedia, status, IDTransaksi))
         self.connection.commit()
         cursor.close() 
         get = self.get__byIDTransaksi(IDTransaksi)
