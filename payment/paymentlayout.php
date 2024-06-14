@@ -335,6 +335,8 @@
         $("input[type='text']").val('');
         selectedPaymentMethod = $(this).attr("id");;
         console.log(selectedPaymentMethod)// Reset variabel selectedPaymentMethod
+        $("#bank").val("bca");
+
       });
 
       // Ketika tombol "Book Now" diklik
