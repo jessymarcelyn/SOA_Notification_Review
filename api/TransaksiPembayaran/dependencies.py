@@ -74,7 +74,64 @@ class DatabaseWrapper:
         get = self.get__byIDTransaksi(IDTransaksi)
         # return {"Status updated to success. Payment is already paid."}
         return get
+    
+    def create_pembayaran(self, id_pesanan, id_pesanan2, total_transaksi):
+        print("masuk")
+        cursor = self.connection.cursor(dictionary=True)
+        status = "initial"
+        timestamp = datetime.now()
+        sql = ("INSERT INTO trans_pembayaran (id_pesanan, id_pesanan2, total_transaksi, status, timestamp ) "
+               "VALUES (%s, %s, %s, %s, %s)")
 
+        val = (id_pesanan, id_pesanan2, total_transaksi, status, timestamp)
+        try:
+            cursor.execute(sql, val)
+            self.connection.commit()
+            cursor.close()
+            return True
+        except mysql.connector.Error as err:
+            print(f"Error: {err}")
+            cursor.close()
+            return False
+    
+    def update_status_pembayaran(self, id_pesanan, status):
+        cursor = self.connection.cursor(dictionary=True)
+
+        try:
+            sql = "UPDATE trans_pembayaran SET status = %s WHERE id_pesanan = %s"
+            val = (status, id_pesanan)
+
+            cursor.execute(sql, val)
+            self.connection.commit()
+            
+            return True
+
+        except mysql.connector.Error as err:
+            print(f"Error: {err}")
+            return False
+
+        finally:
+            cursor.close()
+    
+    def update_idTransaksi(self, id_pesanan, id_transaksi):
+        cursor = self.connection.cursor(dictionary=True)
+
+        try:
+            sql = "UPDATE trans_pembayaran SET id_transaksi = %s WHERE id_pesanan = %s"
+            val = (id_transaksi, id_pesanan)
+
+            cursor.execute(sql, val)
+            self.connection.commit()
+            
+            return True
+
+        except mysql.connector.Error as err:
+            print(f"Error: {err}")
+            return False
+
+        finally:
+            cursor.close()
+        
 class Database(DependencyProvider):
 
     connection_pool = None

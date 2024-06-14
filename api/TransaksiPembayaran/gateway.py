@@ -61,4 +61,33 @@ class GatewayService:
                 return 500, json.dumps({"error": str(e)})
         else:
             return Response(json.dumps('No Transaction found with this ID'), status=404, mimetype='application/json')
+    
+    #Create transaksi_pembayaran
+    @http('POST', '/Tpembayaran')
+    def create_pembayaran(self, request):
+        data = json.loads(request.get_data(as_text=True))
+        id_pesanan = data.get('id_pesanan')
+        id_pesanan2 = data.get('id_pesanan2') 
+        total_transaksi = data.get('total_transaksi')
         
+        pembayaran = self.TransP_rpc.create_pembayaran(id_pesanan, id_pesanan2, total_transaksi)
+
+        return pembayaran['code'],json.dumps(pembayaran['data'])
+    
+    #update status berdasarkan id_pesanan
+    @http('PUT', '/Tpembayaran/pesanan/<int:id_pesanan>/status/<string:status>')
+    def update_status_pembayaran(self, request, id_pesanan, status):
+        transaksi = self.TransP_rpc.update_status_pembayaran(id_pesanan, status)
+        if transaksi :
+            return transaksi['code'],json.dumps(transaksi['data'])
+        else:
+            return transaksi['code'],json.dumps(transaksi['data'])
+    
+    #update id_transaksi berdasarkan id_pesanan
+    @http('PUT', '/Tpembayaran/pesanan/<int:id_pesanan>/transaksi/<string:id_transaksi>')
+    def update_idTransaksi(self, request, id_pesanan, id_transaksi):
+        transaksi = self.TransP_rpc.update_idTransaksi(id_pesanan, id_transaksi)
+        if transaksi :
+            return transaksi['code'],json.dumps(transaksi['data'])
+        else:
+            return transaksi['code'],json.dumps(transaksi['data'])

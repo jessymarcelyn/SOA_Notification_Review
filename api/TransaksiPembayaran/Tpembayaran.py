@@ -33,3 +33,51 @@ class Transferservice:
             'code' : 200,
             'data' : trans
         }
+        
+    
+    @rpc
+    def create_pembayaran(self, id_pesanan, id_pesanan2, total_transaksi):
+        success = self.database.create_pembayaran(id_pesanan, id_pesanan2, total_transaksi)
+        if success:
+            return {
+                'code': 200,
+                'data': success
+            }
+        else:
+            return {
+                'code': 500,
+                'data': success
+            }
+            
+    
+    #update status berdasarkan id_pesanan
+    @rpc
+    def update_status_pembayaran(self, id_pesanan, status):
+        success = self.database.update_status_pembayaran(id_pesanan, status)
+        
+        if not success:
+            return {
+                'code': 500,
+                'data': False
+            }
+        else :
+            return {
+                'code': 200,
+                'data': True
+            }
+    
+    #update id_transaksi berdasarkan id_pesanan
+    @rpc
+    def update_idTransaksi(self, id_pesanan, id_transaksi):
+        success = self.database.update_idTransaksi(id_pesanan, id_transaksi)
+        
+        if not success:
+            return {
+                'code': 500,
+                'data': False
+            }
+        else :
+            return {
+                'code': 200,
+                'data': True
+            }
