@@ -61,8 +61,8 @@
                 <div class="">
                     <!-- Kolom 1: Konten pertama -->
                     <section class="hotel">
-                        <p>Hotel</p>
-                        <H4>The Kayuan Lumbur Resort ubud</H4>
+                        <p>Rental Transportation</p>
+                        <H4>Pura Rental</H4>
                         <div id="location">
                             <p>Jalan Katik Lantang, 80571 Ubud, Indonesia</p>
                         </div>
@@ -72,32 +72,57 @@
                         <div class="row justify-content-start">
                             <div class="row" style="display: flex; align-items: center; margin-top:3vh;">
                                 <div class="col-6" style="width: 27vh;">
-                                    <p>Check-in</p>
+                                    <p>Start Date</p>
                                     <h5 style="margin-top:2vh;margin-bottom: 1vh;">Thu, May 23, 2024</h5>
-                                    <p>From 2:00 PM</p>
                                 </div>
 
                                 <div class="col-6" style="width: 27vh;">
-                                    <p>Check-out</p>
+                                    <p>End Date</p>
                                     <h5 style="margin-top:2vh;margin-bottom: 1vh;">Sat, May 25, 2024</h5>
-                                    <p>7:00 AM - 12:00 PM</p>
                                 </div>
                             </div>
                             <div class="row" style="margin-top:5vh">
-                                <p>Room type:</p>
-                                <p><b>Deluxe room</b></p>
-                                <br> <br>
-                                <p>Total room:</p>
-                                <p><b>1 room(s)</b></p>
-                                <br> <br>
-                                <p>Total length of stay:</p>
-                                <p><b>2 night(s)</b></p>
-                                <br>
+                                <p style="margin-bottom: 1vh">Car Details</p>
+                                <div class="col-4" style="width: 18vh;">
+                                    <p>Brand</p>
+                                    <h5 style="margin-top:2vh;margin-bottom: 1vh;">Toyota</h5>
+                                </div>
+                                <div class="col-4" style="width: 18vh;">
+                                    <p>Nama</p>
+                                    <h5 style="margin-top:2vh;margin-bottom: 1vh;">Avanza</h5>
+                                </div>
+                                <div class="col-4" style="width: 18vh;">
+                                    <p>Tahun</p>
+                                    <h5 style="margin-top:2vh;margin-bottom: 5vh;">2023</h5>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <p style="margin-bottom: 1vh">Additional Information</p>
+                                <div class="checklist">
+                                    <div class="checklist-item">
+                                        <input type="checkbox" id="item1" checked disabled>
+                                        <label for="item1">Included Insurance</label>
+                                        <span id="price">(Rp 1,800,000)</span>
+                                    </div>
+                                    <!-- <p style="padding-left: 3vh;margin-bottom:1vh";>Rp 1,800,000</p> -->
+                                    <div class="checklist-item">
+                                        <input type="checkbox" id="item1" checked disabled>
+                                        <label for="item1">Included Driver</label>
+                                    </div>
+                                </div>
                             </div>
                     </section>
                     <section class="price">
                         <div id="rincian">
                             <h4>Your Price Summary</h4>
+                            <!-- <div class="row justify-content-start">
+                                <div class="col-6">
+                                    <p>Included isurance</p>
+                                </div>
+                                <div class="col-6 kanan" id="tes" style="padding-right:9vh">
+                                    <p>Rp 1,800,000</p>
+                                </div>
+                            </div> -->
                         </div>
                         <div id="totalHarga">
                             <div class="row justify-content-start" style="padding-top:1vh">
@@ -111,6 +136,7 @@
                             </div>
                         </div>
                     </section>
+
                 </div>
             </div>
             <!-- Kolom kedua -->
