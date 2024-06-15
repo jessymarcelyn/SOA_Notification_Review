@@ -28,15 +28,16 @@ class BankBCAService:
     def CheckPin(self, no ,pin):
         check = self.database.CheckPin(no, pin)
         if check is True:
-            return True
+             return {
+            'code' : 200,
+            'data' : check
+        }
         else:
-            return False
-        # return {
-        #     'code' : 200,
-        #     'data' : check
-        # }
+            return {
+                'code' : 404,
+                'data' : check
+            }
+        #     return True
         # else:
-        #     return {
-        #         'code' : 404,
-        #         'data' : check
-        #     }
+        #     return False
+       

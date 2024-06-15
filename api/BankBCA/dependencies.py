@@ -54,25 +54,29 @@ class DatabaseWrapper:
         
     def CheckPin(self, no, pin):
         hash_pin = self.hash_value(pin)
-        # if self.get_byNoTelp(no) : 
+        print("hashed pin: " + hash_pin)
+        
         cursor = self.connection.cursor(dictionary=True)
-        result = []
-        sql = "SELECT pin FROM bankbca WHERE no_telp = {}" .format((no))
-        cursor.execute(sql)
-        for row in cursor.fetchall():
-            result.append({
-                'pin' : row['pin'],
-            })
-        cursor.close()
-        if row and result[pin] == hash_pin:
-            # return {'status': 'Payment Success'}
+        
+        try:
+            sql = "SELECT pin FROM bankbca WHERE no_telp = %s"
+            cursor.execute(sql, (no,))
+            row = cursor.fetchone()
+            
+            if row:
+                stored_pin = row['pin']
+            else:
+                stored_pin = None
+
+            cursor.fetchall()
+        
+        finally:
+            cursor.close()
+
+        if stored_pin and stored_pin == hash_pin:
             return True
         else:
-            # return {'status': 'Wrong PIN'}
             return False
-        # else:
-        #     return {'status': 'Wrong VA'}
-
 
 class Database(DependencyProvider):
 
