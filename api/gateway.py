@@ -180,17 +180,17 @@ class GatewayService:
     @http('GET', '/BCA/<string:noTelp>')
     def getVA (self, request, noTelp):
         exist = self.BBCA_rpc.get_byNoTelp(noTelp)
-        va = []
+        va = ''
         if exist:
-            va.append('123')
-            va.append(noTelp)
+            va += '123'
+            va  += noTelp
             # va.append(str(noTelp))
             return Response(json.dumps(va), status=200, mimetype='application/json')
         else:
             return Response(json.dumps('No Bank Account is found with this phone number'), status=404, mimetype='application/json')
         
     @http('POST', '/BCA')
-    def getVA (self, request):
+    def createBankAcc (self, request):
         try:
             data = json.loads(request.get_data(as_text=True))
             nama = data.get('nama')
