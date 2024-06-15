@@ -37,6 +37,13 @@ body {
     margin-bottom: 100px;
 }
 
+#noRekInputs {
+  /* display: flex; */
+  gap: 15px;
+  /* bottom: 0; */
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
 .pin-box {
     width: 40px;
     height: 40px;
