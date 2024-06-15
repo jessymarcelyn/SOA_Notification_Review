@@ -36,8 +36,8 @@ class TransferBCAservice:
     
     #POST masukin transaksi ke tabel transaksi transaksi transfer bank
     @rpc
-    def create_trans(self, no_rek, nominal, va ):
-        trans = self.database.create_trans(no_rek, nominal, va)
+    def create_trans(self, no_telp, nominal, va ):
+        trans = self.database.create_trans(no_telp, nominal, va)
         return {
             'code' : 200,
             'data' : trans

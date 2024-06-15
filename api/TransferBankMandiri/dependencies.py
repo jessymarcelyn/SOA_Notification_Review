@@ -110,17 +110,16 @@ class DatabaseWrapper:
                     return {'status': 'Still Waiting For Payment'}
 
     # Add Transaksi into tabel transaksi transfer bank
-    def create_trans(self, no_rek, nominal, va):
-        # hashed_noRek = self.hash_value(no_rek)
+    def create_trans(self, no_telp, nominal, va):
         status = 'ongoing'
         try:
             cursor = self.connection.cursor(dictionary=True)
             sql = """
             INSERT INTO transmandiri (
-                no_rek, nominal, va, status, timestamp_trans
+                no_telp, nominal, va, status, timestamp_trans
             ) VALUES (%s, %s, %s, %s, NOW())
             """
-            cursor.execute(sql, (no_rek, nominal, va, status))
+            cursor.execute(sql, (no_telp, nominal, va, status))
             self.connection.commit()
             cursor.close()
             return True

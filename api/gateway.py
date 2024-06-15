@@ -75,18 +75,24 @@ class GatewayService:
         else:
             return Response(json.dumps('No Transaction found with this ID'), status=404, mimetype='application/json')
         
-    #POST create (masukin no_rek, nominal, status = ongoing, VA) di tabel transaksi transfer bank
+    #POST create (masukin no_telp, nominal, status = ongoing, VA) di tabel transaksi transfer bank
     @http('POST', '/transBCA')
     def create_trans(self, request):
         try:
             data = json.loads(request.get_data(as_text=True))
-            no_rek = data.get('no_rek')
+            no_telp = data.get('no_telp') #BAKALAN DIGANTI SAMA API GET NO_TELP NYA 
             nominal = data.get('nominal')
-            va = data.get('VA')
-            transaksi = self.bca_rpc.create_trans(
-                no_rek, nominal, va
-            )
-            return 200, json.dumps(transaksi)
+            # va = data.get('VA')
+            api_url = f'http://localhost:8000//BCA/{no_telp}'
+            Response = request.get(api_url)
+            if Response.status_code == 200:
+                va = Response.json()
+                transaksi = self.bca_rpc.create_trans(
+                    no_telp, nominal, va
+                )
+                return 200, json.dumps(transaksi)
+            else: 
+                return Response(json.dumps('Wrong phone number'), status=404, mimetype='application/json')
         except Exception as e:
             return 500, json.dumps({"error": str(e)})
         
@@ -140,16 +146,16 @@ class GatewayService:
         else:
             return Response(json.dumps('No Transaction found with this ID'), status=404, mimetype='application/json')
         
-    #POST create (masukin no_rek, nominal, status = ongoing, VA) di tabel transaksi transfer bank
+    #POST create (masukin no_telp, nominal, status = ongoing, VA) di tabel transaksi transfer bank
     @http('POST', '/transMandiri')
     def create_trans(self, request):
         try:
             data = json.loads(request.get_data(as_text=True))
-            no_rek = data.get('no_rek')
+            no_telp = data.get('no_telp')
             nominal = data.get('nominal')
             va = data.get('VA')
             transaksi = self.mandiri_rpc.create_trans(
-                no_rek, nominal, va
+                no_telp, nominal, va
             )
             return 200, json.dumps(transaksi)
         except Exception as e:
