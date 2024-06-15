@@ -39,7 +39,7 @@
                         </div>
                     </form>
                     <div class="content2 mt-4">
-                        <p style="margin-bottom: -5vh;">Enter PIN</p>
+                        <p style="margin-bottom: -5vh; text-align:center; margin-top:10px">Enter PIN</p>
                             <div id="pinInputs">
                                 <input type="password" class="pin-box" maxlength="1" readonly>
                                 <input type="password" class="pin-box" maxlength="1" readonly>
