@@ -37,7 +37,7 @@ require "connect.php";
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   
-  <link rel="stylesheet" href="css/notification.css">
+  <!-- <link rel="stylesheet" href="css/notification.css"> -->
 
 </head>
 
@@ -147,7 +147,6 @@ require "connect.php";
   </div>
 
 
-  <?php include 'notif_modal.php'; ?>
 
 </body>
 
@@ -162,23 +161,29 @@ require "connect.php";
       });
     });
   $(document).ready(function () {
-    var type_notif = 1;
+    var idUser = 1;
 
     // Fungsi untuk memuat notifikasi dengan type_notif yang ditentukan
-    // function loadNotifications(type) {
-    //   $.ajax({
-    //     url: 'fetch-notification.php',
-    //     method: 'POST',
-    //     data: { type_notif: type },
-    //     success: function (response) {
-    //       // Mengganti konten dari tab pane yang aktif dengan data notifikasi yang baru
-    //       $('.tab-pane.active').find('.list-group').html(response);
-    //     }
-    //   });
-    // }
+    function loadNotifications(idUser) {
+      $.ajax({
+        url: "fetch-api-notif.php",
+        method: 'POST',
+        data: { idUser: idUser },
+        success: function (response) {
+          // Mengganti konten dari tab pane yang aktif dengan data notifikasi yang baru
+          $('.tab-pane.active').find('.list-group').html(response);
+          console.log("masuk fetch-api-notif.php")
+          console.log(idUser)
+
+        }
+      });
+    }
 
     // // Memuat notifikasi dengan type_notif = 1 saat halaman dimuat pertama kali
-    // loadNotifications(type_notif);
+    // loadNotifications(idUser);
+
+
+
     // Event listener untuk setiap kali tab diubah
     // $('.nav-link').on('click', function () {
     //   // Mengambil id tab yang aktif
