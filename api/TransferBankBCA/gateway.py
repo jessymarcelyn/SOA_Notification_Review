@@ -68,11 +68,6 @@ class GatewayService:
             }       
             # Make the HTTP PUT request
             response = requests.put(api_url, json=payload)
-            
-        #     return Response(json.dumps(pay), status=200, mimetype='application/json')
-        # else:
-        #     return Response(json.dumps('No Transaction found with this ID'), status=404, mimetype='application/json')
-                    # Check the response status and return appropriate content
             if response.status_code == 200:
                 pay = self.bca_rpc.pay_trans(idTrans)
 

@@ -175,4 +175,42 @@ class GatewayService:
         else:
             return Response(json.dumps('No Transaction found with this ID'), status=404, mimetype='application/json')
         
+    BBCA_rpc = RpcProxy('BankBCA_service')
+    
+    @http('GET', '/BCA/<string:noTelp>')
+    def getVA (self, request, noTelp):
+        exist = self.BBCA_rpc.get_byNoTelp(noTelp)
+        va = []
+        if exist:
+            va.append('123')
+            va.append(noTelp)
+            # va.append(str(noTelp))
+            return Response(json.dumps(va), status=200, mimetype='application/json')
+        else:
+            return Response(json.dumps('No Bank Account is found with this phone number'), status=404, mimetype='application/json')
+        
+    @http('POST', '/BCA')
+    def getVA (self, request):
+        try:
+            data = json.loads(request.get_data(as_text=True))
+            nama = data.get('nama')
+            no_rek = data.get('no_rek')
+            pin = data.get('pin')
+            saldo = data.get('saldo')
+            no_telp = data.get('no_telp')
+            create = self.BBCA_rpc.createBankAcc(nama, no_rek, pin, saldo, no_telp)
+            return 200, json.dumps(create)
+        except Exception as e:
+            return 500, json.dumps({"error": str(e)})
+        
+    @http('GET', '/BCA/Cpin/<string:VA>/<string:pin>')
+    def CheckPin (self, request, VA, pin):
+        no = VA[3:]
+        check = self.BBCA_rpc.CheckPin(no, pin)
+        if check: 
+            return Response(json.dumps('hhh'), status=200, mimetype='application/json')
+        else:
+            return Response(json.dumps('Wrong VA or PIN Please try again'), status=404, mimetype='application/json')
+            
+    
     
