@@ -36,7 +36,7 @@ require "connect.php";
     integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-  
+
   <!-- <link rel="stylesheet" href="css/notification.css"> -->
 
 </head>
@@ -65,7 +65,7 @@ require "connect.php";
                 <div class="d-flex justify-content-between">
                   <h5 class="mb-1">Pembayaran anda sedang di proses</h5>
                   <small>2025-05-12 12:23</small>
-              
+
                 </div>
                 <p class="mb-1">Silahkan masukan pin anda melalui link berikut</p>
               </div>
@@ -153,60 +153,60 @@ require "connect.php";
 </html>
 
 <script>
-  // var type_notif = 1;
   $(document).ready(function () {
-      $('.list-group-item').on('click', function () {
-        $(this).removeClass('list-group-item-primary');
-        // $(this).addClass('list-group-item-light');
-      });
-    });
-  $(document).ready(function () {
-    var idUser = 1;
+    $(document).on('click', '.list-group-item', function () {  // Gunakan event delegation untuk menangani click event
+      console.log('Notifikasi di klik.');
 
-    // Fungsi untuk memuat notifikasi dengan type_notif yang ditentukan
-    function loadNotifications(idUser) {
+      // Ambil ID notifikasi dari atribut data
+      var id_notif = 4;  // Pastikan atribut data 'id' sudah ada di dalam elemen .list-group-item
+
       $.ajax({
         url: "fetch-api-notif.php",
         method: 'POST',
-        data: { idUser: idUser },
+        data: {
+          id_notif: id_notif
+        },
+        success: function (response) {
+          // Mengganti konten dari tab pane yang aktif dengan data notifikasi yang baru
+          // $('.tab-pane.active').find('.list-group').html(response);
+          console.log('Berhasil update notifikasi:', response);
+        },
+        error: function (xhr, status, error) {
+          console.error('Gagal update notifikasi:', error);
+          // Tambahkan logika untuk menangani kesalahan saat memuat notifikasi
+        }
+      });
+      loadNotifications(idUser, notifType);
+
+      // Optional: Ganti atau tambahkan kelas pada elemen .list-group-item
+      // $(this).removeClass('list-group-item-primary').addClass('list-group-item-light');
+    });
+
+    var idUser = 1;
+    var notifType = "pembayaran";
+
+    // Fungsi untuk memuat notifikasi dengan type_notif yang ditentukan
+    function loadNotifications(idUser, notifType) {
+      $.ajax({
+        url: "fetch-api-notif.php",
+        method: 'POST',
+        data: {
+          idUser: idUser,
+          notifType: notifType
+        },
         success: function (response) {
           // Mengganti konten dari tab pane yang aktif dengan data notifikasi yang baru
           $('.tab-pane.active').find('.list-group').html(response);
-          console.log("masuk fetch-api-notif.php")
-          console.log(idUser)
-
+        },
+        error: function (xhr, status, error) {
+          console.error('Gagal memuat notifikasi:', error);
+          // Tambahkan logika untuk menangani kesalahan saat memuat notifikasi
         }
       });
     }
 
-    // // Memuat notifikasi dengan type_notif = 1 saat halaman dimuat pertama kali
-    // loadNotifications(idUser);
-
-
-
-    // Event listener untuk setiap kali tab diubah
-    // $('.nav-link').on('click', function () {
-    //   // Mengambil id tab yang aktif
-    //   var activeTab = $(this).attr('data-bs-target');
-    //   console.log(type_notif);
-    //   console.log(activeTab);
-
-    //   if (activeTab == "#nav-home") {
-    //     type_notif = 1;
-    //   }
-    //   else if (activeTab == "#nav-profile") {
-    //     type_notif = 0;
-    //   }
-    //   // Melakukan request AJAX untuk mengambil data notifikasi dengan type_notif = 2
-    //   $.ajax({
-    //     url: 'fetch-notification.php', // Ubah sesuai dengan file yang berisi script PHP untuk mengambil notifikasi
-    //     method: 'POST',
-    //     data: { type_notif: type_notif }, // Mengirim parameter type_notif
-    //     success: function (response) {
-    //       // Mengganti konten dari tab pane yang aktif dengan data notifikasi yang baru
-    //       $(activeTab).find('.list-group').html(response);
-    //     }
-    //   });
-    // });
+    // Memuat notifikasi dengan type_notif = 1 saat halaman dimuat pertama kali
+    loadNotifications(idUser, notifType);
   });
+
 </script>
