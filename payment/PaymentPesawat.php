@@ -63,7 +63,7 @@
                     <section class="hotel">
                         <h4>Flight Summary</h4>
                         <p><strong>Booking ID:</strong> GA12345678</p>
-                        <p><strong>Flight:</strong> Garuda Indonesia</p>
+                        <!-- <p><strong>Flight:</strong> Garuda Indonesia</p> -->
                         <!-- <div id="bookingID">
                         <p>Booking ID: <b>GA12345678</b></p>
                         </div> -->
@@ -77,9 +77,10 @@
                             <p><strong>Jakarta (CGK) to Bali (DPS)</strong></p>
                             <p>Thu, June 20, 2024</p>
                             <p><span class="flight-time">08:00 AM</span> - <span class="flight-time">10:30 AM</span></p>
+                            <p>Flight: <strong>Garuda Indonesia </strong></p>
                             <p class="flight-info">Class: Economy | Duration: 2h 30m</p>
-                            <p class="flight-info">Aircraft: Boeing 737-800</p>
-                            <p class="flight-info">Terminal: 1</p>
+                            <!-- <p class="flight-info">Aircraft: Boeing 737-800</p>
+                            <p class="flight-info">Terminal: 1</p> -->
                         </div>
                         <div class="mb-3" id="returnFlightDetails" >
                         <!-- <div class="mb-3" id="returnFlightDetails" style="display: none;"> -->
@@ -87,9 +88,10 @@
                             <p><strong>Bali (DPS) to Jakarta (CGK)</strong></p>
                             <p>Sun, June 23, 2024</p>
                             <p><span class="flight-time">04:00 PM</span> - <span class="flight-time">06:30 PM</span></p>
+                            <p>Flight: <strong> Garuda Indonesia</strong></p>
                             <p class="flight-info">Class: Economy | Duration: 2h 30m</p>
-                            <p class="flight-info">Aircraft: Boeing 737-800</p>
-                            <p class="flight-info">Terminal: 2</p>
+                            <!-- <p class="flight-info">Aircraft: Boeing 737-800</p>
+                            <p class="flight-info">Terminal: 2</p> -->
                         </div>
                         <p style="margin-bottom: 1vh">Additional Information</p>
                                 <div class="checklist">
