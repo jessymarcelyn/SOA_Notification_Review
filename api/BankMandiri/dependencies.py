@@ -51,6 +51,32 @@ class DatabaseWrapper:
             return True
         except Exception as e:
             return {"error": str(e)}
+        
+    def CheckPin(self, no, pin):
+        hash_pin = self.hash_value(pin)
+        print("hashed pin: " + hash_pin)
+        
+        cursor = self.connection.cursor(dictionary=True)
+        
+        try:
+            sql = "SELECT pin FROM bankmandiri WHERE no_telp = %s"
+            cursor.execute(sql, (no,))
+            row = cursor.fetchone()
+            
+            if row:
+                stored_pin = row['pin']
+            else:
+                stored_pin = None
+
+            cursor.fetchall()
+        
+        finally:
+            cursor.close()
+
+        if stored_pin and stored_pin == hash_pin:
+            return True
+        else:
+            return False
     
 class Database(DependencyProvider):
 

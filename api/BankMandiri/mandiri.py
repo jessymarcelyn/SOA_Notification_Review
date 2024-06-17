@@ -23,3 +23,17 @@ class BankMandiriService:
             'code' : 200,
             'data' : create
         }
+    
+    @rpc
+    def CheckPin(self, no ,pin):
+        check = self.database.CheckPin(no, pin)
+        if check is True:
+             return {
+            'code' : 200,
+            'data' : check
+        }
+        else:
+            return {
+                'code' : 404,
+                'data' : check
+            }
