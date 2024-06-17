@@ -47,10 +47,16 @@ if (isset($_POST['idUser']) && isset($_POST['notifType'])) {
                 $title = $row['judul'];
                 $desc = $row['deskripsi'];
                 $datetime = $row['timestamp_masuk'];
+                $id = $row['id_notif'];
+                if($row['link'] == null){
+                    $link = "#";
+                }else{
+                    $link = $row['link'];
+                }
 
                 // Buat HTML untuk setiap notifikasi
                 $notificationsHTML .= '
-                    <a href="#" class="list-group-item list-group-item-action ' . $color . ' border-0">
+                    <a id='.$id.' href="'.$link.'" class="list-group-item list-group-item-action ' . $color . ' border-0">
                         <div class="row g-1">
                             <div class="col px-0 text">
                                 <div class="d-flex justify-content-between">

@@ -41,16 +41,15 @@ require "connect.php";
 
 </head>
 
-
 <body>
 
   <div class="notif-content m-5">
     <nav>
-      <div class="nav nav-tabs" id="nav-tab" role="tablist">
+      <div class="nav nav-tabs" id="pembayaran" role="tablist">
         <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button"
           role="tab" aria-controls="nav-home" aria-selected="true">Keuangan</button>
-        <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button"
-          role="tab" aria-controls="nav-profile" aria-selected="false">Info Booking</button>
+        <button class="nav-link" id="info" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab"
+          aria-controls="nav-profile" aria-selected="false">Info Pesanan</button>
 
       </div>
     </nav>
@@ -102,45 +101,7 @@ require "connect.php";
       </div>
       <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
         <div class="list-group pt-2 ">
-          <a href="#" class="list-group-item list-group-item-action list-group-item-primary border-0">
-            <div class="row g-1">
 
-              <div class="col px-0 text ">
-                <div class="d-flex justify-content-between">
-                  <h5 class="mb-1">Perubahan keberangkatan pesawat</h5>
-                  <small>2025-05-12 11:23</small>
-
-                </div>
-                <p class="mb-1">Pesawat yang anda pesan mengalami perubahan jadwal keberangkatan menjadi pukul 18:00</p>
-              </div>
-            </div>
-          </a>
-          <a href="#" class="list-group-item list-group-item-action '.$color.' border-0">
-            <div class="row g-1">
-
-              <div class="col px-0 text ">
-                <div class="d-flex justify-content-between">
-                  <h5 class="mb-1">Perubahan keberangkatan pesawat</h5>
-                  <small>2025-05-12 11:23</small>
-
-                </div>
-                <p class="mb-1">Pesawat yang anda pesan mengalami perubahan jadwal keberangkatan menjadi pukul 18:00</p>
-              </div>
-            </div>
-          </a>
-          <a href="#" class="list-group-item list-group-item-action '.$color.' border-0">
-            <div class="row g-1">
-
-              <div class="col px-0 text ">
-                <div class="d-flex justify-content-between">
-                  <h5 class="mb-1">Perubahan keberangkatan pesawat</h5>
-                  <small>2025-05-12 11:23</small>
-
-                </div>
-                <p class="mb-1">Pesawat yang anda pesan mengalami perubahan jadwal keberangkatan menjadi pukul 18:00</p>
-              </div>
-            </div>
-          </a>
         </div>
       </div>
     </div>
@@ -158,7 +119,8 @@ require "connect.php";
       console.log('Notifikasi di klik.');
 
       // Ambil ID notifikasi dari atribut data
-      var id_notif = 4;  // Pastikan atribut data 'id' sudah ada di dalam elemen .list-group-item
+        var id_notif = $(this).attr('id');
+        console.log('ID Notifikasi:', id_notif);
 
       $.ajax({
         url: "fetch-api-notif.php",
@@ -207,6 +169,12 @@ require "connect.php";
 
     // Memuat notifikasi dengan type_notif = 1 saat halaman dimuat pertama kali
     loadNotifications(idUser, notifType);
+
+    $(document).on('click', '.nav-link', function () {
+      notifType = $(this).attr('id');
+      // print(notifType);
+      loadNotifications(idUser, notifType);
+    });
   });
 
 </script>
