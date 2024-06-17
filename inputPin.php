@@ -90,90 +90,134 @@ require "connect.php";
     const content = document.querySelector('.content');
 
     function adjustContentPosition() {
-        const keyboardHeight = keyboard.offsetHeight;
-        content.style.marginBottom = keyboardHeight + 'px';
+      const keyboardHeight = keyboard.offsetHeight;
+      content.style.marginBottom = keyboardHeight + 'px';
     }
 
     adjustContentPosition();
 
     window.addEventListener('resize', adjustContentPosition);
-});
+  });
 
 
   document.addEventListener('DOMContentLoaded', () => {
-  const pinInputs = document.querySelectorAll('.pin-box');
-  const keys = document.querySelectorAll('.key');
-  const submitPinButton = document.getElementById('submitPin');
-  const submitOkButton = document.getElementById('submitOk');
+    const pinInputs = document.querySelectorAll('.pin-box');
+    const keys = document.querySelectorAll('.key');
+    const submitPinButton = document.getElementById('submitPin');
+    const submitOkButton = document.getElementById('submitOk');
 
-  let currentInputIndex = 0;
+    let currentInputIndex = 0;
 
-  const handleInput = (keyValue) => {
-    if (keyValue === 'clear') {
-      pinInputs.forEach(input => input.value = '');
-      currentInputIndex = 0;
-    } else if (keyValue === 'backspace') {
-      if (currentInputIndex > 0) {
-        pinInputs[currentInputIndex - 1].value = '';
-        currentInputIndex--;
-      }
-    } else {
-      if (currentInputIndex < pinInputs.length && !isNaN(keyValue)) {
-        pinInputs[currentInputIndex].value = keyValue;
-        currentInputIndex++;
-      }
-    }
-    checkIfAllFieldsAreFilled();
-  };
-
-  const checkIfAllFieldsAreFilled = () => {
-    const allFilled = [...pinInputs].every(input => input.value !== '');
-    submitPinButton.disabled = !allFilled;
-    submitOkButton.disabled = !allFilled;
-
-  };
-
-  const getPinValue = () => {
-    let pin = '';
-    pinInputs.forEach(input => {
-      pin += input.value;
-    });
-    return pin;
-  };
-
-  const submitPin = () => {
-    const pin = getPinValue();
-    console.log('PIN:', pin); // Handle PIN value here as needed (e.g., send it to the server)
-    pinInputs.forEach(input => input.value = '');
-    currentInputIndex = 0;
-    checkIfAllFieldsAreFilled();
-  };
-
-  keys.forEach(key => {
-    key.addEventListener('click', () => {
-      const keyValue = key.dataset.key;
-      if (keyValue === 'submit') {
-        submitPin();
+    const handleInput = (keyValue) => {
+      if (keyValue === 'clear') {
+        pinInputs.forEach(input => input.value = '');
+        currentInputIndex = 0;
+      } else if (keyValue === 'backspace') {
+        if (currentInputIndex > 0) {
+          pinInputs[currentInputIndex - 1].value = '';
+          currentInputIndex--;
+        }
       } else {
-        handleInput(keyValue);
+        if (currentInputIndex < pinInputs.length && !isNaN(keyValue)) {
+          pinInputs[currentInputIndex].value = keyValue;
+          currentInputIndex++;
+        }
+      }
+      checkIfAllFieldsAreFilled();
+    };
+
+    const checkIfAllFieldsAreFilled = () => {
+      const allFilled = [...pinInputs].every(input => input.value !== '');
+      submitPinButton.disabled = !allFilled;
+      submitOkButton.disabled = !allFilled;
+
+    };
+
+    const getPinValue = () => {
+      let pin = '';
+      pinInputs.forEach(input => {
+        pin += input.value;
+      });
+      return pin;
+    };
+
+    const submitPin = async () => {
+      const pin = getPinValue();
+      console.log('PIN:', pin); // Handle PIN value here as needed (e.g., send it to the server)
+
+      try {
+        const hashed = await hashPin(pin); // Wait for the hashPin function to complete
+        console.log('Hashed PIN:', hashed);
+
+        // Example AJAX request to send the hashed PIN to server
+        $.ajax({
+          url: 'checkPin.php',
+          type: 'POST',
+          data: {
+            id_transaksi: 1,
+            pin: hashed,
+            nama_penyedia: 'booking' 
+          },
+          success: function (response) {
+            console.log(response); // Handle success response from server
+          },
+          error: function (xhr, status, error) {
+            console.error('AJAX Error:', error); // Handle AJAX errors
+          }
+        });
+
+        // Clear the PIN inputs after submission
+        pinInputs.forEach(input => input.value = '');
+        currentInputIndex = 0;
+        checkIfAllFieldsAreFilled();
+      } catch (error) {
+        console.error('Error hashing PIN:', error); // Handle any errors from hashPin function
+      }
+    };
+
+
+    keys.forEach(key => {
+      key.addEventListener('click', () => {
+        const keyValue = key.dataset.key;
+        if (keyValue === 'submit') {
+          submitPin();
+        } else {
+          handleInput(keyValue);
+        }
+      });
+    });
+
+    document.addEventListener('keydown', (event) => {
+      const key = event.key;
+      if (key >= '0' && key <= '9') {
+        handleInput(key);
+      } else if (key === 'Backspace') {
+        handleInput('backspace');
+      } else if (key === 'Delete') {
+        handleInput('clear');
+      } else if (key === 'Enter') {
+        submitPin();
       }
     });
-  });
 
-  document.addEventListener('keydown', (event) => {
-    const key = event.key;
-    if (key >= '0' && key <= '9') {
-      handleInput(key);
-    } else if (key === 'Backspace') {
-      handleInput('backspace');
-    } else if (key === 'Delete') {
-      handleInput('clear');
-    } else if (key === 'Enter') {
-      submitPin();
+    async function hashPin(pin) {
+      // Convert the PIN to a byte array
+      const encoder = new TextEncoder();
+      const data = encoder.encode(pin);
+
+      // Hash the byte array using SHA-256
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+
+      // Convert the hash to a hexadecimal string
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+
+      return hashHex;
     }
-  });
 
-  submitPinButton.addEventListener('click', submitPin);
-});
+
+    submitPinButton.addEventListener('click', submitPin);
+
+  });
 
 </script>
