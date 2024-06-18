@@ -8,6 +8,7 @@ import requests
 class GatewayService:
     name = 'gateway'
 
+    # TRANSAKSI PEMBAYARAN
     TransP_rpc = RpcProxy('transaksi_pembayaran_service')
 
     # Get berdasarkan id_pesanan
@@ -45,7 +46,38 @@ class GatewayService:
                 return 500, json.dumps({"error": str(e)})
         else:
             return Response(json.dumps('No Transaction found with this ID'), status=404, mimetype='application/json')
+    
+     #Create transaksi_pembayaran
+    @http('POST', '/Tpembayaran')
+    def create_pembayaran(self, request):
+        data = json.loads(request.get_data(as_text=True))
+        id_pesanan = data.get('id_pesanan')
+        id_pesanan2 = data.get('id_pesanan2') 
+        total_transaksi = data.get('total_transaksi')
         
+        pembayaran = self.TransP_rpc.create_pembayaran(id_pesanan, id_pesanan2, total_transaksi)
+
+        return pembayaran['code'],json.dumps(pembayaran['data'])
+    
+    #update status berdasarkan id_pesanan
+    @http('PUT', '/Tpembayaran/pesanan/<int:id_pesanan>/status/<string:status>')
+    def update_status_pembayaran(self, request, id_pesanan, status):
+        transaksi = self.TransP_rpc.update_status_pembayaran(id_pesanan, status)
+        if transaksi :
+            return transaksi['code'],json.dumps(transaksi['data'])
+        else:
+            return transaksi['code'],json.dumps(transaksi['data'])
+    
+    #update id_transaksi berdasarkan id_pesanan
+    @http('PUT', '/Tpembayaran/pesanan/<int:id_pesanan>/transaksi/<string:id_transaksi>')
+    def update_idTransaksi(self, request, id_pesanan, id_transaksi):
+        transaksi = self.TransP_rpc.update_idTransaksi(id_pesanan, id_transaksi)
+        if transaksi :
+            return transaksi['code'],json.dumps(transaksi['data'])
+        else:
+            return transaksi['code'],json.dumps(transaksi['data'])
+    
+    # TRANSFER BCA
     bca_rpc = RpcProxy('transferBCA_service')
 
     #GET status berdasarkan id_transaksi
@@ -116,7 +148,8 @@ class GatewayService:
                 return Response(json.dumps({'error': 'Failed to update transaction'}), status=response.status_code, mimetype='application/json')
         else:
             return Response(json.dumps('No Transaction found with this ID'), status=404, mimetype='application/json')
-        
+    
+    #TRANSFER MANDIRI
     mandiri_rpc = RpcProxy('transferMandiri_service')
 
     #GET status berdasarkan id_transaksi
@@ -254,6 +287,149 @@ class GatewayService:
             return Response(json.dumps('hhh'), status=200, mimetype='application/json')
         else:
             return Response(json.dumps('Wrong VA or PIN Please try again'), status=404, mimetype='application/json')
-            
     
+    # GOPAY
+    gopay_rpc = RpcProxy('gopay_service')
+
+    # @http('GET', '/gopay/no_telp/<string:no_telp>')
+    # def get_no_telp(self, request, no_telp):
+    #     pembayaran = self.ovo_rpc.get_no_telp()
+    #     return json.dumps(pembayaran)
     
+    @http('POST', '/gopay') #cek nomor telepon, return idtransaksi
+    def post_pembayaran(self, request):
+        data = json.loads(request.get_data(as_text=True))
+        pembayaran = self.gopay_rpc.insert_transaksi(data['no_telp'], data['nominal'])
+        return json.dumps(pembayaran)
+         
+    @http('GET', '/gopay/status/<string:id_transaksi>') #return status pembayaran
+    def get_status_pembayaran_by_id_transaksi(self, request, id_transaksi):
+        pembayaran = self.gopay_rpc.get_status_transaksi(id_transaksi)
+        return json.dumps(pembayaran)
+    
+    @http('PUT', '/gopay/bayar') #check pin dan check saldo
+    def bayar(self, request):
+        data = json.loads(request.get_data(as_text=True))
+        pembayaran = self.gopay_rpc.bayar(data['id_transaksi'], data['pin'])
+        return json.dumps(pembayaran)
+    
+    @http('GET', '/gopay/timestamp/<string:id_transaksi>')
+    def get_timestamp_by_id_transaksi(self, request, id_transaksi):
+        timestamp = self.gopay_rpc.get_timestamp(id_transaksi)
+        return json.dumps(timestamp)
+    
+    # OVO
+    ovo_rpc = RpcProxy('ovo_service')
+
+    # @http('GET', '/ovo/no_telp/<string:no_telp>')
+    # def get_no_telp(self, request, no_telp):
+    #     pembayaran = self.ovo_rpc.get_no_telp()
+    #     return json.dumps(pembayaran)
+    
+    @http('POST', '/ovo') #cek nomor telepon, return idtransaksi
+    def post_pembayaran(self, request):
+        data = json.loads(request.get_data(as_text=True))
+        pembayaran = self.ovo_rpc.insert_transaksi(data['no_telp'], data['nominal'])
+        return json.dumps(pembayaran)
+         
+    @http('GET', '/ovo/status/<string:id_transaksi>') #return status pembayaran
+    def get_status_pembayaran_by_id_transaksi(self, request, id_transaksi):
+        pembayaran = self.ovo_rpc.get_status_transaksi(id_transaksi)
+        return json.dumps(pembayaran)
+    
+    @http('PUT', '/ovo/bayar') #check pin dan check saldo
+    def bayar(self, request):
+        data = json.loads(request.get_data(as_text=True))
+        pembayaran = self.ovo_rpc.bayar(data['id_transaksi'], data['pin'])
+        return json.dumps(pembayaran)
+    
+    @http('GET', '/ovo/timestamp/<string:id_transaksi>')
+    def get_timestamp_by_id_transaksi(self, request, id_transaksi):
+        timestamp = self.ovo_rpc.get_timestamp(id_transaksi)
+        return json.dumps(timestamp)
+    
+    # KARTU KREDIT
+    kartu_rpc = RpcProxy('kartu_service')
+    
+    @http('POST', '/kartu_kredit')
+    def create_kartu(self, request):
+        data = json.loads(request.get_data(as_text=True))
+        kartu  = self.kartu_rpc.create_kartu(data['nama'], data['nomer_kartu'], data['cvv'], data['expired_year'], data['expired_month'], data['limit_maks'], data['limit_terpakai'], data['status'])
+        return json.dumps(kartu)
+    
+    #cek apakah kartu valid dan bisa digunakan
+    @http('GET', '/kartu_kredit/<string:nomer_kartu>')
+    def get_nomer_kartu(self, request, nomer_kartu):
+        kartu = self.kartu_rpc.get_nomer_kartu(nomer_kartu)
+
+        return kartu['code'],json.dumps(kartu['data'])
+    
+    #cek apakah nomer kartu dan cvv sesuai
+    # @http('GET', '/kartu_kredit/<string:nomer_kartu>/cvv/<string:cvv>')
+    # def cek_card_cvv(self, request, nomer_kartu, cvv):
+    #     kartu = self.kartu_rpc.cek_card_cvv(nomer_kartu,cvv)
+    #     if kartu:
+    #         response = {'valid': True}
+    #     else:
+    #         response = {'valid': False}
+    #     return Response(json.dumps(response), mimetype='application/json')
+    
+    #cek apakah nomer kartu dan cvv sesuai dan apakah limit tidak lebih
+    @http('GET', '/kartu_kredit/<string:nomer_kartu>/cvv/<string:cvv>/nominal/<int:nominal>')
+    def cek_card_cvv(self, request, nomer_kartu, cvv, nominal):
+        kartu = self.kartu_rpc.cek_card_cvv(nomer_kartu,cvv, nominal)
+        if kartu:
+            response = {'valid': True}
+        else:
+            response = {'valid': False}
+        return Response(json.dumps(response), mimetype='application/json')
+    
+    #create skalian buat otp
+    @http('POST', '/kartu_kredit/transaksi/')
+    def create_transaksi(self, request):
+        data = json.loads(request.get_data(as_text=True))
+        transaksi  = self.kartu_rpc.create_transaksi(data['nomer_kartu'], data['nominal'], data['status'])
+        return transaksi['code'],json.dumps(transaksi['data'])
+    
+    #get OTP berdasarkan id_transaksi
+    @http('GET', '/kartu_kredit/transaksi/<int:id_transaksi>')
+    def get_otp(self, request, id_transaksi):
+        cek_id_transaksi = self.kartu_rpc.cek_id_transaksi(id_transaksi)
+        if cek_id_transaksi:
+            otp = self.kartu_rpc.get_otp(id_transaksi)
+            if otp :
+                return otp['code'],json.dumps(otp['data'])
+        else:
+            return cek_id_transaksi['code'],json.dumps(cek_id_transaksi['data'])
+        
+    # cek OTP berdasarkan id_transaksi dan otp user
+    @http('GET', '/kartu_kredit/transaksi/<int:id_transaksi>/otp/<string:otp>')
+    def cek_otp(self, request, id_transaksi, otp):
+        cek_id_transaksi = self.kartu_rpc.cek_id_transaksi(id_transaksi)
+        if cek_id_transaksi:
+            otp = self.kartu_rpc.cek_otp(id_transaksi, otp)
+            if otp :
+                return otp['code'],json.dumps(otp['data'])
+        else:
+            return cek_id_transaksi['code'],json.dumps(cek_id_transaksi['data'])
+        
+    # Update timestamp_otp dan otp berdasarkan id_transaksi 
+    @http('PUT', '/kartu_kredit/transaksi/<string:id_transaksi>')
+    def change_otp(self, request, id_transaksi):
+        kartu = self.kartu_rpc.cek_id_transaksi(id_transaksi)
+        if kartu:
+            transaksi = self.kartu_rpc.change_otp(id_transaksi)
+            return transaksi['code'],json.dumps(transaksi['data'])
+        else:
+            return kartu['code'],json.dumps(kartu['data'])
+    
+    #update status dan limit berdasarkan id_transaksi
+    @http('PUT', '/kartu_kredit/transaksi/<int:id_transaksi>/status/<string:status>')
+    def update_status_transaksi(self, request, id_transaksi, status):
+        cek_id_transaksi = self.kartu_rpc.cek_id_transaksi(id_transaksi)
+        if cek_id_transaksi:
+            transaksi = self.kartu_rpc.update_status_transaksi(id_transaksi, status)
+            if transaksi :
+                return transaksi['code'],json.dumps(transaksi['data'])
+        else:
+            return cek_id_transaksi['code'],json.dumps(cek_id_transaksi['data'])
