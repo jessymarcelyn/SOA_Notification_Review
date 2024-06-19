@@ -47,7 +47,7 @@ class GatewayService:
         else:
             return Response(json.dumps('No Transaction found with this ID'), status=404, mimetype='application/json')
     
-     #Create transaksi_pembayaran
+    #Create transaksi_pembayaran
     @http('POST', '/Tpembayaran')
     def create_pembayaran(self, request):
         data = json.loads(request.get_data(as_text=True))
