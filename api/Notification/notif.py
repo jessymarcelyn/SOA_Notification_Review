@@ -44,6 +44,36 @@ class Notifservice:
         #         'data' : 'No Notification found with this ID'
         #     }
         return notifs
+    
+    @rpc
+    def get_notif_IDUser_notifType(self, idUser, notifType):
+        notifs = self.database.get_notif_IDUser_notifType(idUser, notifType)
+        # if notifs:
+        #     return {
+        #         'code' : 200,
+        #         'data' : notifs
+        #     }
+        # else :
+        #     return {
+        #         'code' : 404,
+        #         'data' : 'No Notification found with this ID'
+        #     }
+        return notifs
+
+    # @rpc
+    # def get_notif_IDUser(self, idPesanan):
+    #     notifs = self.database.get_notif_IDPesanan(idPesanan)
+    #     # if notifs:
+    #     #     return {
+    #     #         'code' : 200,
+    #     #         'data' : notifs
+    #     #     }
+    #     # else :
+    #     #     return {
+    #     #         'code' : 404,
+    #     #         'data' : 'No Notification found with this ID'
+    #     #     }
+    #     return notifs
 
     @rpc
     def get_notif_status(self, status):
@@ -147,8 +177,17 @@ class Notifservice:
 
     # Add notification
     @rpc
-    def add_notif(self, id_user, tipe_notif, jenis, judul, deskripsi, timestamp_masuk, timestamp_announce, status, link, foto):
-        notifs = self.database.add_notif(id_user, tipe_notif, judul, jenis, deskripsi, timestamp_masuk, timestamp_announce, status, link, foto)
+    def add_notif(self, id_user, id_pesanan, tipe_notif, jenis, judul, deskripsi, timestamp_masuk, timestamp_announce, status, link):
+        notifs = self.database.add_notif(id_user, id_pesanan, tipe_notif,  judul, jenis, deskripsi, timestamp_masuk, timestamp_announce, status, link)
+        return {
+            'code': 200,
+            'data': notifs
+        }
+
+    # Update notification
+    @rpc
+    def update_notif_status(self, id_notif):
+        notifs = self.database.update_notif_status(id_notif)
         return {
             'code': 200,
             'data': notifs

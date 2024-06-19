@@ -29,6 +29,7 @@ class DatabaseWrapper:
             result.append({
                 'id_notif': row['id_notif'],
                 'id_user': row['id_user'],
+                'id_pesanan': row['id_pesanan'],
                 'tipe_notif': row['tipe_notif'],
                 'judul': row['judul'],
                 'deskripsi': row['deskripsi'],
@@ -36,7 +37,6 @@ class DatabaseWrapper:
                 'timestamp_announce': row['timestamp_announce'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_announce'], datetime) else row['timestamp_announce'],
                 'status': row['status'],
                 'link': row['link'],
-                'foto': row['foto'],
             })
         cursor.close()
         return result
@@ -79,7 +79,6 @@ class DatabaseWrapper:
                 'timestamp_announce': row['timestamp_announce'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_announce'], datetime) else row['timestamp_announce'],
                 'status': row['status'],
                 'link': row['link'],
-                'foto': row['foto'],
             })
         cursor.close()
         # return result
@@ -99,6 +98,7 @@ class DatabaseWrapper:
             result.append({
                 'id_notif': row['id_notif'],
                 'id_user': row['id_user'],
+                'id_pesanan': row['id_pesanan'],
                 'tipe_notif': row['tipe_notif'],
                 'judul': row['judul'],
                 'deskripsi': row['deskripsi'],
@@ -106,7 +106,62 @@ class DatabaseWrapper:
                 'timestamp_announce': row['timestamp_announce'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_announce'], datetime) else row['timestamp_announce'],
                 'status': row['status'],
                 'link': row['link'],
-                'foto': row['foto'],
+            })
+        cursor.close()
+        if result:
+            return result  # Asumsikan hanya ada satu notifikasi dengan ID tertentu
+        else:
+            return None
+        # return result
+
+    #GET notif berdasarkan id_user
+    def get_notif_IDUser_notifType(self, idUser, notifType):
+        cursor = self.connection.cursor(dictionary=True)
+        result = []
+        sql = "SELECT * FROM notifikasi WHERE id_user = %s AND tipe_notif = %s"
+        cursor.execute(sql, (idUser, notifType))
+        # cursor.execute(sql)
+        # if cursor.fetchall():
+        for row in cursor.fetchall():
+            result.append({
+                'id_notif': row['id_notif'],
+                'id_user': row['id_user'],
+                'id_pesanan': row['id_pesanan'],
+                'tipe_notif': row['tipe_notif'],
+                'judul': row['judul'],
+                'deskripsi': row['deskripsi'],
+                'timestamp_masuk': row['timestamp_masuk'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_masuk'], datetime) else row['timestamp_masuk'],
+                'timestamp_announce': row['timestamp_announce'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_announce'], datetime) else row['timestamp_announce'],
+                'status': row['status'],
+                'link': row['link'],
+            })
+        cursor.close()
+        if result:
+            return result  # Asumsikan hanya ada satu notifikasi dengan ID tertentu
+            print(result)
+        else:
+            return None
+        # return result
+
+    #GET notif berdasarkan id_user
+    def get_notif_IDPesanan(self, idPesanan):
+        cursor = self.connection.cursor(dictionary=True)
+        result = []
+        sql = "SELECT * FROM notifikasi WHERE id_pesanan = {}" .format((idPesanan))
+        cursor.execute(sql)
+        # if cursor.fetchall():
+        for row in cursor.fetchall():
+            result.append({
+                'id_notif': row['id_notif'],
+                'id_user': row['id_user'],
+                'id_pesanan': row['id_pesanan'],
+                'tipe_notif': row['tipe_notif'],
+                'judul': row['judul'],
+                'deskripsi': row['deskripsi'],
+                'timestamp_masuk': row['timestamp_masuk'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_masuk'], datetime) else row['timestamp_masuk'],
+                'timestamp_announce': row['timestamp_announce'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_announce'], datetime) else row['timestamp_announce'],
+                'status': row['status'],
+                'link': row['link'],
             })
         cursor.close()
         if result:
@@ -125,6 +180,7 @@ class DatabaseWrapper:
             result.append({
                 'id_notif': row['id_notif'],
                 'id_user': row['id_user'],
+                'id_pesanan': row['id_pesanan'],                
                 'tipe_notif': row['tipe_notif'],
                 'judul': row['judul'],
                 'deskripsi': row['deskripsi'],
@@ -132,7 +188,6 @@ class DatabaseWrapper:
                 'timestamp_announce': row['timestamp_announce'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_announce'], datetime) else row['timestamp_announce'],
                 'status': row['status'],
                 'link': row['link'],
-                'foto': row['foto'],
             })
         cursor.close()
         return result
@@ -156,6 +211,7 @@ class DatabaseWrapper:
             result.append({
                 'id_notif': row['id_notif'],
                 'id_user': row['id_user'],
+                'id_pesanan': row['id_pesanan'],
                 'tipe_notif': row['tipe_notif'],
                 'judul': row['judul'],
                 'deskripsi': row['deskripsi'],
@@ -163,7 +219,6 @@ class DatabaseWrapper:
                 'timestamp_announce': row['timestamp_announce'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_announce'], datetime) else row['timestamp_announce'],
                 'status': row['status'],
                 'link': row['link'],
-                'foto': row['foto'],
             })
         cursor.close()
         return (result)
@@ -178,6 +233,7 @@ class DatabaseWrapper:
             result.append({
                 'id_notif': row['id_notif'],
                 'id_user': row['id_user'],
+                'id_pesanan': row['id_pesanan'],
                 'tipe_notif': row['tipe_notif'],
                 'judul': row['judul'],
                 'deskripsi': row['deskripsi'],
@@ -185,7 +241,6 @@ class DatabaseWrapper:
                 'timestamp_announce': row['timestamp_announce'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_announce'], datetime) else row['timestamp_announce'],
                 'status': row['status'],
                 'link': row['link'],
-                'foto': row['foto'],
             })
         cursor.close()
         return (result)
@@ -200,6 +255,7 @@ class DatabaseWrapper:
             result.append({
                 'id_notif': row['id_notif'],
                 'id_user': row['id_user'],
+                'id_pesanan': row['id_pesanan'],
                 'tipe_notif': row['tipe_notif'],
                 'judul': row['judul'],
                 'deskripsi': row['deskripsi'],
@@ -207,7 +263,6 @@ class DatabaseWrapper:
                 'timestamp_announce': row['timestamp_announce'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_announce'], datetime) else row['timestamp_announce'],
                 'status': row['status'],
                 'link': row['link'],
-                'foto': row['foto'],
             })
         cursor.close()
         return (result)
@@ -222,6 +277,7 @@ class DatabaseWrapper:
             result.append({
                 'id_notif': row['id_notif'],
                 'id_user': row['id_user'],
+                'id_pesanan': row['id_pesanan'],
                 'tipe_notif': row['tipe_notif'],
                 'judul': row['judul'],
                 'deskripsi': row['deskripsi'],
@@ -229,7 +285,6 @@ class DatabaseWrapper:
                 'timestamp_announce': row['timestamp_announce'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_announce'], datetime) else row['timestamp_announce'],
                 'status': row['status'],
                 'link': row['link'],
-                'foto': row['foto'],
             })
         cursor.close()
         return (result)
@@ -250,6 +305,15 @@ class DatabaseWrapper:
             return True
         except Exception as e:
             return {"error": str(e)}
+        
+    # Update notification
+    def update_notif_status(self, id_notif):
+        cursor = self.connection.cursor(dictionary=True)
+        sql = "UPDATE notifikasi SET status = 1 WHERE id_notif = %s"
+        cursor.execute(sql, (id_notif,))  # Notice the comma to create a tuple
+        self.connection.commit()
+        cursor.close()
+        return True
     
 
 class Database(DependencyProvider):

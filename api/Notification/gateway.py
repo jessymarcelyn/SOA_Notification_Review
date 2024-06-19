@@ -35,6 +35,16 @@ class GatewayService:
             return Response(json.dumps(notifs), status=200, mimetype='application/json')
         else:
             return Response(json.dumps('No Notification found with this User ID'), status=404, mimetype='application/json')
+        
+    #GET notif berdasarkan id user
+    @http('GET', '/notif/user/<int:idUser>/<string:notifTypes>')
+    def get_notif_IDUser_notifTypes(self, request, idUser, notifTypes):
+        notifs = self.notif_rpc.get_notif_IDUser_notifType(idUser, notifTypes)
+        # return json.dumps(notifs)
+        if notifs:
+            return Response(json.dumps(notifs), status=200, mimetype='application/json')
+        else:
+            return Response(json.dumps('No Notification found with this User ID'), status=404, mimetype='application/json')
 
     #PUT berdasarkan id_notif 
     # @http('PUT', '/notif/<int:idNotif>')
@@ -103,5 +113,12 @@ class GatewayService:
             return 200, json.dumps(notif)
         except Exception as e:
             return 500, json.dumps({"error": str(e)})
+        
+
+    
+    @http('PUT', '/notif/<int:idNotif>')
+    def update_notif_status(self,request, idNotif):
+        notifs = self.notif_rpc.update_notif_status(idNotif)
+        return json.dumps(notifs)
     
     
