@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 18, 2024 at 07:49 PM
+-- Generation Time: Jun 19, 2024 at 04:46 AM
 -- Server version: 10.4.25-MariaDB
 -- PHP Version: 8.1.10
 
@@ -124,24 +124,25 @@ INSERT INTO `kartu` (`id_kartu`, `nama`, `nomer_kartu`, `cvv`, `expired_year`, `
 CREATE TABLE `notifikasi` (
   `id_notif` int(11) NOT NULL,
   `id_user` int(11) NOT NULL,
+  `id_pesanan` int(11) NOT NULL,
   `tipe_notif` varchar(20) NOT NULL,
   `judul` varchar(50) NOT NULL,
   `deskripsi` varchar(100) NOT NULL,
   `timestamp_masuk` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `timestamp_announce` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `status` tinyint(1) NOT NULL,
-  `link` varchar(20) DEFAULT NULL,
-  `foto` blob DEFAULT NULL
+  `link` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `notifikasi`
 --
 
-INSERT INTO `notifikasi` (`id_notif`, `id_user`, `tipe_notif`, `judul`, `deskripsi`, `timestamp_masuk`, `timestamp_announce`, `status`, `link`, `foto`) VALUES
-(1, 1, 'promo', 'Hotel Bumi Diskon 50%', 'Dapatkan promo special menginap 2 malam dengan diskon 50%', '2024-05-29 10:57:19', '2024-05-29 10:57:19', 0, NULL, NULL),
-(2, 2, 'promo', 'Tiket Taman Safari Promo!!', 'Ajak orang tersayang mengunjungi Taman Safari Prigen pada tanggal 1 Juni dengan harga special hanya ', '2024-05-29 10:59:06', '2024-05-29 10:59:06', 0, NULL, NULL),
-(4, 1, 'pembayaran', 'Pembayaran melalui Kartu Kredit berhasil', 'Pembayaran utnuk transaksi T001 menggunakan Kartu Kredit Bank BCA telah berhasil', '2024-05-29 11:01:24', '2024-05-29 11:01:24', 0, NULL, NULL);
+INSERT INTO `notifikasi` (`id_notif`, `id_user`, `id_pesanan`, `tipe_notif`, `judul`, `deskripsi`, `timestamp_masuk`, `timestamp_announce`, `status`, `link`) VALUES
+(1, 1, 0, 'info', 'Perubah jadwal pesawat', 'Dapatkan promo special menginap 2 malam dengan diskon 50%', '2024-06-16 20:14:25', '2024-06-16 20:14:25', 0, NULL),
+(2, 2, 0, 'info', 'Checkin pesawat', 'Ajak orang tersayang mengunjungi Taman Safari Prigen pada tanggal 1 Juni dengan harga special hanya ', '2024-06-16 20:14:53', '2024-06-16 20:14:53', 0, NULL),
+(3, 1, 0, 'pembayaran', 'Pembayaran melalui Gopay berhasil', 'Pembayaran utnuk transaksi T001 menggunakan gopay telah berhasil.', '2024-06-16 21:33:27', '2024-06-16 21:33:27', 0, NULL),
+(4, 1, 0, 'pembayaran', 'Pembayaran melalui Kartu Kredit berhasil', 'Pembayaran utnuk transaksi T001 menggunakan Kartu Kredit Bank BCA telah berhasil', '2024-06-16 21:33:30', '2024-06-16 21:33:30', 0, NULL);
 
 -- --------------------------------------------------------
 
