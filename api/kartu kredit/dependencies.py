@@ -145,8 +145,11 @@ class DatabaseWrapper:
     #     else:
     #         return False
     
-    # cek apakah nomer kartu dan cvv sesuai 
-    def cek_card_cvv(self, nomer_kartu, cvv, nominal):
+    # cek apakah inputan user sesuai dan blm expired
+    def cek_card_cvv(self, nomer_kartu, cvv, nama, month, year, nominal):
+        print("masukyo")
+        print("nomer_kartu : " + nomer_kartu)
+        print("cvv : " + cvv)
         cursor = self.connection.cursor(dictionary=True)
         hashed_nomer_kartu = self.hash_nomer_kartu(nomer_kartu)
         hashed_cvv = self.hash_nomer_kartu(cvv)
@@ -155,17 +158,44 @@ class DatabaseWrapper:
         result = cursor.fetchall()
         cursor.close()
         
-        cvv = result[0].get('cvv')
+        current_date = datetime.now()
+        
+        if not result:
+            return {"status": False, "message": "Card not found"}
+        
+        cvv_db = result[0].get('cvv')
         limit_terpakai = result[0].get('limit_terpakai')
         limit_maks = result[0].get('limit_maks')
+        nama_db = result[0].get('nama')
+        month_db = result[0].get('expired_month')
+        year_db = result[0].get('expired_year')
+        status = result[0].get('status')
+        nomer_kartu_db = result[0].get('nomer_kartu')
         
-        if cvv == hashed_cvv:
-            if(limit_terpakai + nominal <= limit_maks):
-                return True
-            else:
-                return False
-        else:
-            return False
+        if status == 0:
+            print("masuk1")
+            return {"status": False, "message": "Card is inactive"}
+        
+        if nama_db.lower() != nama.lower():
+            return {"status": False, "message": "Data does not match"}
+        
+        if month_db != month:
+            return {"status": False, "message": "Data does not match"}
+        
+        if year_db != year:
+            return {"status": False, "message": "Data does not match"}
+        
+        if cvv_db != hashed_cvv:
+            return {"status": False, "message": "CVV does not match"}
+        
+        if (limit_terpakai + nominal) > limit_maks:
+            return {"status": False, "message": "Transaction limit exceeded"}
+        
+        if year < current_date.year or (year == current_date.year and month < current_date.month):
+            return {"status": False, "message": "Card has expired"}
+        
+        print("masuk2")
+        return {"status": True, "message": "Transaction approved"}
                 
     def generate_otp(self, length=6):
         otp = np.random.randint(0, 10, length)

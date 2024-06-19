@@ -61,10 +61,20 @@ class KartuService:
     # def cek_card_cvv(self, nomer_kartu, cvv,):
     #     return self.database.cek_card_cvv(nomer_kartu, cvv)
     
-    #cek apakah nomer kartu dan cvv sesuai dan apakah limit tidak lebih
+    #cek apakah inputan user sudah sesuai, apakah limit tidak lebih dan blm expired
     @rpc
-    def cek_card_cvv(self, nomer_kartu, cvv, nominal):
-        return self.database.cek_card_cvv(nomer_kartu, cvv, nominal)
+    def cek_card_cvv(self, nomer_kartu, cvv, nama, month, year, nominal):
+        success = self.database.cek_card_cvv(nomer_kartu, cvv, nama, month, year, nominal)
+        if success:
+            return {
+                'code': 200,
+                'data': success
+            }
+        else:
+            return {
+                'code': 500,
+                'data': success
+            }
     
     #create skalian buat otp
     @rpc

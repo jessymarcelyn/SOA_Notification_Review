@@ -374,15 +374,15 @@ class GatewayService:
     #         response = {'valid': False}
     #     return Response(json.dumps(response), mimetype='application/json')
     
-    #cek apakah nomer kartu dan cvv sesuai dan apakah limit tidak lebih
-    @http('GET', '/kartu_kredit/<string:nomer_kartu>/cvv/<string:cvv>/nominal/<int:nominal>')
-    def cek_card_cvv(self, request, nomer_kartu, cvv, nominal):
-        kartu = self.kartu_rpc.cek_card_cvv(nomer_kartu,cvv, nominal)
-        if kartu:
-            response = {'valid': True}
+    #cek apakah inputan user sudah sesuai, apakah limit tidak lebih dan blm expired
+    @http('GET', '/kartu_kredit/<string:nomer_kartu>/cvv/<string:cvv>/nama/<string:nama>/expired_month/<int:month>/expired_year/<int:year>/nominal/<int:nominal>')
+    def cek_card_cvv_http(self, request, nomer_kartu, cvv, nama, month, year, nominal):
+        kartu = self.kartu_rpc.cek_card_cvv(nomer_kartu, cvv, nama, month, year, nominal)
+        
+        if kartu.get('status', False):
+            return kartu.get('code', 200), json.dumps(kartu)
         else:
-            response = {'valid': False}
-        return Response(json.dumps(response), mimetype='application/json')
+            return kartu.get('code', 500), json.dumps(kartu)
     
     #create skalian buat otp
     @http('POST', '/kartu_kredit/transaksi/')
