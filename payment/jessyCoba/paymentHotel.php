@@ -258,6 +258,27 @@
                 createTransaction(id_pesanan);
             }
 
+            $('#cardNumber, #cvv, #expiryMonth, #expiryYear').on('input', function () {
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+            $('#cardNumber').on('input', function () {
+                if (this.value.length > 16) {
+                    this.value = this.value.slice(0, 16);
+                }
+            });
+
+            $('#expiryMonth').on('input', function () {
+                if (this.value.length > 2) {
+                    this.value = this.value.slice(0, 2);
+                }
+            });
+
+            $('#expiryYear').on('input', function () {
+                if (this.value.length > 4) {
+                    this.value = this.value.slice(0, 4);
+                }
+            });
+            
             var selectedPaymentMethod = ""; // Variabel untuk menyimpan metode pembayaran yang dipili
 
             // Ketika accordion item dibuka
@@ -338,7 +359,8 @@
                     id_pesanan: id_pesanan
                 },
                 success: function(response) {
-                    console.log('Berhasil buat Initial Transaksi1;');
+                    console.log(response);
+                    console.log('Berhasil buat Initial Transaksi1 ', response);
                 },
                 error: function(xhr, status, error) {
                     console.error('Gagal membuat transaksi:', error);
