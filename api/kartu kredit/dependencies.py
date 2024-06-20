@@ -195,7 +195,8 @@ class DatabaseWrapper:
             return {"status": False, "message": "Card has expired"}
         
         print("masuk2")
-        return {"status": True, "message": "Transaction approved"}
+        # return {"status": True, "message": "Transaction approved"}
+        return self.create_transaksi(nomer_kartu, nominal, "ongoing")
                 
     def generate_otp(self, length=6):
         otp = np.random.randint(0, 10, length)
@@ -203,7 +204,7 @@ class DatabaseWrapper:
         return otp_str
 
     def create_transaksi(self, nomer_kartu, nominal, status):
-        print("masuk")
+        print("masuk create_transaksi")
         cursor = self.connection.cursor(dictionary=True)
         otp = self.generate_otp()
         encrypted_otp = self.encryption_helper.encrypt(otp)
@@ -222,8 +223,10 @@ class DatabaseWrapper:
         try:
             cursor.execute(sql, val)
             self.connection.commit()
+            inserted_id = cursor.lastrowid
+            print("inserted_id : ", inserted_id)
             cursor.close()
-            return otp
+            return otp, inserted_id
         except mysql.connector.Error as err:
             print(f"Error: {err}")
             cursor.close()

@@ -3,12 +3,12 @@
 if (!isset($_SESSION)) {
     session_start();
 }
-
+echo "<script>console.log('HALO1');</script>";
 if (isset($_POST['id_pesanan']) && ($_POST['id_pesanan2'])) {
     echo ("masuk1");
     $id_pesanan = htmlspecialchars($_POST['id_pesanan']);
     $id_pesanan2 = htmlspecialchars($_POST['id_pesanan2']);
-    echo "<script>console.log('HALO');</script>";
+    echo "<script>console.log('HALO2');</script>";
     // Hardcoded nominal for example purposes
     $nominal = 200000;
 
@@ -43,10 +43,11 @@ if (isset($_POST['id_pesanan']) && ($_POST['id_pesanan2'])) {
         $result = json_decode($response, true);
 
         if ($result === null && json_last_error() !== JSON_ERROR_NONE) {
-          
+            echo "<script>console.log('HALO3');</script>";
             echo 'Error decoding JSON response';
         } else {
             // Output the response from API
+            echo "<script>console.log('HALO4');</script>";
             echo 'Response from API: ' . json_encode($result);
         }
     }
@@ -55,7 +56,7 @@ if (isset($_POST['id_pesanan']) && ($_POST['id_pesanan2'])) {
 
 // Periksa apakah parameter idUser dikirim melalui metode POST
 elseif (isset($_POST['id_pesanan'])) {
-    echo "<script>console.log('HALO');</script>";
+    echo "<script>console.log('HALO12');</script>";
     $id_pesanan = htmlspecialchars($_POST['id_pesanan']);
 
     // Hardcoded nominal for example purposes
@@ -82,6 +83,7 @@ elseif (isset($_POST['id_pesanan'])) {
 
     // Periksa kesalahan cURL
     if (curl_errno($ch)) {
+        echo "<script>console.log('HALO13');</script>";
         echo 'Error:' . curl_error($ch);
     } else {
         // Tutup cURL
@@ -92,11 +94,11 @@ elseif (isset($_POST['id_pesanan'])) {
 
         if ($result === null && json_last_error() !== JSON_ERROR_NONE) {
             echo 'Error decoding JSON response';
-            echo "<script>console.log('HALO');</script>";
+            echo "<script>console.log('HALO14');</script>";
         } else {
             // Output the response from API
             echo 'Response from API: ' . json_encode($result);
-            echo "<script>console.log('HALO');</script>";
+            echo "<script>console.log('HALO15');</script>";
         }
     }
 }

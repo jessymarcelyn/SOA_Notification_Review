@@ -64,18 +64,30 @@ class KartuService:
     #cek apakah inputan user sudah sesuai, apakah limit tidak lebih dan blm expired
     @rpc
     def cek_card_cvv(self, nomer_kartu, cvv, nama, month, year, nominal):
-        success = self.database.cek_card_cvv(nomer_kartu, cvv, nama, month, year, nominal)
-        if success:
-            return {
-                'code': 200,
-                'data': success
-            }
-        else:
+        try:
+            # Call database method to check card details
+            success = self.database.cek_card_cvv(nomer_kartu, cvv, nama, month, year, nominal)
+            
+            if success and isinstance(success, dict) and 'otp' in success and 'inserted_id' in success:
+                return {
+                    'code': 200,
+                    'data': {
+                        'otp': success['otp'],
+                        'id_transaksi': success['inserted_id']
+                    }
+                }
+            else:
+                return {
+                    'code': 500,
+                    'data': success
+                }
+        except Exception as e:
+            # Handle exceptions or errors here
+            print(f"Error in cek_card_cvv_rpc: {e}")
             return {
                 'code': 500,
-                'data': success
+                'data': str(e)  # Return error message as string
             }
-    
     #create skalian buat otp
     @rpc
     def create_transaksi(self, nomer_kartu, nominal, status):
