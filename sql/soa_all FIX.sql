@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 18, 2024 at 07:49 PM
+-- Generation Time: Jun 20, 2024 at 10:26 AM
 -- Server version: 10.4.25-MariaDB
 -- PHP Version: 8.1.10
 
@@ -124,24 +124,25 @@ INSERT INTO `kartu` (`id_kartu`, `nama`, `nomer_kartu`, `cvv`, `expired_year`, `
 CREATE TABLE `notifikasi` (
   `id_notif` int(11) NOT NULL,
   `id_user` int(11) NOT NULL,
+  `id_pesanan` int(11) NOT NULL,
   `tipe_notif` varchar(20) NOT NULL,
   `judul` varchar(50) NOT NULL,
   `deskripsi` varchar(100) NOT NULL,
   `timestamp_masuk` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `timestamp_announce` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `status` tinyint(1) NOT NULL,
-  `link` varchar(20) DEFAULT NULL,
-  `foto` blob DEFAULT NULL
+  `link` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `notifikasi`
 --
 
-INSERT INTO `notifikasi` (`id_notif`, `id_user`, `tipe_notif`, `judul`, `deskripsi`, `timestamp_masuk`, `timestamp_announce`, `status`, `link`, `foto`) VALUES
-(1, 1, 'promo', 'Hotel Bumi Diskon 50%', 'Dapatkan promo special menginap 2 malam dengan diskon 50%', '2024-05-29 10:57:19', '2024-05-29 10:57:19', 0, NULL, NULL),
-(2, 2, 'promo', 'Tiket Taman Safari Promo!!', 'Ajak orang tersayang mengunjungi Taman Safari Prigen pada tanggal 1 Juni dengan harga special hanya ', '2024-05-29 10:59:06', '2024-05-29 10:59:06', 0, NULL, NULL),
-(4, 1, 'pembayaran', 'Pembayaran melalui Kartu Kredit berhasil', 'Pembayaran utnuk transaksi T001 menggunakan Kartu Kredit Bank BCA telah berhasil', '2024-05-29 11:01:24', '2024-05-29 11:01:24', 0, NULL, NULL);
+INSERT INTO `notifikasi` (`id_notif`, `id_user`, `id_pesanan`, `tipe_notif`, `judul`, `deskripsi`, `timestamp_masuk`, `timestamp_announce`, `status`, `link`) VALUES
+(1, 1, 0, 'info', 'Perubah jadwal pesawat', 'Dapatkan promo special menginap 2 malam dengan diskon 50%', '2024-06-19 11:32:01', '2024-06-19 11:32:01', 1, NULL),
+(2, 2, 0, 'info', 'Checkin pesawat', 'Ajak orang tersayang mengunjungi Taman Safari Prigen pada tanggal 1 Juni dengan harga special hanya ', '2024-06-16 20:14:53', '2024-06-16 20:14:53', 0, NULL),
+(3, 1, 0, 'pembayaran', 'Pembayaran melalui Gopay berhasil', 'Pembayaran utnuk transaksi T001 menggunakan gopay telah berhasil.', '2024-06-19 11:26:45', '2024-06-19 11:26:45', 1, NULL),
+(4, 1, 0, 'pembayaran', 'Pembayaran melalui Kartu Kredit berhasil', 'Pembayaran utnuk transaksi T001 menggunakan Kartu Kredit Bank BCA telah berhasil', '2024-06-19 11:26:46', '2024-06-19 11:26:46', 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -274,7 +275,17 @@ INSERT INTO `transaksi_kartu` (`id_transaksi`, `timestamp`, `nomer_kartu`, `nomi
 (27, '2024-06-10 21:58:53', 'e85acad0a469f9166744a79a1c9d33a11f735abca10f328b48ebbce3c10e75a8', '200000', 'ongoing', 'JPzywtpjhp/TaTZWRKNYeYigE1Um1g==', '2024-06-10 22:06:14'),
 (28, '2024-06-10 22:09:11', 'e85acad0a469f9166744a79a1c9d33a11f735abca10f328b48ebbce3c10e75a8', '200000', '1', 'RiLcrkwjf/Ll9HyVr58bHzsRUpEb4Q==', '2024-06-10 22:09:11'),
 (29, '2024-06-10 22:10:22', 'e85acad0a469f9166744a79a1c9d33a11f735abca10f328b48ebbce3c10e75a8', '200000', '1', '3/Tb+qSinZR9ytXOIV2ykRtAz+bxYQ==', '2024-06-10 22:10:22'),
-(30, '2024-06-10 22:10:55', 'e85acad0a469f9166744a79a1c9d33a11f735abca10f328b48ebbce3c10e75a8', '200000', 'success', 'ZBrqu4Eb7ku2ysSQkFnPBv187zjNdA==', '2024-06-10 22:10:55');
+(30, '2024-06-10 22:10:55', 'e85acad0a469f9166744a79a1c9d33a11f735abca10f328b48ebbce3c10e75a8', '200000', 'success', 'ZBrqu4Eb7ku2ysSQkFnPBv187zjNdA==', '2024-06-10 22:10:55'),
+(31, '2024-06-19 22:46:48', '85df00411f072d601b21fc2e6db9e83e01d04d11169bc7f306e13d6b4c57e99b', '200000', 'ongoing', 'vujkAO1XkChnuyAyxGStZOgE89+gQg==', '2024-06-19 22:46:48'),
+(32, '2024-06-19 22:48:31', '85df00411f072d601b21fc2e6db9e83e01d04d11169bc7f306e13d6b4c57e99b', '200000', 'ongoing', 'Ae+be4nA5J+BSfGUxeY5JgMf9tmlXg==', '2024-06-19 22:48:31'),
+(33, '2024-06-19 22:48:54', '85df00411f072d601b21fc2e6db9e83e01d04d11169bc7f306e13d6b4c57e99b', '200000', 'ongoing', 'NhldX4eQkPtDCfU5NU37L9hDrmHpFg==', '2024-06-19 22:48:54'),
+(34, '2024-06-19 22:49:39', '85df00411f072d601b21fc2e6db9e83e01d04d11169bc7f306e13d6b4c57e99b', '200000', 'ongoing', 'NMpvw+90VKF5XmbJswfxYA7GxnGKzg==', '2024-06-19 22:49:39'),
+(35, '2024-06-19 22:50:28', '85df00411f072d601b21fc2e6db9e83e01d04d11169bc7f306e13d6b4c57e99b', '200000', 'ongoing', '5P8tAdNeiMLtHYWnkLGeSwzjtbFkVA==', '2024-06-19 22:50:28'),
+(36, '2024-06-19 22:53:01', '85df00411f072d601b21fc2e6db9e83e01d04d11169bc7f306e13d6b4c57e99b', '200000', 'ongoing', 'x4NBz3lFbZbEePff10vDIVedrrD4OA==', '2024-06-19 22:53:01'),
+(37, '2024-06-19 22:53:48', '85df00411f072d601b21fc2e6db9e83e01d04d11169bc7f306e13d6b4c57e99b', '200000', 'ongoing', 'DXP4fVMeb5bzVYzvVlaIqSrGtEH8Cw==', '2024-06-19 22:53:48'),
+(38, '2024-06-19 22:56:11', '85df00411f072d601b21fc2e6db9e83e01d04d11169bc7f306e13d6b4c57e99b', '200000', 'ongoing', '/6g/PYGn+fjLtDYTdNWNUJdbi6V6bw==', '2024-06-19 22:56:11'),
+(39, '2024-06-19 22:58:16', '85df00411f072d601b21fc2e6db9e83e01d04d11169bc7f306e13d6b4c57e99b', '200000', 'ongoing', 'ybpb/CXa1FTAFiNjN4DBKIvMw+YcoA==', '2024-06-19 22:58:16'),
+(40, '2024-06-19 23:26:53', '85df00411f072d601b21fc2e6db9e83e01d04d11169bc7f306e13d6b4c57e99b', '200000', 'ongoing', '7I3ZQKWtazwudP8r16uFMp+G9mfCng==', '2024-06-19 23:26:53');
 
 -- --------------------------------------------------------
 
@@ -288,7 +299,7 @@ CREATE TABLE `transbca` (
   `no_telp` varchar(255) NOT NULL,
   `nominal` double NOT NULL,
   `status` varchar(25) NOT NULL,
-  `va` int(12) NOT NULL
+  `va` varchar(12) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -296,14 +307,23 @@ CREATE TABLE `transbca` (
 --
 
 INSERT INTO `transbca` (`id`, `timestamp_trans`, `no_telp`, `nominal`, `status`, `va`) VALUES
-(1, '2024-06-08 11:05:07', '492194c3a6d05c54a88c400c6d31af8f57bf332965e546f5f6ff9e77adc71fa5', 1000000, 'ongoing', 0),
-(2, '2024-06-08 16:32:07', '492194c3a6d05c54a88c400c6d31af8f57bf332965e546f5f6ff9e77adc71fa5', 500968, 'failed', 0),
-(3, '2024-06-08 11:08:45', '492194c3a6d05c54a88c400c6d31af8f57bf332965e546f5f6ff9e77adc71fa5', 3568000, 'ongoing', 2147483647),
-(4, '2024-06-08 11:12:12', '492194c3a6d05c54a88c400c6d31af8f57bf332965e546f5f6ff9e77adc71fa5', 350000, 'ongoing', 2147483647),
-(5, '2024-06-10 15:10:20', '492194c3a6d05c54a88c400c6d31af8f57bf332965e546f5f6ff9e77adc71fa5', 569000, 'success', 2147483647),
-(6, '2024-06-10 15:15:19', '492194c3a6d05c54a88c400c6d31af8f57bf332965e546f5f6ff9e77adc71fa5', 213003, 'success', 2147483647),
-(7, '2024-06-10 20:26:57', 'c612d647f84b2ce77cff50c3a9f54c5ea806a987429542744fcda2afb694f392', 3213103, 'success', 2147483647),
-(8, '2024-06-10 20:27:45', '83492322', 0, 'success', 0);
+(1, '2024-06-08 11:05:07', '492194c3a6d05c54a88c400c6d31af8f57bf332965e546f5f6ff9e77adc71fa5', 1000000, 'ongoing', '0'),
+(2, '2024-06-08 16:32:07', '492194c3a6d05c54a88c400c6d31af8f57bf332965e546f5f6ff9e77adc71fa5', 500968, 'failed', '0'),
+(3, '2024-06-08 11:08:45', '492194c3a6d05c54a88c400c6d31af8f57bf332965e546f5f6ff9e77adc71fa5', 3568000, 'ongoing', '2147483647'),
+(4, '2024-06-08 11:12:12', '492194c3a6d05c54a88c400c6d31af8f57bf332965e546f5f6ff9e77adc71fa5', 350000, 'ongoing', '2147483647'),
+(5, '2024-06-10 15:10:20', '492194c3a6d05c54a88c400c6d31af8f57bf332965e546f5f6ff9e77adc71fa5', 569000, 'success', '2147483647'),
+(6, '2024-06-10 15:15:19', '492194c3a6d05c54a88c400c6d31af8f57bf332965e546f5f6ff9e77adc71fa5', 213003, 'success', '2147483647'),
+(7, '2024-06-10 20:26:57', 'c612d647f84b2ce77cff50c3a9f54c5ea806a987429542744fcda2afb694f392', 3213103, 'success', '2147483647'),
+(8, '2024-06-10 20:27:45', '83492322', 0, 'success', '0'),
+(9, '2024-06-20 15:10:52', '081211366021', 10000, 'ongoing', '2147483647'),
+(10, '2024-06-20 15:13:34', '081211366021', 10000, 'ongoing', '2147483647'),
+(11, '2024-06-20 15:14:39', '081211366021', 10000, 'ongoing', '2147483647'),
+(12, '2024-06-20 15:14:58', '081211366021', 10000, 'ongoing', '2147483647'),
+(13, '2024-06-20 15:15:27', '081211366021', 10000, 'ongoing', '2147483647'),
+(14, '2024-06-20 15:17:48', '081211366021', 10000, 'ongoing', '2147483647'),
+(15, '2024-06-20 15:20:14', '081211366021', 10000, 'ongoing', '2147483647'),
+(16, '2024-06-20 15:21:15', '081211366021', 10000, 'ongoing', '2147483647'),
+(17, '2024-06-20 15:23:44', '081211366021', 10000, 'ongoing', '122081211366');
 
 -- --------------------------------------------------------
 
@@ -362,7 +382,61 @@ INSERT INTO `trans_pembayaran` (`id_pembayaran`, `id_pesanan`, `id_pesanan2`, `i
 (45, 0, 2147483647, 0, 269, '2024-06-15 00:17:45', '', '', 'initial'),
 (46, 0, NULL, 0, 269, '2024-06-15 00:19:53', '', '', 'initial'),
 (47, 0, NULL, 0, 269, '2024-06-15 00:20:39', '', '', 'initial'),
-(48, 1213, NULL, 2, 269, '2024-06-15 00:21:11', '', '', 'mmm');
+(48, 1213, NULL, 2, 269, '2024-06-15 00:21:11', '', '', 'mmm'),
+(49, 1, NULL, 0, 100000, '2024-06-19 14:00:18', '', '', 'initial'),
+(50, 1, NULL, 0, 100000, '2024-06-19 14:00:18', '', '', 'initial'),
+(51, 1, NULL, 0, 100000, '2024-06-19 14:00:29', '', '', 'initial'),
+(52, 1, NULL, 0, 100000, '2024-06-19 14:00:33', '', '', 'initial'),
+(53, 1, NULL, 0, 100000, '2024-06-19 14:00:45', '', '', 'initial'),
+(54, 1, NULL, 0, 100000, '2024-06-19 14:01:30', '', '', 'initial'),
+(55, 1, NULL, 0, 100000, '2024-06-19 14:05:01', '', '', 'initial'),
+(56, 1, NULL, 0, 100000, '2024-06-19 14:06:37', '', '', 'initial'),
+(57, 1, NULL, 0, 100000, '2024-06-19 14:06:58', '', '', 'initial'),
+(58, 1, NULL, 0, 100000, '2024-06-19 14:11:17', '', '', 'initial'),
+(59, 1, NULL, 0, 100000, '2024-06-19 14:11:29', '', '', 'initial'),
+(60, 1, NULL, 0, 100000, '2024-06-19 14:16:51', '', '', 'initial'),
+(61, 1, NULL, 0, 100000, '2024-06-19 14:17:31', '', '', 'initial'),
+(62, 1, 2, 0, 200000, '2024-06-19 14:18:14', '', '', 'initial'),
+(63, 1, NULL, 0, 100000, '2024-06-19 14:18:14', '', '', 'initial'),
+(64, 1, 2, 0, 200000, '2024-06-19 14:18:32', '', '', 'initial'),
+(65, 1, NULL, 0, 100000, '2024-06-19 14:25:16', '', '', 'initial'),
+(66, 1, 2, 0, 200000, '2024-06-19 14:25:16', '', '', 'initial'),
+(67, 1, NULL, 0, 100000, '2024-06-19 14:25:16', '', '', 'initial'),
+(68, 1, NULL, 0, 100000, '2024-06-19 14:25:16', '', '', 'initial'),
+(69, 1, 2, 0, 200000, '2024-06-19 14:25:16', '', '', 'initial'),
+(70, 1, 2, 0, 200000, '2024-06-19 14:25:16', '', '', 'initial'),
+(71, 1, 2, 0, 200000, '2024-06-19 14:25:23', '', '', 'initial'),
+(72, 1, 2, 0, 200000, '2024-06-19 14:25:38', '', '', 'initial'),
+(73, 1, NULL, 0, 100000, '2024-06-19 14:26:55', '', '', 'initial'),
+(74, 1, NULL, 0, 100000, '2024-06-19 17:33:07', '', '', 'initial'),
+(75, 1, NULL, 0, 100000, '2024-06-19 17:33:44', '', '', 'initial'),
+(76, 1, NULL, 0, 100000, '2024-06-19 17:34:25', '', '', 'initial'),
+(77, 1, NULL, 0, 100000, '2024-06-19 17:41:13', '', '', 'initial'),
+(78, 1, NULL, 0, 100000, '2024-06-19 20:00:55', '', '', 'initial'),
+(79, 1, NULL, 0, 100000, '2024-06-19 20:01:01', '', '', 'initial'),
+(80, 1, NULL, 0, 100000, '2024-06-19 20:02:00', '', '', 'initial'),
+(81, 1, NULL, 0, 100000, '2024-06-19 20:02:16', '', '', 'initial'),
+(82, 1, NULL, 0, 100000, '2024-06-19 20:08:07', '', '', 'initial'),
+(83, 1, NULL, 0, 100000, '2024-06-19 20:13:28', '', '', 'initial'),
+(84, 1, NULL, 0, 100000, '2024-06-19 20:17:27', '', '', 'initial'),
+(85, 1, NULL, 0, 100000, '2024-06-19 20:19:57', '', '', 'initial'),
+(86, 1, NULL, 0, 100000, '2024-06-19 20:21:26', '', '', 'initial'),
+(87, 1, NULL, 0, 100000, '2024-06-19 20:21:56', '', '', 'initial'),
+(88, 0, NULL, 0, 269, '2024-06-19 20:22:40', '', '', 'initial'),
+(89, 1, NULL, 0, 100000, '2024-06-19 20:25:22', '', '', 'initial'),
+(90, 1, NULL, 0, 100000, '2024-06-19 20:25:51', '', '', 'initial'),
+(91, 1, 2, 0, 200000, '2024-06-19 20:26:13', '', '', 'initial'),
+(92, 1, NULL, 0, 100000, '2024-06-19 20:47:58', '', '', 'initial'),
+(93, 1, NULL, 0, 100000, '2024-06-19 20:47:58', '', '', 'initial'),
+(94, 1, NULL, 0, 100000, '2024-06-19 20:47:58', '', '', 'initial'),
+(95, 1, NULL, 0, 100000, '2024-06-19 20:48:02', '', '', 'initial'),
+(96, 1, NULL, 0, 100000, '2024-06-19 20:50:09', '', '', 'initial'),
+(97, 1, NULL, 0, 100000, '2024-06-19 21:14:50', '', '', 'initial'),
+(98, 1, NULL, 0, 100000, '2024-06-19 21:24:32', '', '', 'initial'),
+(99, 1, NULL, 0, 100000, '2024-06-19 21:25:32', '', '', 'initial'),
+(100, 1, NULL, 0, 100000, '2024-06-19 21:34:35', '', '', 'initial'),
+(101, 1, NULL, 0, 100000, '2024-06-19 21:36:43', '', '', 'initial'),
+(102, 1, NULL, 0, 100000, '2024-06-19 21:37:24', '', '', 'initial');
 
 --
 -- Indexes for dumped tables
@@ -510,13 +584,13 @@ ALTER TABLE `transaksiovo`
 -- AUTO_INCREMENT for table `transaksi_kartu`
 --
 ALTER TABLE `transaksi_kartu`
-  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `transbca`
 --
 ALTER TABLE `transbca`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `transmandiri`
@@ -528,7 +602,7 @@ ALTER TABLE `transmandiri`
 -- AUTO_INCREMENT for table `trans_pembayaran`
 --
 ALTER TABLE `trans_pembayaran`
-  MODIFY `id_pembayaran` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `id_pembayaran` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
