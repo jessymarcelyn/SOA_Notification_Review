@@ -13,7 +13,7 @@ class GatewayService:
 
     # Get berdasarkan id_pesanan
     @http('GET', '/Tpembayaran/IDPesanan/<int:IDPesanan>')
-    def get__byIDPesanan(self, request, IDPesanan):
+    def get__byIDPesananTP(self, request, IDPesanan):
         exist = self.TransP_rpc.get__byIDPesanan(IDPesanan)
         if exist:
             return Response(json.dumps(exist), status=200, mimetype='application/json')
@@ -22,7 +22,7 @@ class GatewayService:
         
     # Get berdasarkan id_transaksi
     @http('GET', '/Tpembayaran/IDTransaksi/<int:IDTransaksi>')
-    def get__byIDTransaksi(self, request, IDTransaksi):
+    def get__byIDTransaksiTP(self, request, IDTransaksi):
         exist = self.TransP_rpc.get__byIDTransaksi(IDTransaksi)
         if exist:
             return Response(json.dumps(exist), status=200, mimetype='application/json')
@@ -31,7 +31,7 @@ class GatewayService:
         
     # Update berdasarkan id_pesanan (jenis_pembayaran, nama_penyedia)
     @http('PUT', '/Tpembayaran/updateTrans/<int:IDTransaksi>')
-    def update__byIDTransaksi(self, request, IDTransaksi):
+    def update__byIDTransaksiTP(self, request, IDTransaksi):
         exist = self.TransP_rpc.get__byIDTransaksi(IDTransaksi)
         if exist:
             try:
@@ -49,7 +49,7 @@ class GatewayService:
     
     #Create transaksi_pembayaran
     @http('POST', '/Tpembayaran')
-    def create_pembayaran(self, request):
+    def create_pembayaranTP(self, request):
         data = json.loads(request.get_data(as_text=True))
         id_pesanan = data.get('id_pesanan')
         id_pesanan2 = data.get('id_pesanan2') 
@@ -61,7 +61,7 @@ class GatewayService:
     
     #update status berdasarkan id_pesanan
     @http('PUT', '/Tpembayaran/pesanan/<int:id_pesanan>/status/<string:status>')
-    def update_status_pembayaran(self, request, id_pesanan, status):
+    def update_status_pembayaranTP(self, request, id_pesanan, status):
         transaksi = self.TransP_rpc.update_status_pembayaran(id_pesanan, status)
         if transaksi :
             return transaksi['code'],json.dumps(transaksi['data'])
@@ -70,7 +70,7 @@ class GatewayService:
     
     #update id_transaksi berdasarkan id_pesanan
     @http('PUT', '/Tpembayaran/pesanan/<int:id_pesanan>/transaksi/<string:id_transaksi>')
-    def update_idTransaksi(self, request, id_pesanan, id_transaksi):
+    def update_idTransaksiTP(self, request, id_pesanan, id_transaksi):
         transaksi = self.TransP_rpc.update_idTransaksi(id_pesanan, id_transaksi)
         if transaksi :
             return transaksi['code'],json.dumps(transaksi['data'])
@@ -82,7 +82,7 @@ class GatewayService:
 
     #GET status berdasarkan id_transaksi
     @http('GET', '/transBCA/status/<int:idTrans>')
-    def get_status_byIDTrans(self, request, idTrans):
+    def get_status_byIDTransTBCA(self, request, idTrans):
         exist = self.bca_rpc.get_status_byIDTrans(idTrans)
         if exist:
             return Response(json.dumps(exist), status=200, mimetype='application/json')
@@ -91,7 +91,7 @@ class GatewayService:
         
     #GET berdasarkan id_transaksi
     @http('GET', '/transBCA/<int:idTrans>')
-    def get_byIDTrans(self, request, idTrans):
+    def get_byIDTransTBCA(self, request, idTrans):
         exist = self.bca_rpc.get_byIDTrans(idTrans)
         if exist:
             return Response(json.dumps(exist), status=200, mimetype='application/json')
@@ -100,7 +100,7 @@ class GatewayService:
         
     #GET untuk cek timestamp > 2 menit berdasarkan id_trans
     @http('GET', '/transBCA/timestamp/<int:idTrans>')
-    def get_timestamp_byIDTrans(self, request, idTrans):
+    def get_timestamp_byIDTransTBCA(self, request, idTrans):
         exist = self.bca_rpc.get_timestamp_byIDTrans(idTrans)
         if exist:
             return Response(json.dumps(exist), status=200, mimetype='application/json')
@@ -109,14 +109,14 @@ class GatewayService:
         
     #POST create (masukin no_telp, nominal, status = ongoing, VA) di tabel transaksi transfer bank
     @http('POST', '/transBCA')
-    def create_trans(self, request):
+    def create_transTBCA(self, request):
         try:
             data = json.loads(request.get_data(as_text=True))
             no_telp = data.get('no_telp') #BAKALAN DIGANTI SAMA API GET NO_TELP NYA 
             nominal = data.get('nominal')
             # va = data.get('VA')
-            api_url = f'http://localhost:8000//BCA/{no_telp}'
-            Response = request.get(api_url)
+            api_url = f'http://localhost:8000/BCA/{no_telp}'
+            Response = requests.get(api_url)
             if Response.status_code == 200:
                 va = Response.json()
                 transaksi = self.bca_rpc.create_trans(
@@ -130,7 +130,7 @@ class GatewayService:
         
     #PUT ada pembayaran jadi update status = success
     @http('PUT', '/transBCA/<int:idTrans>')
-    def pay_trans(self, request, idTrans):
+    def pay_transTBCA(self, request, idTrans):
         exist = self.bca_rpc.get_byIDTrans(idTrans)
         if exist :
             api_url = f'http://localhost:8000/Tpembayaran/updateTrans/{idTrans}'
@@ -154,7 +154,7 @@ class GatewayService:
 
     #GET status berdasarkan id_transaksi
     @http('GET', '/transMandiri/status/<int:idTrans>')
-    def get_status_byIDTrans(self, request, idTrans):
+    def get_status_byIDTransTMandiri(self, request, idTrans):
         exist = self.mandiri_rpc.get_status_byIDTrans(idTrans)
         if exist:
             return Response(json.dumps(exist), status=200, mimetype='application/json')
@@ -163,7 +163,7 @@ class GatewayService:
         
     #GET berdasarkan id_transaksi
     @http('GET', '/transMandiri/<int:idTrans>')
-    def get_byIDTrans(self, request, idTrans):
+    def get_byIDTransTMandiri(self, request, idTrans):
         exist = self.mandiri_rpc.get_byIDTrans(idTrans)
         if exist:
             return Response(json.dumps(exist), status=200, mimetype='application/json')
@@ -172,7 +172,7 @@ class GatewayService:
         
     #GET untuk cek timestamp > 2 menit berdasarkan id_trans
     @http('GET', '/transMandiri/timestamp/<int:idTrans>')
-    def get_timestamp_byIDTrans(self, request, idTrans):
+    def get_timestamp_byIDTransTMandiri(self, request, idTrans):
         exist = self.mandiri_rpc.get_timestamp_byIDTrans(idTrans)
         if exist:
             return Response(json.dumps(exist), status=200, mimetype='application/json')
@@ -181,7 +181,7 @@ class GatewayService:
         
     #POST create (masukin no_telp, nominal, status = ongoing, VA) di tabel transaksi transfer bank
     @http('POST', '/transMandiri')
-    def create_trans(self, request):
+    def create_transTMandiri(self, request):
         try:
             data = json.loads(request.get_data(as_text=True))
             no_telp = data.get('no_telp')
@@ -196,7 +196,7 @@ class GatewayService:
         
     #PUT ada pembayaran jadi update status = success
     @http('PUT', '/transMandiri/<int:idTrans>')
-    def pay_trans(self, request, idTrans):
+    def pay_transTMandiri(self, request, idTrans):
         exist = self.mandiri_rpc.get_byIDTrans(idTrans)
         if exist :
             api_url = f'http://localhost:8000/Tpembayaran/updateTrans/{idTrans}'
@@ -217,11 +217,11 @@ class GatewayService:
     BBCA_rpc = RpcProxy('BankBCA_service')
     
     @http('GET', '/BCA/<string:noTelp>')
-    def getVA (self, request, noTelp):
+    def getVABCA(self, request, noTelp):
         exist = self.BBCA_rpc.get_byNoTelp(noTelp)
         va = ''
         if exist:
-            va += '123'
+            va += '122'
             va  += noTelp
             # va.append(str(noTelp))
             return Response(json.dumps(va), status=200, mimetype='application/json')
@@ -229,7 +229,7 @@ class GatewayService:
             return Response(json.dumps('No Bank Account is found with this phone number'), status=404, mimetype='application/json')
         
     @http('POST', '/BCA')
-    def createBankAcc (self, request):
+    def createBankAccBCA(self, request):
         try:
             data = json.loads(request.get_data(as_text=True))
             nama = data.get('nama')
@@ -243,7 +243,7 @@ class GatewayService:
             return 500, json.dumps({"error": str(e)})
         
     @http('GET', '/BCA/Cpin/<string:VA>/<string:pin>')
-    def CheckPin (self, request, VA, pin):
+    def CheckPinBCA(self, request, VA, pin):
         no = VA[3:]
         check = self.BBCA_rpc.CheckPin(no, pin)
         if check: 
@@ -253,20 +253,20 @@ class GatewayService:
     
     BMandiri_RPC = RpcProxy('BankMandiri_service')
     
-    @http('GET', '/BCA/<string:noTelp>')
-    def getVA (self, request, noTelp):
+    @http('GET', '/Mandiri/<string:noTelp>')
+    def getVAMandiri(self, request, noTelp):
         exist = self.BMandiri_RPC.get_byNoTelp(noTelp)
         va = ''
         if exist:
-            va += '123'
+            va += '126'
             va  += noTelp
             # va.append(str(noTelp))
             return Response(json.dumps(va), status=200, mimetype='application/json')
         else:
             return Response(json.dumps('No Bank Account is found with this phone number'), status=404, mimetype='application/json')
         
-    @http('POST', '/BCA')
-    def createBankAcc (self, request):
+    @http('POST', '/Mandiri')
+    def createBankAccMandiri(self, request):
         try:
             data = json.loads(request.get_data(as_text=True))
             nama = data.get('nama')
@@ -279,8 +279,8 @@ class GatewayService:
         except Exception as e:
             return 500, json.dumps({"error": str(e)})
         
-    @http('GET', '/BCA/Cpin/<string:VA>/<string:pin>')
-    def CheckPin (self, request, VA, pin):
+    @http('GET', '/Mandiri/Cpin/<string:VA>/<string:pin>')
+    def CheckPinMandiri(self, request, VA, pin):
         no = VA[3:]
         check = self.BMandiri_RPC.CheckPin(no, pin)
         if check: 
@@ -288,7 +288,7 @@ class GatewayService:
         else:
             return Response(json.dumps('Wrong VA or PIN Please try again'), status=404, mimetype='application/json')
     
-    # GOPAY
+    #GOPAY
     gopay_rpc = RpcProxy('gopay_service')
 
     # @http('GET', '/gopay/no_telp/<string:no_telp>')
