@@ -55,9 +55,9 @@
   </div>
 </div>
 
-<div  id="autoCloseAlert"  class="alert alert-primary" role="alert">
+<!-- <div  id="autoCloseAlert"  class="alert alert-primary" role="alert">
   <a href="notif_page.php" class="alert-link" style="text-decoration: none; color: inherit; font-weight: normal;">Pembayaran sedang di proses!</a>
-</div>
+</div> -->
 
 
 

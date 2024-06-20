@@ -40,6 +40,8 @@ require "connect.php";
 </head>
 
 <body>
+  <?php include 'notif_modal.php'; ?>
+
   <div class="container-fluid full-screen">
     <div class="row">
       <div class="content ">
@@ -154,12 +156,18 @@ require "connect.php";
           url: 'checkPin.php',
           type: 'POST',
           data: {
-            id_transaksi: 1,
+            id_transaksi: 2,
             pin: hashed,
-            nama_penyedia: 'booking' 
           },
           success: function (response) {
-            console.log(response); // Handle success response from server
+            console.log(response);
+            if (response == "true") {
+              $('#successNotif').modal('show');
+            }
+            else {
+              // $('#failedNotif').modal('show');
+
+            }
           },
           error: function (xhr, status, error) {
             console.error('AJAX Error:', error); // Handle AJAX errors
