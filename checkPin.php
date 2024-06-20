@@ -57,6 +57,7 @@ if (isset($_POST['id_transaksi']) && isset($_POST['pin'])) {
     $pin = htmlspecialchars($_POST['pin']);
 
     $nama_penyedia = getNamaPenyedia($id_transaksi);
+    $nama_penyedia = strtolower($nama_penyedia);
 
 
 
