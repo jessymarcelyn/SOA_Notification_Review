@@ -45,7 +45,7 @@ if(isset($_POST['id_pesanan'])){
             echo "<script>console.log('HALO');</script>";
         } else {
             // Output the response from API
-            echo 'Response from API: ' . json_encode($result);
+            // echo 'Response from API: ' . json_encode($result);
             echo "<script>console.log('HALO');</script>";
         }
     }

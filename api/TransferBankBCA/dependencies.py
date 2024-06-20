@@ -49,7 +49,7 @@ class DatabaseWrapper:
             result.append({
                 'id' : row['id'],
                 'timestamp_trans' : row['timestamp_trans'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_trans'], datetime) else row['timestamp_trans'],
-                'no_rek' : row['no_rek'],
+                'no_telp' : row['no_telp'],
                 'nominal' : row['nominal'],
                 'status' : row['status'],
                 'va' : row['va']
@@ -111,8 +111,6 @@ class DatabaseWrapper:
 
     # Add Transaksi into tabel transaksi transfer bank
     def create_trans(self, no_telp, nominal, va):
-        # hashed_noRek = self.hash_value(no_rek)
-        # hashed_va = self.hash_value(va)
         status = 'ongoing'
         try:
             cursor = self.connection.cursor(dictionary=True)
@@ -123,8 +121,24 @@ class DatabaseWrapper:
             """
             cursor.execute(sql, (no_telp, nominal, va, status))
             self.connection.commit()
-            cursor.close()
-            return True
+            # Ambil id_transaksi dari baris yang baru saja dimasukkan
+            id_transaksi = cursor.lastrowid
+            
+            # Ambil VA dari database setelah INSERT
+            sql_select_va = """
+            SELECT va FROM transbca WHERE id = %s
+            """
+            cursor.execute(sql_select_va, (id_transaksi,))
+            result = cursor.fetchone()
+            
+            if result:
+                va_from_db = result['va']
+                cursor.close()
+                return {"id_transaksi": id_transaksi, "va": va_from_db}
+            else:
+                cursor.close()
+                return {"error": "Failed to fetch VA from database"}
+        
         except Exception as e:
             return {"error": str(e)}
 

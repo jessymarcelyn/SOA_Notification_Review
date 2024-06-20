@@ -279,10 +279,11 @@
             </div>
         </div>
     </div>
-
+<!-- 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script>
         $(document).ready(function() {
 
@@ -387,7 +388,7 @@
         function createTransaction(id_pesanan){
             console.log('id_pesanan: ', id_pesanan);
             $.ajax({
-                url: "fetc-api-BCA.php",
+                url: "fetch-api-BCA.php",
                 method: 'POST',
                 data: {
                     id_pesanan: id_pesanan
@@ -402,11 +403,11 @@
         }
 
         // Fungsi untuk memuat membuat transaksi pertama kali dengan status "initial" khusus pesawat PP
-        function createTransaction(id_pesanan, id_pesanan2){
+        function createTransaction2(id_pesanan, id_pesanan2){
             console.log('id_pesanan: ', id_pesanan);
             console.log('id_pesanan2: ', id_pesanan2);
             $.ajax({
-                url: "fetc-api-BCA.php",
+                url: "fetch-api-BCA.php",
                 method: 'POST',
                 data: {
                     id_pesanan: id_pesanan,

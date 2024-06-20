@@ -45,11 +45,11 @@ class DatabaseWrapper:
         sql = "SELECT * FROM transmandiri WHERE id_trans = {}" .format((idTrans))
         cursor.execute(sql)
         for row in cursor.fetchall():
-            # unhashed_no_rek = self.decrypt_value(row['no_rek'])
+            # unhashed_no_rek = self.decrypt_value(row['no_telp'])
             result.append({
                 'id_trans' : row['id_trans'],
                 'timestamp_trans' : row['timestamp_trans'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_trans'], datetime) else row['timestamp_trans'],
-                'no_rek' : row['no_rek'],
+                'no_telp' : row['no_telp'],
                 'nominal' : row['nominal'],
                 'status' : row['status'],
                 'va' : row['va']

@@ -36,7 +36,7 @@ class DatabaseWrapper:
             })
         cursor.close()
         if result:
-            return result
+            return True
         else:
             return None
         
