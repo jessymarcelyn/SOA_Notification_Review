@@ -83,7 +83,7 @@ elseif (isset($_POST['id_pesanan']) && ($_POST['id_pesanan2'])) {
     // Periksa kesalahan cURL
     if (curl_errno($ch)) {
         echo 'Error:' . curl_error($ch);
-        curl_close($ch);
+        // curl_close($ch);
     } else {
         // Tutup cURL
         curl_close($ch);

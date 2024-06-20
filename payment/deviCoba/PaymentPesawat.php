@@ -10,7 +10,7 @@
     <!-- Import jquery cdn -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
     </script>
-    <link rel='icon' href='../images/logo.png' type='images/logo.png'>
+    <link rel='icon' href='../../image/logo.png' type='images/logo.png'>
     <title>Booking.com | Payment</title>
 
     <!-- Bootstrap CSS  -->
@@ -23,10 +23,10 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <link rel="stylesheet" href="../css/payment.css">
+    <link rel="stylesheet" href="../../css/payment.css">
 
 </head>
-<script>
+<!-- <script>
     $(document).ready(function() {
         $("#toggleDetails").click(function() {
             $("#priceInfo").toggle();
@@ -50,7 +50,7 @@
             }
         }
     });
-</script>
+</script> -->
 
 <body>
 
@@ -148,7 +148,7 @@
                                             </div>
                                             <div class="col-6" style="padding-right: 5%; text-align:right">
                                                 <!-- <img src="../icon/visa.png" class="my-image" style="width: 20%;"> -->
-                                                <img src="../icon/mastercard.png" class="my-image" style="width: 15%;">
+                                                <img src="../../icon/mastercard.png" class="my-image" style="width: 15%;">
                                                 <!-- <img src="../icon/american2.png" class="my-image" style="width: 20%;">
                         <img src="../icon/jcb4.png" class="my-image" style="width: 20%;"> -->
                                             </div>
@@ -205,8 +205,8 @@
                                                 <p>Digital Payment</p>
                                             </div>
                                             <div class="col-6" style="padding-right: 5%; text-align:right">
-                                                <img src="../icon/ovo.png" class="my-image" style="width:15%;">
-                                                <img src="../icon/gopay.png" class="my-image" style="width: 25%;">
+                                                <img src="../../icon/ovo.png" class="my-image" style="width:15%;">
+                                                <img src="../../icon/gopay.png" class="my-image" style="width: 25%;">
                                             </div>
                                         </div>
                                     </button>
@@ -219,8 +219,8 @@
                                             </label>
                                             <select id="digitalProvider" class="form-select" aria-label="Default select example" style="font-size: 13px;">
 
-                                                <option value="ovo" data-image="icon/bca.png" selected>OVO</option>
-                                                <option value="gopay" data-image="icon/mandiri.png">GOPAY</option>
+                                                <option value="ovo" data-image="../icon/bca.png" selected>OVO</option>
+                                                <option value="gopay" data-image="../icon/mandiri.png">GOPAY</option>
                                                 <!-- <option value="bri" data-image="icon/bri.png">BRI</option>
                         <option value="bni" data-image="icon/bni.png">BNI</option> -->
                                             </select>
@@ -255,8 +255,8 @@
                                                 <p>Choose bank <span class="asterisk" style="color:red">*</span></p>
                                             </label>
                                             <select id="bank" class="form-select" aria-label="Default select example" style="font-size: 13px;">
-                                                <option value="bca" data-image="icon/bca.png" selected>BCA</option>
-                                                <option value="mandiri" data-image="icon/mandiri.png">Mandiri</option>
+                                                <option value="bca" data-image="../icon/bca.png" selected>BCA</option>
+                                                <option value="mandiri" data-image="../icon/mandiri.png">Mandiri</option>
                                                 <!-- <option value="bri" data-image="icon/bri.png">BRI</option>
                         <option value="bni" data-image="icon/bni.png">BNI</option> -->
                                             </select>
@@ -280,108 +280,94 @@
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script>
         $(document).ready(function() {
 
-            // AJAX
-            // NANTI AMBIL DARI ERICKSEN
-            var id_pesanan = 1;
-            var id_pesanan2;
-            // var id_pesanan2 = 2;
+// AJAX
+// NANTI AMBIL DARI ERICKSEN
+var id_pesanan = 1;
+var id_pesanan2;
+// var id_pesanan2 = 2;
 
-            // Membuat traksaksi ketika pertama kali pindah dari halaman booking ke pembayaran
-            if (id_pesanan2 != null) {
-                createTransaction2(id_pesanan, id_pesanan2);
-            }else{
-                createTransaction(id_pesanan);
-            }
+// Membuat traksaksi ketika pertama kali pindah dari halaman booking ke pembayaran
+if (id_pesanan2 != null) {
+    createTransaction2(id_pesanan, id_pesanan2);
+}else{
+    createTransaction(id_pesanan);
+}
 
+var selectedPaymentMethod = ""; // Variabel untuk menyimpan metode pembayaran yang dipili
 
-            var selectedPaymentMethod = ""; // Variabel untuk menyimpan metode pembayaran yang dipilih
+// Ketika accordion item dibuka
+$(".accordion-item").on('shown.bs.collapse', function() {
+    // Bersihkan formulir
+    $("input[type='text']").val('');
+    selectedPaymentMethod = $(this).attr("id");;
+    console.log(selectedPaymentMethod) // Reset variabel selectedPaymentMethod
+    $("#bank").val("bca");
 
+});
 
-
-            // Ketika accordion item dibuka
-            $(".accordion-item").on('shown.bs.collapse', function() {
-                // Bersihkan formulir
-                $("input[type='text']").val('');
-                selectedPaymentMethod = $(this).attr("id");;
-                console.log(selectedPaymentMethod) // Reset variabel selectedPaymentMethod
-                $("#bank").val("bca");
-
-            });
-
-            // Ketika tombol "Book Now" diklik
-            $("#bookNowBtn").click(function() {
-                if (selectedPaymentMethod) { // Jika metode pembayaran dipilih
-                    switch (selectedPaymentMethod) {
-                        case "creditCardOption":
-                            if ($("#cardHolderName").val() === "" || $("#cardNumber").val() === "" || $("#expiryMonth").val() === "" || $("#expiryYear").val() === "" || $("#cvc").val() === "") {
-                                alert("Please fill in all required fields.");
-                                return;
-                            }
-                            // Kumpulkan data dari formulir kartu kredit/debit
-                            paymentData = {
-                                method: "Credit/Debit Card",
-                                cardHolderName: $("#cardHolderName").val(),
-                                cardNumber: $("#cardNumber").val(),
-                                expiryMonth: $("#expiryMonth").val(),
-                                expiryYear: $("#expiryYear").val(),
-                                cvc: $("#cvc").val()
-                            };
-                            console.log(paymentData); // Lakukan tindakan dengan data yang dikumpulkan
-                            alert("Processing credit/debit card payment...");
-                            break;
-                        case "digitalPaymentOption":
-                            if ($("#mobileNumber").val() === "") {
-                                alert("Please fill in all required fields.");
-                                return;
-                            }
-                            // Kumpulkan data dari formulir pembayaran digital
-                            paymentData = {
-                                method: "Digital Payment",
-                                provider: $("#digitalProvider").val(),
-                                mobileNumber: $("#mobileNumber").val()
-                            };
-                            console.log(paymentData); // Lakukan tindakan dengan data yang dikumpulkan
-                            alert("Processing digital payment...");
-                            break;
-                        case "bankTransferOption":
-                            // Kumpulkan data dari formulir transfer bank
-                            paymentData = {
-                                method: "Bank Transfer",
-                                bank: $("#bank").val()
-                            };
-                            console.log(paymentData); // Lakukan tindakan dengan data yang dikumpulkan
-                            alert("Processing bank transfer payment...");
-                            break;
-                        default:
-                            // Tindakan jika tidak ada metode pembayaran yang dipilih
-                            alert("Please select a payment method.");
-                    }
-                    // Contoh pengiriman data ke server
-                    /*
-                    $.ajax({
-                      url: 'your-server-endpoint',
-                      method: 'POST',
-                      data: paymentData,
-                      success: function(response) {
-                        console.log('Payment data submitted successfully');
-                      },
-                      error: function(error) {
-                        console.log('Error submitting payment data', error);
-                      }
-                    });
-                    */
+// Ketika tombol "Book Now" diklik
+$("#bookNowBtn").click(function() {
+    if (selectedPaymentMethod) { // Jika metode pembayaran dipilih
+        switch (selectedPaymentMethod) {
+            case "creditCardOption":
+                if ($("#cardHolderName").val() === "" || $("#cardNumber").val() === "" || $("#expiryMonth").val() === "" || $("#expiryYear").val() === "" || $("#cvc").val() === "") {
+                    alert("Please fill in all required fields.");
+                    return;
                 } else {
-                    // Tampilkan pesan jika tidak ada metode pembayaran yang dipilih
-                    alert("Please select a payment method before proceeding.");
+                    // Kumpulkan data dari formulir kartu kredit/debit
+                    // paymentData = {
+                    //     method: "Credit/Debit Card",
+                    //     cardHolderName: $("#cardHolderName").val(),
+                    //     cardNumber: $("#cardNumber").val(),
+                    //     expiryMonth: $("#expiryMonth").val(),
+                    //     expiryYear: $("#expiryYear").val(),
+                    //     cvc: $("#cvc").val()
+                    // };
+                    checkKartu($("#cardHolderName").val(), $("#cardNumber").val(), $("#expiryMonth").val(), $("#expiryYear").val(), $("#cvc").val(), 200000)
+                    // console.log(paymentData); // Lakukan tindakan dengan data yang dikumpulkan
+                    // alert("Processing credit/debit card payment...");
+                    break;
                 }
-            });
-        });
+            case "digitalPaymentOption":
+                if ($("#mobileNumber").val() === "") {
+                    alert("Please fill in all required fields.");
+                    return;
+                }
+                // Kumpulkan data dari formulir pembayaran digital
+                paymentData = {
+                    method: "Digital Payment",
+                    provider: $("#digitalProvider").val(),
+                    mobileNumber: $("#mobileNumber").val()
+                };
+                console.log(paymentData); // Lakukan tindakan dengan data yang dikumpulkan
+                alert("Processing digital payment...");
+                break;
+            case "bankTransferOption":
+                // Kumpulkan data dari formulir transfer bank
+                paymentData = {
+                    method: "Bank Transfer",
+                    bank: $("#bank").val()
+                };
+                console.log(paymentData); // Lakukan tindakan dengan data yang dikumpulkan
+                alert("Processing bank transfer payment...");
+                break;
+            default:
+                // Tindakan jika tidak ada metode pembayaran yang dipilih
+                alert("Please select a payment method.");
+        }
+    } else {
+        // Tampilkan pesan jika tidak ada metode pembayaran yang dipilih
+        alert("Please select a payment method before proceeding.");
+    }
+});
+});
 
         // Fungsi untuk memuat membuat transaksi pertama kali dengan status "initial" 
         function createTransaction(id_pesanan){
