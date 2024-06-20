@@ -77,6 +77,20 @@ class GatewayService:
         else:
             return transaksi['code'],json.dumps(transaksi['data'])
     
+    #update id_transaksi, jenis_pembayaran, nama_penyedia, status(ongoing), timestamp(otomatis) berdasarkan id_pesanan
+    @http('PUT', '/Tpembayaran/pesanan/<int:id_pesanan>')
+    def update_pembayaranTP(self, request, id_pesanan):
+        data = json.loads(request.get_data(as_text=True))
+        id_transaksi = data.get('id_transaksi')
+        jenis_pembayaran = data.get('jenis_pembayaran') 
+        nama_penyedia = data.get('nama_penyedia')
+    
+        transaksi = self.TransP_rpc.update_pembayaran(id_pesanan, id_transaksi, jenis_pembayaran, nama_penyedia)
+        if transaksi :
+            return transaksi['code'],json.dumps(transaksi['data'])
+        else:
+            return transaksi['code'],json.dumps(transaksi['data'])
+    
     # TRANSFER BCA
     bca_rpc = RpcProxy('transferBCA_service')
 
@@ -386,7 +400,7 @@ class GatewayService:
     
     #create skalian buat otp
     @http('POST', '/kartu_kredit/transaksi/')
-    def create_transaksi(self, request):
+    def create_transaksi_kartu(self, request):
         data = json.loads(request.get_data(as_text=True))
         transaksi  = self.kartu_rpc.create_transaksi(data['nomer_kartu'], data['nominal'], data['status'])
         return transaksi['code'],json.dumps(transaksi['data'])
@@ -425,7 +439,7 @@ class GatewayService:
     
     #update status dan limit berdasarkan id_transaksi
     @http('PUT', '/kartu_kredit/transaksi/<int:id_transaksi>/status/<string:status>')
-    def update_status_transaksi(self, request, id_transaksi, status):
+    def update_status_transaksi_kartu(self, request, id_transaksi, status):
         cek_id_transaksi = self.kartu_rpc.cek_id_transaksi(id_transaksi)
         if cek_id_transaksi:
             transaksi = self.kartu_rpc.update_status_transaksi(id_transaksi, status)
