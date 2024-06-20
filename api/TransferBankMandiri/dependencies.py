@@ -45,7 +45,7 @@ class DatabaseWrapper:
         sql = "SELECT * FROM transmandiri WHERE id_trans = {}" .format((idTrans))
         cursor.execute(sql)
         for row in cursor.fetchall():
-            # unhashed_no_rek = self.decrypt_value(row['no_telp'])
+            # unhashed_no_rek = self.decrypt_value(row['no_rek'])
             result.append({
                 'id_trans' : row['id_trans'],
                 'timestamp_trans' : row['timestamp_trans'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_trans'], datetime) else row['timestamp_trans'],
@@ -121,10 +121,27 @@ class DatabaseWrapper:
             """
             cursor.execute(sql, (no_telp, nominal, va, status))
             self.connection.commit()
-            cursor.close()
-            return True
+            # Ambil id_transaksi dari baris yang baru saja dimasukkan
+            id_transaksi = cursor.lastrowid
+            
+            # Ambil VA dari database setelah INSERT
+            sql_select_va = """
+            SELECT va FROM transmandiri WHERE id = %s
+            """
+            cursor.execute(sql_select_va, (id_transaksi,))
+            result = cursor.fetchone()
+            
+            if result:
+                va_from_db = result['va']
+                cursor.close()
+                return {"id_transaksi": id_transaksi, "va": va_from_db}
+            else:
+                cursor.close()
+                return {"error": "Failed to fetch VA from database"}
+        
         except Exception as e:
             return {"error": str(e)}
+
 
     # Pay transaksi and set status to success
     def pay_trans(self, idTrans):
