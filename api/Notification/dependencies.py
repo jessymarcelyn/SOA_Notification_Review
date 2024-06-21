@@ -34,7 +34,6 @@ class DatabaseWrapper:
                 'judul': row['judul'],
                 'deskripsi': row['deskripsi'],
                 'timestamp_masuk': row['timestamp_masuk'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_masuk'], datetime) else row['timestamp_masuk'],
-                'timestamp_announce': row['timestamp_announce'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_announce'], datetime) else row['timestamp_announce'],
                 'status': row['status'],
                 'link': row['link'],
             })
@@ -76,7 +75,6 @@ class DatabaseWrapper:
                 'judul': row['judul'],
                 'deskripsi': row['deskripsi'],
                 'timestamp_masuk': row['timestamp_masuk'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_masuk'], datetime) else row['timestamp_masuk'],
-                'timestamp_announce': row['timestamp_announce'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_announce'], datetime) else row['timestamp_announce'],
                 'status': row['status'],
                 'link': row['link'],
             })
@@ -103,7 +101,6 @@ class DatabaseWrapper:
                 'judul': row['judul'],
                 'deskripsi': row['deskripsi'],
                 'timestamp_masuk': row['timestamp_masuk'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_masuk'], datetime) else row['timestamp_masuk'],
-                'timestamp_announce': row['timestamp_announce'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_announce'], datetime) else row['timestamp_announce'],
                 'status': row['status'],
                 'link': row['link'],
             })
@@ -131,7 +128,6 @@ class DatabaseWrapper:
                 'judul': row['judul'],
                 'deskripsi': row['deskripsi'],
                 'timestamp_masuk': row['timestamp_masuk'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_masuk'], datetime) else row['timestamp_masuk'],
-                'timestamp_announce': row['timestamp_announce'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_announce'], datetime) else row['timestamp_announce'],
                 'status': row['status'],
                 'link': row['link'],
             })
@@ -159,7 +155,6 @@ class DatabaseWrapper:
                 'judul': row['judul'],
                 'deskripsi': row['deskripsi'],
                 'timestamp_masuk': row['timestamp_masuk'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_masuk'], datetime) else row['timestamp_masuk'],
-                'timestamp_announce': row['timestamp_announce'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_announce'], datetime) else row['timestamp_announce'],
                 'status': row['status'],
                 'link': row['link'],
             })
@@ -185,7 +180,6 @@ class DatabaseWrapper:
                 'judul': row['judul'],
                 'deskripsi': row['deskripsi'],
                 'timestamp_masuk': row['timestamp_masuk'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_masuk'], datetime) else row['timestamp_masuk'],
-                'timestamp_announce': row['timestamp_announce'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_announce'], datetime) else row['timestamp_announce'],
                 'status': row['status'],
                 'link': row['link'],
             })
@@ -216,7 +210,6 @@ class DatabaseWrapper:
                 'judul': row['judul'],
                 'deskripsi': row['deskripsi'],
                 'timestamp_masuk': row['timestamp_masuk'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_masuk'], datetime) else row['timestamp_masuk'],
-                'timestamp_announce': row['timestamp_announce'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_announce'], datetime) else row['timestamp_announce'],
                 'status': row['status'],
                 'link': row['link'],
             })
@@ -238,7 +231,6 @@ class DatabaseWrapper:
                 'judul': row['judul'],
                 'deskripsi': row['deskripsi'],
                 'timestamp_masuk': row['timestamp_masuk'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_masuk'], datetime) else row['timestamp_masuk'],
-                'timestamp_announce': row['timestamp_announce'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_announce'], datetime) else row['timestamp_announce'],
                 'status': row['status'],
                 'link': row['link'],
             })
@@ -260,7 +252,6 @@ class DatabaseWrapper:
                 'judul': row['judul'],
                 'deskripsi': row['deskripsi'],
                 'timestamp_masuk': row['timestamp_masuk'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_masuk'], datetime) else row['timestamp_masuk'],
-                'timestamp_announce': row['timestamp_announce'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_announce'], datetime) else row['timestamp_announce'],
                 'status': row['status'],
                 'link': row['link'],
             })
@@ -282,7 +273,6 @@ class DatabaseWrapper:
                 'judul': row['judul'],
                 'deskripsi': row['deskripsi'],
                 'timestamp_masuk': row['timestamp_masuk'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_masuk'], datetime) else row['timestamp_masuk'],
-                'timestamp_announce': row['timestamp_announce'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_announce'], datetime) else row['timestamp_announce'],
                 'status': row['status'],
                 'link': row['link'],
             })
@@ -290,16 +280,16 @@ class DatabaseWrapper:
         return (result)
     
     # Add notification
-    def add_notif(self, id_user, tipe_notif, jenis, judul, deskripsi, timestamp_masuk, timestamp_announce, status, link, foto):
+    def add_notif(self, id_user, id_pesanan, tipe_notif, judul, deskripsi, timestamp_masuk, status, link ):
         try:
             cursor = self.connection.cursor(dictionary=True)
             sql = """
             INSERT INTO notifikasi (
-                id_user, tipe_notif, jenis, judul, deskripsi, timestamp_masuk, 
-                timestamp_announce, status, link, foto
-            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                id_user, id_pesanan, tipe_notif,  judul, deskripsi, timestamp_masuk, 
+                status, link
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
             """
-            cursor.execute(sql, (id_user, tipe_notif, jenis, judul, deskripsi, timestamp_masuk, timestamp_announce, status, link, foto))
+            cursor.execute(sql, (id_user, id_pesanan, tipe_notif, judul, deskripsi, timestamp_masuk, status, link));
             self.connection.commit()
             cursor.close()
             return True

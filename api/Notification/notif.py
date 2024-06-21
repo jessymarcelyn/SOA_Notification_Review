@@ -177,8 +177,8 @@ class Notifservice:
 
     # Add notification
     @rpc
-    def add_notif(self, id_user, id_pesanan, tipe_notif, jenis, judul, deskripsi, timestamp_masuk, timestamp_announce, status, link):
-        notifs = self.database.add_notif(id_user, id_pesanan, tipe_notif,  judul, jenis, deskripsi, timestamp_masuk, timestamp_announce, status, link)
+    def add_notif(self, id_user, id_pesanan, tipe_notif,  judul, deskripsi, timestamp_masuk, status, link):
+        notifs = self.database.add_notif(id_user, id_pesanan, tipe_notif,  judul, deskripsi, timestamp_masuk, status, link)
         return {
             'code': 200,
             'data': notifs

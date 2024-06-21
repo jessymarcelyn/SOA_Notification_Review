@@ -95,20 +95,17 @@ class GatewayService:
         try:
             data = json.loads(request.get_data(as_text=True))
             id_user = data.get('id_user')
+            id_pesanan = data.get('id_pesanan')
             tipe_notif = data.get('tipe_notif')
-            jenis = data.get('jenis')
             judul = data.get('judul')
             deskripsi = data.get('deskripsi')
             timestamp_masuk = data.get('timestamp_masuk')
-            timestamp_announce = data.get('timestamp_announce')
             status = data.get('status')
             link = data.get('link')  # Use get() method to get optional fields
-            foto = data.get('foto')  # Use get() method to get optional fields
             
             # Call add_notif method with optional fields
             notif = self.notif_rpc.add_notif(
-                id_user, tipe_notif, jenis, judul, deskripsi, timestamp_masuk, 
-                timestamp_announce, status, link, foto
+                id_user, id_pesanan, tipe_notif, judul, deskripsi, timestamp_masuk, status, link
             )
             return 200, json.dumps(notif)
         except Exception as e:
