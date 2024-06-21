@@ -18,35 +18,29 @@ if (isset($_POST['id_pesanan']) && isset($_POST['nama']) && isset($_POST['nomer_
     $cvv = htmlspecialchars($_POST['cvv']);
     $nominal = htmlspecialchars($_POST['nominal']);
 
-    // Construct the URL endpoint for the API request
     $url = "http://localhost:8000/kartu_kredit/{$nomer_kartu}/cvv/{$cvv}/nama/{$nama}/expired_month/{$expired_month}/expired_year/{$expired_year}/nominal/{$nominal}";
 
-    // Initialize cURL session
     $ch = curl_init();
 
-    // Set cURL options for GET request
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-    // Execute cURL and fetch response
     $response = curl_exec($ch);
 
-    // Check for cURL errors
     if (curl_errno($ch)) {
         echo json_encode(['code' => 500, 'message' => 'Error executing request']);
     } else {
-        // Close cURL session
         curl_close($ch);
 
-        // Decode JSON response into associative array
         $result = json_decode($response, true);
 
         if ($result === null && json_last_error() !== JSON_ERROR_NONE) {
             echo json_encode(['code' => 500, 'message' => 'Error decoding JSON response']);
         } else {
-            // Respond with the original result first
+
             echo json_encode($result);
 
+            //UPDATE Transaksi pembayaran
             if ($result['code'] == 200) {
                 // Construct the PUT request data
                 $putData = [
@@ -57,10 +51,10 @@ if (isset($_POST['id_pesanan']) && isset($_POST['nama']) && isset($_POST['nomer_
 
                 $putDataJson = json_encode($putData);
 
-                // Construct the PUT URL
+
                 $putUrl = "http://localhost:8000/Tpembayaran/pesanan/{$id_pesanan}";
 
-                // Initialize cURL session for PUT request
+
                 $chPut = curl_init();
 
                 // Set cURL options for PUT request
@@ -73,85 +67,97 @@ if (isset($_POST['id_pesanan']) && isset($_POST['nama']) && isset($_POST['nomer_
                     'Content-Length: ' . strlen($putDataJson)
                 ]);
 
-                // Execute cURL and fetch response
                 $putResponse = curl_exec($chPut);
 
-                // Check for cURL errors
+
                 if (curl_errno($chPut)) {
                     echo json_encode(['code' => 500, 'message' => 'Error executing PUT request']);
                 } else {
-                    // Close cURL session
                     curl_close($chPut);
 
-                    // Decode JSON response into associative array
                     $putResult = json_decode($putResponse, true);
                     if ($putResult === null && json_last_error() !== JSON_ERROR_NONE) {
                         echo json_encode(['code' => 500, 'message' => 'Error decoding PUT response JSON']);
                     } else {
-                        // If PUT was successful, proceed to POST to /notif
-                        // if ($putResult == true) {
-                        //     // Prepare data for POST to /notif
-                        //     $postData = [
-                        //         'code' => 200,
-                        //         'data' => [
-                        //             [
-                        //                 'id_user' => 1,
-                        //                 'id_pesanan' => $id_pesanan,
-                        //                 'tipe_notif' => 'info',
-                        //                 'judul' => 'OTP',
-                        //                 'deskripsi' => "Silahkan lakukan pembayaran dengan OTP ini {$result['data']['otp']}",
-                        //                 'timestamp_masuk' => date('Y-m-d H:i:s'), // Current timestamp
-                        //                 'timestamp_announce' => date('Y-m-d H:i:s'), // Current timestamp
-                        //                 'status' => 0,
-                        //                 'link' => null
-                        //             ]
-                        //         ]
-                        //     ];
 
-                        //     $postDataJson = json_encode($postData);
+                        //post notif
+                        if ($putResult == true) {
+                            $chPost = curl_init();
 
-                        //     // Initialize cURL session for POST request to /notif
-                        //     $chPost = curl_init();
+                            curl_setopt($chPost, CURLOPT_URL, 'http://localhost:8000/notif');
+                            curl_setopt($chPost, CURLOPT_POST, 1);
+                            curl_setopt($chPost, CURLOPT_RETURNTRANSFER, true);
+                            curl_setopt($chPost, CURLOPT_POSTFIELDS, json_encode(array(
+                                'id_user' => 1,
+                                'id_pesanan' => $id_pesanan,
+                                'tipe_notif' => 'info',
+                                'judul' => 'OTP',
+                                'deskripsi' => "Silahkan lakukan pembayaran dengan OTP ini {$result['data']['otp']}",
+                                'timestamp_masuk' => date('Y-m-d H:i:s'), // Current timestamp
+                                'status' => 0,
+                                'link' => null
+                            )));
+                            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
 
-                        //     // Set cURL options for POST request to /notif
-                        //     curl_setopt($chPost, CURLOPT_URL, 'http://localhost:8000/notif');
-                        //     curl_setopt($chPost, CURLOPT_POST, true);
-                        //     curl_setopt($chPost, CURLOPT_POSTFIELDS, $postDataJson);
-                        //     curl_setopt($chPost, CURLOPT_RETURNTRANSFER, true);
-                        //     curl_setopt($chPost, CURLOPT_HTTPHEADER, [
-                        //         'Content-Type: application/json',
-                        //         'Content-Length: ' . strlen($postDataJson)
-                        //     ]);
+                            $postResponse = curl_exec($chPost);
 
-                        //     // Execute cURL and fetch response
-                        //     $postResponse = curl_exec($chPost);
+                            if (curl_errno($chPost)) {
+                                echo json_encode(['code' => 500, 'message' => 'Error executing POST request to /notif']);
+                            } else {
+                                curl_close($chPost);
 
-                        //     // Check for cURL errors
-                        //     if (curl_errno($chPost)) {
-                        //         echo json_encode(['code' => 500, 'message' => 'Error executing POST request to /notif']);
-                        //     } else {
-                        //         // Close cURL session
-                        //         curl_close($chPost);
+                                $postResult = json_decode($postResponse, true);
 
-                        //         // Decode JSON response into associative array
-                        //         $postResult = json_decode($postResponse, true);
+                                if ($postResult === null && json_last_error() !== JSON_ERROR_NONE) {
+                                    echo json_encode(['code' => 500, 'message' => 'Error decoding POST response JSON from /notif']);
+                                } else {
+                                    //Manggil notif kirim link input_otp.php
+                                    if ($postResult['data'] == true) {
+                                        $chPost = curl_init();
 
-                        //         if ($postResult === null && json_last_error() !== JSON_ERROR_NONE) {
-                        //             echo json_encode(['code' => 500, 'message' => 'Error decoding POST response JSON from /notif']);
-                        //         } else {
-                        //             // Respond with the POST request result from /notif
-                        //             // echo json_encode($postResult);
-                        //         }
-                        //     }
-                        // }
+                                        curl_setopt($chPost, CURLOPT_URL, 'http://localhost:8000/notif');
+                                        curl_setopt($chPost, CURLOPT_POST, 1);
+                                        curl_setopt($chPost, CURLOPT_RETURNTRANSFER, true);
+                                        curl_setopt($chPost, CURLOPT_POSTFIELDS, json_encode(array(
+                                            'id_user' => 1,
+                                            'id_pesanan' => $id_pesanan,
+                                            'tipe_notif' => 'info',
+                                            'judul' => 'OTP',
+                                            'deskripsi' => "Silahkan lakukan pembayaran untuk pesanan $id_pesanan",
+                                            'timestamp_masuk' => date('Y-m-d H:i:s'), // Current timestamp
+                                            'status' => 0,
+                                            'link' => "../../inputOTP.php"
+                                        )));
+                                        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+
+
+                                        // Execute cURL and fetch response
+                                        $postResponse = curl_exec($chPost);
+                                        if (curl_errno($chPost)) {
+                                            echo json_encode(['code' => 500, 'message' => 'Error executing POST request to /notif']);
+                                        } else {
+                                            // Close cURL session
+                                            curl_close($chPost);
+
+                                            // Decode JSON response into associative array
+                                            $postResult = json_decode($postResponse, true);
+                                            if ($postResult === null && json_last_error() !== JSON_ERROR_NONE) {
+                                                echo json_encode(['code' => 500, 'message' => 'Error decoding POST response JSON from /notif']);
+                                            } else {
+                                            }
+                                        }
+                                    }
+                                    // Respond with the POST request result from /notif
+                                    // echo json_encode($postResult);
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
     }
-}
-
-else if (isset($_POST['id_pesanan']) && isset($_POST['id_pesanan2'])) {
+} else if (isset($_POST['id_pesanan']) && isset($_POST['id_pesanan2'])) {
     $id_pesanan = htmlspecialchars($_POST['id_pesanan']);
     $id_pesanan2 = htmlspecialchars($_POST['id_pesanan2']);
 
@@ -287,8 +293,3 @@ else if (isset($_POST['id_pesanan']) && isset($_POST['id_pesanan2'])) {
 // } else {
 //     echo json_encode(['code' => 400, 'message' => 'Missing POST parameters']);
 // }
-
-
-
-
-

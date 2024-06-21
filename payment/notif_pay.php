@@ -60,9 +60,9 @@
 
 
 
-    <script>
+    <!-- <script>
         // Set timeout untuk menghilangkan alert setelah 1 menit (60000 milidetik)
         setTimeout(function() {
             document.getElementById('autoCloseAlert').style.display = 'none';
         }, 60000); // 60000 milidetik = 1 menit
-    </script>
+    </script> -->
