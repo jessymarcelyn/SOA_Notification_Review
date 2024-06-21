@@ -26,7 +26,7 @@
 </head>
 
 <body>
-
+    <?php include '../notif_pay.php'; ?>
     <div class="container">
         <div class="row">
             <!-- Kolom pertama -->
@@ -147,7 +147,7 @@
                                                     <label>
                                                         <p>CVC/ CVV <span class="asterisk" style="color:red">*</span></p>
                                                     </label>
-                                                    <input id="cvc" type="text" class="form-control" name="name" required style="width:70%">
+                                                    <input id="cvc" type="password" class="form-control" name="name" required style="width:70%">
                                                 </div>
                                             </div>
                                         </div>
@@ -247,7 +247,7 @@
 
             // AJAX
             // NANTI AMBIL DARI ERICKSEN
-            var id_pesanan = 1;
+            var id_pesanan = 16;
             var id_pesanan2;
             // var id_pesanan2 = 2;
 
@@ -258,27 +258,32 @@
                 createTransaction(id_pesanan);
             }
 
-            $('#cardNumber, #cvv, #expiryMonth, #expiryYear').on('input', function () {
+            $('#cardNumber, #cvv, #expiryMonth, #expiryYear, #cvc').on('input', function() {
                 this.value = this.value.replace(/[^0-9]/g, '');
             });
-            $('#cardNumber').on('input', function () {
+            $('#cvc').on('input', function() {
+                if (this.value.length > 3) {
+                    this.value = this.value.slice(0, 3);
+                }
+            });
+            $('#cardNumber').on('input', function() {
                 if (this.value.length > 16) {
                     this.value = this.value.slice(0, 16);
                 }
             });
 
-            $('#expiryMonth').on('input', function () {
+            $('#expiryMonth').on('input', function() {
                 if (this.value.length > 2) {
                     this.value = this.value.slice(0, 2);
                 }
             });
 
-            $('#expiryYear').on('input', function () {
+            $('#expiryYear').on('input', function() {
                 if (this.value.length > 4) {
                     this.value = this.value.slice(0, 4);
                 }
             });
-            
+
             var selectedPaymentMethod = ""; // Variabel untuk menyimpan metode pembayaran yang dipili
 
             // Ketika accordion item dibuka
@@ -299,6 +304,12 @@
                             if ($("#cardHolderName").val() === "" || $("#cardNumber").val() === "" || $("#expiryMonth").val() === "" || $("#expiryYear").val() === "" || $("#cvc").val() === "") {
                                 alert("Please fill in all required fields.");
                                 return;
+                            } else if ($("#cardNumber").val().length !== 16) {
+                                alert("Card number must be 16 digits long.");
+                                return;
+                            } else if ($("#cvc").val().length !== 3) {
+                                alert("CVV must be 3 digits long.");
+                                return;
                             } else {
                                 // Kumpulkan data dari formulir kartu kredit/debit
                                 // paymentData = {
@@ -309,7 +320,7 @@
                                 //     expiryYear: $("#expiryYear").val(),
                                 //     cvc: $("#cvc").val()
                                 // };
-                                checkKartu($("#cardHolderName").val(), $("#cardNumber").val(), $("#expiryMonth").val(), $("#expiryYear").val(), $("#cvc").val(), 200000)
+                                checkKartu(id_pesanan, $("#cardHolderName").val(), $("#cardNumber").val(), $("#expiryMonth").val(), $("#expiryYear").val(), $("#cvc").val(), 200000)
                                 // console.log(paymentData); // Lakukan tindakan dengan data yang dikumpulkan
                                 // alert("Processing credit/debit card payment...");
                                 break;
@@ -360,7 +371,7 @@
                 },
                 success: function(response) {
                     console.log(response);
-                    console.log('Berhasil buat Initial Transaksi1 ', response);
+                    console.log('Berhasil buat Initial Transaksi1 ');
                 },
                 error: function(xhr, status, error) {
                     console.error('Gagal membuat transaksi:', error);
@@ -380,7 +391,8 @@
                     id_pesanan2: id_pesanan2
                 },
                 success: function(response) {
-                    console.log('Berhasil buat Initial Transaksi1;');
+                    console.log(response);
+                    console.log('Berhasil buat Initial Transaksi2;');
                 },
                 error: function(xhr, status, error) {
                     console.error('Gagal membuat transaksi:', error);
@@ -388,17 +400,15 @@
             });
         }
 
-        function checkKartu(nama, nomer_kartu, expired_month, expired_year, cvv, nominal) {
-            console.log('nama:', nama);
-            console.log('nomer_kartu:', nomer_kartu);
-            console.log('expired_month:', expired_month);
-            console.log('expired_year:', expired_year);
-            console.log('cvv:', cvv);
-            console.log('nominal:', nominal);
+        function checkKartu(id_pesanan, nama, nomer_kartu, expired_month, expired_year, cvv, nominal) {
+            console.log('Checking kartu...');
+
             $.ajax({
                 url: "fetch-api-kartu.php",
                 method: 'POST',
+                dataType: 'json', // Specify dataType as json
                 data: {
+                    id_pesanan: id_pesanan,
                     nama: nama,
                     nomer_kartu: nomer_kartu,
                     expired_month: expired_month,
@@ -407,14 +417,28 @@
                     nominal: nominal
                 },
                 success: function(response) {
-                    console.log('berhasil3;');
+                    console.log('Response:', response); // Log the response to inspect it
+
+                    // Check if response code is 200 for success
+                    if (response.code === 200) {
+                        $('#isiOtp').text(response.data.otp);
+                        $('#successNotif').modal('show'); // Show success modal
+
+                    } else {
+                        $('.error-message').text(response.data.message);
+                        $('#failedNotif').modal('show'); // Show failed modal
+
+                    }
                 },
                 error: function(xhr, status, error) {
-                    console.error('Gagal cek inputan user:', error);
+                    console.error('Failed to check user input:', error);
+                    $('#failedNotif').modal('show'); // Show failed modal due to error
                 }
             });
         }
     </script>
+
+
 </body>
 
 </html>

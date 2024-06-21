@@ -161,7 +161,7 @@ class DatabaseWrapper:
         current_date = datetime.now()
         
         if not result:
-            return {"status": False, "message": "Card not found"}
+            return {"status": False, "message": "Data does not match"}
         
         cvv_db = result[0].get('cvv')
         limit_terpakai = result[0].get('limit_terpakai')
@@ -195,8 +195,13 @@ class DatabaseWrapper:
             return {"status": False, "message": "Card has expired"}
         
         print("masuk2")
-        # return {"status": True, "message": "Transaction approved"}
-        return self.create_transaksi(nomer_kartu, nominal, "ongoing")
+        # Perform the transaction
+        success, otp, inserted_id = self.create_transaksi(nomer_kartu, nominal, "ongoing")
+        
+        if success:
+            return {"status": True, "message": "Transaction approved", "otp": otp, "inserted_id": inserted_id}
+        else:
+            return {"status": False, "message": "Transaction failed"}
                 
     def generate_otp(self, length=6):
         otp = np.random.randint(0, 10, length)
@@ -211,13 +216,11 @@ class DatabaseWrapper:
         
         print("otp {}".format(otp))
         print("encrypted_otp {}".format(encrypted_otp))
-        # print("decrypted_otp {}".format(decrypted_otp))
-        # hashed_otp = self.hash_nomer_kartu(otp)
         hashed_nomer_kartu = self.hash_nomer_kartu(nomer_kartu)
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         sql = ("INSERT INTO transaksi_kartu (nomer_kartu, nominal, status, otp, timestamp, otp_timestamp) "
-               "VALUES (%s, %s, %s, %s, %s, %s)")
+            "VALUES (%s, %s, %s, %s, %s, %s)")
 
         val = (hashed_nomer_kartu, nominal, status, encrypted_otp, timestamp, timestamp)
         try:
@@ -226,11 +229,12 @@ class DatabaseWrapper:
             inserted_id = cursor.lastrowid
             print("inserted_id : ", inserted_id)
             cursor.close()
-            return otp, inserted_id
+            return True, otp, inserted_id
         except mysql.connector.Error as err:
             print(f"Error: {err}")
             cursor.close()
-            return None
+            return False, None, None
+
     
     # get OTP berdasarkan id_transaksi
     def get_otp(self, id_transaksi):

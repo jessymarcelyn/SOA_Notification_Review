@@ -88,6 +88,7 @@ class KartuService:
                 'code': 500,
                 'data': str(e)  # Return error message as string
             }
+            
     #create skalian buat otp
     @rpc
     def create_transaksi(self, nomer_kartu, nominal, status):
