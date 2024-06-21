@@ -200,13 +200,25 @@ class GatewayService:
             data = json.loads(request.get_data(as_text=True))
             no_telp = data.get('no_telp')
             nominal = data.get('nominal')
-            va = data.get('VA')
-            transaksi = self.mandiri_rpc.create_trans(
-                no_telp, nominal, va
-            )
-            return 200, json.dumps(transaksi)
+            api_url = f'http://localhost:8000/Mandiri/{no_telp}'
+            Response = requests.get(api_url)
+            if Response.status_code == 200:
+                va = Response.json()
+                transaksi = self.mandiri_rpc.create_trans(
+                    no_telp, nominal, va
+                )
+                return 200, json.dumps(transaksi)
+            else: 
+                return Response(json.dumps('Wrong phone number'), status=404, mimetype='application/json')
         except Exception as e:
             return 500, json.dumps({"error": str(e)})
+        #     va = data.get('VA')
+        #     transaksi = self.mandiri_rpc.create_trans(
+        #         no_telp, nominal, va
+        #     )
+        #     return 200, json.dumps(transaksi)
+        # except Exception as e:
+        #     return 500, json.dumps({"error": str(e)})
         
     #PUT ada pembayaran jadi update status = success
     @http('PUT', '/transMandiri/<int:idTrans>')
@@ -256,7 +268,7 @@ class GatewayService:
         except Exception as e:
             return 500, json.dumps({"error": str(e)})
         
-    @http('GET', '/BCA/Cpin/<string:VA>/<string:pin>')
+    @http('GET', '/BCA/pin/<string:VA>/<string:pin>')
     def CheckPinBCA(self, request, VA, pin):
         no = VA[3:]
         check = self.BBCA_rpc.CheckPin(no, pin)
@@ -293,7 +305,7 @@ class GatewayService:
         except Exception as e:
             return 500, json.dumps({"error": str(e)})
         
-    @http('GET', '/Mandiri/Cpin/<string:VA>/<string:pin>')
+    @http('GET', '/Mandiri/pin/<string:VA>/<string:pin>')
     def CheckPinMandiri(self, request, VA, pin):
         no = VA[3:]
         check = self.BMandiri_RPC.CheckPin(no, pin)
@@ -316,7 +328,7 @@ class GatewayService:
         pembayaran = self.gopay_rpc.get_status_transaksi(id_transaksi)
         return json.dumps(pembayaran)
     
-    @http('PUT', '/gopay/bayar') #check pin dan check saldo
+    @http('PUT', '/gopay') #check pin dan check saldo
     def bayar_gopay(self, request):
         data = json.loads(request.get_data(as_text=True))
         pembayaran = self.gopay_rpc.bayar(data['id_transaksi'], data['pin'])
@@ -341,7 +353,7 @@ class GatewayService:
         pembayaran = self.ovo_rpc.get_status_transaksi(id_transaksi)
         return json.dumps(pembayaran)
     
-    @http('PUT', '/ovo/bayar') #check pin dan check saldo
+    @http('PUT', '/ovo') #check pin dan check saldo
     def bayar_ovo(self, request):
         data = json.loads(request.get_data(as_text=True))
         pembayaran = self.ovo_rpc.bayar(data['id_transaksi'], data['pin'])
