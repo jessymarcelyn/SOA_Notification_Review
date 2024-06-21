@@ -21,6 +21,9 @@ class PaymentService:
 
     @rpc
     def insert_transaksi(self, no_telp, nominal):
+        print("masuk insert2")
+        print("no_telp2 ", no_telp)
+        print("nominal2 ", nominal)
         boolean = self.database.get_no_telp(no_telp)
         if boolean == True:
             id_transaksi = self.database.insert_transaksi(no_telp, nominal)
