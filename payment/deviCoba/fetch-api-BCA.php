@@ -134,7 +134,7 @@ elseif (isset($_POST['id_pesanan']) && ($_POST['id_pesanan2'])) {
 
 #untuk cek apakah user sudah milih metode transfer_bank dan jenis bank yang dipilih kemudian mencatat transaksi user berdasarkan bank yang dipilih
 if (isset($_POST['nama_bank'])){
-    if(isset($_POST['id_pesanan'])){
+    // if(isset($_POST['id_pesanan'])){
         if ($_POST['nama_bank'] == 'BCA'){
             $url = "http://localhost:8000/transBCA";
             $postData = array(
@@ -154,7 +154,7 @@ if (isset($_POST['nama_bank'])){
             $result = sendCurlRequest($url, $postData);
             echo json_encode($result);
         }
-    }
+    // }
 } #hasil dari api di atas adalah id_transaksi dan VA
         
 
