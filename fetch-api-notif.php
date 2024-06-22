@@ -10,6 +10,7 @@ if (isset($_POST['idUser']) && isset($_POST['notifType'])) {
     $idUser = htmlspecialchars($_POST['idUser']);
     $notifType = htmlspecialchars($_POST['notifType']);
 
+
     // URL endpoint API
     $url = "http://localhost:8000/notif/user/" . $idUser . "/" . $notifType;
 
@@ -36,6 +37,8 @@ if (isset($_POST['idUser']) && isset($_POST['notifType'])) {
         if ($notifications === null && json_last_error() !== JSON_ERROR_NONE) {
             echo 'Error decoding JSON: ' . json_last_error_msg();
         } else {
+            echo "<script>console.log('HALO');</script>";
+
             $notificationsHTML = '';
 
             // Loop melalui hasil response untuk mengambil data notifikasi
@@ -47,7 +50,9 @@ if (isset($_POST['idUser']) && isset($_POST['notifType'])) {
                 $title = $row['judul'];
                 $desc = $row['deskripsi'];
                 $datetime = $row['timestamp_masuk'];
-                $id = $row['id_notif'];
+                $id_notif= $row['id_notif'];
+                $id_pesanan = $row['id_pesanan'];
+
                 if($row['link'] == null){
                     $link = "#";
                 }else{
@@ -56,7 +61,7 @@ if (isset($_POST['idUser']) && isset($_POST['notifType'])) {
 
                 // Buat HTML untuk setiap notifikasi
                 $notificationsHTML .= '
-                    <a id='.$id.' href="'.$link.'" class="list-group-item list-group-item-action ' . $color . ' border-0">
+                    <a id='.$id_notif.' href="'.$link.'" class="list-group-item list-group-item-action ' . $color . ' border-0" id_pesanan='.$id_pesanan.'>
                         <div class="row g-1">
                             <div class="col px-0 text">
                                 <div class="d-flex justify-content-between">

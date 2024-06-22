@@ -118,9 +118,12 @@ require "connect.php";
     $(document).on('click', '.list-group-item', function () {  // Gunakan event delegation untuk menangani click event
       console.log('Notifikasi di klik.');
 
+
+
       // Ambil ID notifikasi dari atribut data
-        var id_notif = $(this).attr('id');
-        console.log('ID Notifikasi:', id_notif);
+      var id_notif = $(this).attr('id');
+      console.log('ID Notifikasi:', id_notif);      
+
 
       $.ajax({
         url: "fetch-api-notif.php",
@@ -138,7 +141,16 @@ require "connect.php";
           // Tambahkan logika untuk menangani kesalahan saat memuat notifikasi
         }
       });
+
       loadNotifications(idUser, notifType);
+      var id_pesanan = $(this).attr('id_pesanan');
+      var href = $(this).attr('href');
+      if (href != "#"){
+        event.preventDefault(); // Prevents the default action of the link
+
+        window.location.href = `${href}?id_pesanan=${id_pesanan}&id_user=${idUser}`;
+
+      }
 
       // Optional: Ganti atau tambahkan kelas pada elemen .list-group-item
       // $(this).removeClass('list-group-item-primary').addClass('list-group-item-light');
