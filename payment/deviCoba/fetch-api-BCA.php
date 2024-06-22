@@ -174,8 +174,8 @@ if (isset($_POST['bank']) && isset($_POST['id_pesanan'])) {
                 echo json_encode(['code' => 500, 'message' => 'Error decoding JSON response']);
                 // echo 'Error decoding JSON response';
             } else {
-                error_log("Else");
-                echo json_encode($result);
+                // error_log("Else");
+                // echo json_encode($result);
 
                 //UPDATE Transaksi pembayaran
                 if ($result['code'] == 200) {
