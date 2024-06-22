@@ -273,7 +273,7 @@
             // Membuat traksaksi ketika pertama kali pindah dari halaman booking ke pembayaran
             if (id_pesanan2 != null) {
                 createTransaction2(id_pesanan, id_pesanan2);
-            }else{
+            } else {
                 createTransaction(id_pesanan);
             }
 
@@ -317,13 +317,19 @@
                             break;
                         case "bankTransferOption":
                             // // Kumpulkan data dari formulir transfer bank
-                            // paymentData = {
-                            //     method: "Bank Transfer",
-                            //     bank: $("#bank").val()
-                            // };
-                            // console.log(paymentData); // Lakukan tindakan dengan data yang dikumpulkan
+                            paymentData = {
+                                method: "Bank Transfer",
+                                bank: $("#bank").val()
+                            };
+                            console.log(paymentData); // Lakukan tindakan dengan data yang dikumpulkan
                             // alert("Processing bank transfer payment...");
-                            TransferBank(id_pesanan, $("#bank").val())
+                            // TransferBank(id_pesanan, $("#bank").val())
+                            // if ($("#bank").val() == 'BCA') {
+                            TransferBankBCA(id_pesanan, $("#bank").val())
+                            // } else if ($("#bank").val() == 'Mandiri') {
+                            //     TransferBankMandiri(id_pesanan, $("#bank").val())
+
+                            // }
                             break;
                         default:
                             // Tindakan jika tidak ada metode pembayaran yang dipilih
@@ -377,72 +383,79 @@
         }
 
 
-        function TransferBank(id_pesanan, bank) {
+        // if (bank == 'BCA'){
+
+        function TransferBankBCA(id_pesanan, bank) {
             console.log('Trying to make a payment with ' + bank + ' dengan id pesanan: ' + id_pesanan);
-            $.ajax({
-                url: "fetch-api-BCA.php",
-                method: 'POST',
-                data: {
-                    id_pesanan: id_pesanan,
-                    bank: "BCA",
-                },
-                dataType: 'json', // Ensures jQuery parses the response as JSON
-                success: function(response) {
-                    console.log('Full response from server:', response);
-                    console.log('Payment bakalan sukses');
-                    if (response.code === 200) {
-                        console.log('BERHASIL');
-                    } else {
-                        console.log('GAGAL');
+            if (bank == "bca") {
+                $.ajax({
+                    url: "fetch-api-BCA.php",
+                    method: 'POST',
+                    data: {
+                        id_pesanan: id_pesanan,
+                        bank: "BCA",
+                    },
+                    dataType: 'json', // Ensures jQuery parses the response as JSON
+                    success: function(response) {
+                        console.log('Payment bakalan sukses');
+                        console.log('Full response from server:', response);
+
+                        if (response.code === 200) {
+                            $('#isiOtp').text(response.data.va);
+                            $('#successNotif').modal('show'); // Show success modal
+
+                            console.log('BERHASIL');
+                        } else {
+                            $('.error-message').text(response.data.message);
+                            $('#failedNotif').modal('show'); // Show failed modal
+
+                            console.log('GAGAL');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Ada yang salah: ', error);
+                        console.log('Full error response: ', xhr.responseText);
                     }
-                },
-                error: function(xhr, status, error) {
-                    console.log('Ada yang salah: ', error);
-                    console.log('Full error response: ', xhr.responseText);
-                }
+                })
+            } else {
 
+                $.ajax({
+                    url: "fetch-api-BCA.php",
+                    method: 'POST',
+                    data: {
+                        id_pesanan: id_pesanan,
+                        bank: "Mandiri",
+                    },
+                    dataType: 'json', // Ensures jQuery parses the response as JSON
+                    success: function(response) {
+                        console.log('Full response from server:', response);
+                        console.log('Payment bakalan sukses');
+                        if (response.code === 200) {
+                            $('#isiOtp').text(response.data.va);
+                            $('#successNotif').modal('show'); // Show success modal
 
+                            console.log('BERHASIL');
+                        } else {
+                            $('.error-message').text(response.data.message);
+                            $('#failedNotif').modal('show'); // Show failed modal
 
-                // console.log('Trying to make a payment with ' + bank+' dengan id pesanan: '+ id_pesanan);
-                // $.ajax({
-                //     url: "fetch-api-BCA.php",
-                //     method: 'POST',
-                //     data: {
-                //         id_pesanan: id_pesanan,
-                //         bank: bank,
-                //         // no_telp:  no_telp
-                //     },
-                //     dataType: 'json',
-                //     // success: function(response) {
-                //     //     console.log('Payment bakalan sukses')
-                //     //     console.log('Response from server:', response.data);
-                //     //     if (response.code === 200) {
-                //     //         // $('#isiOtp').text(response.data.va);
-                //     //         $('#successNotif').modal('show'); // Show success modal
+                            console.log('GAGAL');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Ada yang salah: ', error);
+                        console.log('Full error response: ', xhr.responseText);
+                    }
+                })
 
-                //     //     } else {
-                //     //         $('.error-message').text(response.data.message);
-                //     //         $('#failedNotif').modal('show'); // Show failed modal
-
-                //     //     }
-                //     // },
-                //     success: function(response) {
-                //         console.log('Full response from server:', response);
-                //         console.log('Payment bakalan sukses');
-                //         if (response.code === 200) {
-                //             // $('#successNotif').modal('show'); // Show success modal
-                //             console.log('BERHASIL')
-                //         } else {
-                //             // $('.error-message').text(response.message); // Adjust to response.message if response.data is undefined
-                //             // $('#failedNotif').modal('show'); // Show failed modal
-                //             console.log('GAGAL')
-                //         }
-                //     },
-                //     error: function(xhr, status, error){
-                //         console.log('Ada yang salah: ', error)
-                //     }
-            })
+            }
         }
+
+        // }
+        // else if(bank == 'Mandiri'){
+
+
+        // }
     </script>
 </body>
 
