@@ -335,46 +335,18 @@ class GatewayService:
     # OVO
     ovo_rpc = RpcProxy('ovo_service')
 
-    # @http('POST', '/ovo') #cek nomor telepon, return idtransaksi
-    # def post_pembayaran_ovo(self, request):
-    #     data = json.loads(request.get_data(as_text=True))
-    #     pembayaran = self.ovo_rpc.insert_transaksi(data['no_telp'], data['nominal'])
-    #     return json.dumps(pembayaran)
-    @http('POST', '/ovo')
+    @http('POST', '/ovo') #cek nomor telepon, return idtransaksi
     def post_pembayaran_ovo(self, request):
-        try:
-            content_type = request.headers.get('Content-Type')
-            if content_type != 'application/json':
-                return json.dumps({"error": "Content-Type must be application/json"}), 400
-
-            data_str = request.get_data(as_text=True)
-            print(f"Received raw data: {data_str}")  # Log the received data
-
-            if not data_str:
-                return json.dumps({"error": "No data received"}), 400
-
-            try:
-                data = json.loads(data_str)
-            except json.JSONDecodeError as e:
-                return json.dumps({"error": f"Invalid JSON data: {str(e)}"}), 400
-
-            print(f"Decoded JSON data: {data}")
-
-            if 'no_telp' not in data or 'nominal' not in data:
-                return json.dumps({"error": "Missing required fields"}), 400
-
-            pembayaran = self.ovo_rpc.insert_transaksi(data['no_telp'], data['nominal'])
-            return json.dumps(pembayaran), 200
-
-        except Exception as e:
-            return json.dumps({"error": str(e)}), 500
-        
+        data = json.loads(request.get_data(as_text=True))
+        pembayaran = self.ovo_rpc.insert_transaksi(data['no_telp'], data['nominal'])
+        return json.dumps(pembayaran)
+         
     @http('GET', '/ovo/status/<string:id_transaksi>') #return status pembayaran
     def get_status_pembayaran_by_id_transaksi_ovo(self, request, id_transaksi):
         pembayaran = self.ovo_rpc.get_status_transaksi(id_transaksi)
         return json.dumps(pembayaran)
     
-    @http('PUT', '/ovo/pembayaran') #check pin dan check saldo
+    @http('PUT', '/ovo/bayar') #check pin dan check saldo
     def bayar_ovo(self, request):
         data = json.loads(request.get_data(as_text=True))
         pembayaran = self.ovo_rpc.bayar(data['id_transaksi'], data['pin'])
