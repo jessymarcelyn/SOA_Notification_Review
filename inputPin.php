@@ -2,6 +2,25 @@
 session_start();
 require "connect.php";
 
+$id_pesanan = $_GET['id_pesanan'];
+// echo 'ID Pesanan:', $id_transaksi;
+$id_user = $_GET['id_user'];
+
+// Ambil nilai dari URL menggunakan $_SERVER['REQUEST_URI']
+// $url_components = parse_url($_SERVER['REQUEST_URI']);
+// parse_str($url_components['query'], $params);
+
+// $id_pesanan = isset($params['id_pesanan']) ? $params['id_pesanan'] : null;
+// $id_user = isset($params['id_user']) ? $params['id_user'] : null;
+
+// echo "<script>";
+// echo "const idPesanan = " . json_encode($id_pesanan) . ";"; // Simpan nilai di JavaScript
+// echo "const idUser = " . json_encode($id_user) . ";";
+// echo "console.log('ID Pesanan:', idPesanan);";
+// echo "console.log('ID User:', idUser);";
+// echo "</script>";
+
+
 ?>
 
 <!DOCTYPE html>
@@ -42,7 +61,7 @@ require "connect.php";
 <body>
   <?php include 'notif_modal.php'; ?>
 
-  <div class="container-fluid full-screen">
+  <div class="container-fluid full-screen pinInputs" data-id-pesanan="<?php echo htmlspecialchars($id_pesanan); ?>">
     <div class="row">
       <div class="content ">
         <!-- <p>Total</p> -->
@@ -87,6 +106,14 @@ require "connect.php";
 
 
 <script>
+
+  const pinInputsDiv = document.querySelector('.pinInputs'); // Menggunakan selector yang benar
+  const idPesanan = pinInputsDiv.getAttribute('data-id-pesanan');
+  // console.log('ID Pesanan:', idPesanan);
+
+
+
+
   window.addEventListener('DOMContentLoaded', () => {
     const keyboard = document.querySelector('.keyboard');
     const content = document.querySelector('.content');
@@ -156,7 +183,8 @@ require "connect.php";
           url: 'checkPin.php',
           type: 'POST',
           data: {
-            id_transaksi: 2,
+            id_pesanan: idPesanan,
+            // id_transaksi: 2,
             pin: hashed,
           },
           success: function (response) {
