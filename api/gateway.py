@@ -212,14 +212,7 @@ class GatewayService:
                 return Response(json.dumps('Wrong phone number'), status=404, mimetype='application/json')
         except Exception as e:
             return 500, json.dumps({"error": str(e)})
-        #     va = data.get('VA')
-        #     transaksi = self.mandiri_rpc.create_trans(
-        #         no_telp, nominal, va
-        #     )
-        #     return 200, json.dumps(transaksi)
-        # except Exception as e:
-        #     return 500, json.dumps({"error": str(e)})
-        
+
     #PUT ada pembayaran jadi update status = success
     @http('PUT', '/transMandiri/<int:idTrans>')
     def pay_transTMandiri(self, request, idTrans):
