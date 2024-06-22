@@ -26,34 +26,10 @@
     <link rel="stylesheet" href="../../css/payment.css">
 
 </head>
-<!-- <script>
-    $(document).ready(function() {
-        $("#toggleDetails").click(function() {
-            $("#priceInfo").toggle();
-            var text = $(this).text();
-            $(this).text(text == "Hide Details" ? "Show Details" : "Hide Details");
-        });
-        const selectElement = document.getElementById("mySelect");
 
-        const options = selectElement.options;
-
-        for (let i = 0; i < options.length; i++) {
-            const option = options[i];
-            const imageUrl = option.dataset.image;
-
-            if (imageUrl) {
-                const image = document.createElement("img");
-                image.src = imageUrl;
-                image.style.marginRight = "5px"; // Adjust margin as needed
-
-                option.parentNode.insertBefore(image, option);
-            }
-        }
-    });
-</script> -->
 
 <body>
-
+    <?php include '../notif_pay.php'; ?>
     <div class="container">
         <div class="row">
             <!-- Kolom pertama -->
@@ -128,11 +104,11 @@
 
                 </div>
             </div>
+
             <!-- Kolom kedua -->
             <div class="col-md-8 col-12">
                 <div class="">
                     <!-- Kolom 2: Konten kedua -->
-
                     <section class="bookForm">
                         <h3>How do you want to secure your booking?</h3>
                         <h5 style="color:#019af3; margin-top:2vh"><i class="fas fa-lock" style="margin-right:5px; color:#019af3"></i>Secure Payment</h5>
@@ -219,8 +195,8 @@
                                             </label>
                                             <select id="digitalProvider" class="form-select" aria-label="Default select example" style="font-size: 13px;">
 
-                                                <option value="ovo" data-image="../icon/bca.png" selected>OVO</option>
-                                                <option value="gopay" data-image="../icon/mandiri.png">GOPAY</option>
+                                                <option value="ovo" data-image="../../icon/bca.png" selected>OVO</option>
+                                                <option value="gopay" data-image="../../icon/mandiri.png">GOPAY</option>
                                                 <!-- <option value="bri" data-image="icon/bri.png">BRI</option>
                         <option value="bni" data-image="icon/bni.png">BNI</option> -->
                                             </select>
@@ -240,8 +216,8 @@
                                                 <p>Bank Transfer</p>
                                             </div>
                                             <div class="col-6" style="padding-right: 5%; text-align:right">
-                                                <img src="../icon/bca.png" class="my-image" style="width: 15%;">
-                                                <img src="../icon/mandiri.png" class="my-image" style="width: 15%;">
+                                                <img src="../../icon/bca.png" class="my-image" style="width: 15%;">
+                                                <img src="../../icon/mandiri.png" class="my-image" style="width: 15%;">
                                                 <!-- <img src="../icon/bri.png" class="my-image" style="width: 20%;">
                           <img src="../icon/bni.png" class="my-image" style="width: 20%;"> -->
                                             </div>
@@ -268,7 +244,8 @@
                         <p style="padding-top: 5vh;">By proceeding with this booking, I agree to SOA’s Terms of Use and Privacy
                             Policy.</p>
                         <div class="col text-end"> <!-- text-end class aligns content to the right -->
-                            <button id="bookNowBtn" type="button" style="margin-top: 1vh; margin-right: 0.5vh; font-size: 14px;" class="btn btn-primary" onclick="window.location.href='PaymentConfirmation.php';">
+                            <!-- <button id="bookNowBtn" type="button" style="margin-top: 1vh; margin-right: 0.5vh; font-size: 14px;" class="btn btn-primary" onclick="window.location.href='../../PaymentConfirmation.php';"> -->
+                            <button id="bookNowBtn" type="button" style="margin-top: 1vh; margin-right: 0.5vh; font-size: 14px;" class="btn btn-primary">
                                 <i class="fas fa-lock" style="margin-right: 8px;"></i>
                                 PAY NOW!
                             </button>
@@ -285,89 +262,80 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script>
+
         $(document).ready(function() {
 
-// AJAX
-// NANTI AMBIL DARI ERICKSEN
-var id_pesanan = 1;
-var id_pesanan2;
-// var id_pesanan2 = 2;
+        // AJAX
+        // NANTI AMBIL DARI ERICKSEN
+        var id_pesanan = 900;
+        var id_pesanan2;
+        var id_pesanan2 = 8400;
 
-// Membuat traksaksi ketika pertama kali pindah dari halaman booking ke pembayaran
-if (id_pesanan2 != null) {
-    createTransaction2(id_pesanan, id_pesanan2);
-}else{
-    createTransaction(id_pesanan);
-}
-
-var selectedPaymentMethod = ""; // Variabel untuk menyimpan metode pembayaran yang dipili
-
-// Ketika accordion item dibuka
-$(".accordion-item").on('shown.bs.collapse', function() {
-    // Bersihkan formulir
-    $("input[type='text']").val('');
-    selectedPaymentMethod = $(this).attr("id");;
-    console.log(selectedPaymentMethod) // Reset variabel selectedPaymentMethod
-    $("#bank").val("bca");
-
-});
-
-// Ketika tombol "Book Now" diklik
-$("#bookNowBtn").click(function() {
-    if (selectedPaymentMethod) { // Jika metode pembayaran dipilih
-        switch (selectedPaymentMethod) {
-            case "creditCardOption":
-                if ($("#cardHolderName").val() === "" || $("#cardNumber").val() === "" || $("#expiryMonth").val() === "" || $("#expiryYear").val() === "" || $("#cvc").val() === "") {
-                    alert("Please fill in all required fields.");
-                    return;
-                } else {
-                    // Kumpulkan data dari formulir kartu kredit/debit
-                    // paymentData = {
-                    //     method: "Credit/Debit Card",
-                    //     cardHolderName: $("#cardHolderName").val(),
-                    //     cardNumber: $("#cardNumber").val(),
-                    //     expiryMonth: $("#expiryMonth").val(),
-                    //     expiryYear: $("#expiryYear").val(),
-                    //     cvc: $("#cvc").val()
-                    // };
-                    checkKartu($("#cardHolderName").val(), $("#cardNumber").val(), $("#expiryMonth").val(), $("#expiryYear").val(), $("#cvc").val(), 200000)
-                    // console.log(paymentData); // Lakukan tindakan dengan data yang dikumpulkan
-                    // alert("Processing credit/debit card payment...");
-                    break;
-                }
-            case "digitalPaymentOption":
-                if ($("#mobileNumber").val() === "") {
-                    alert("Please fill in all required fields.");
-                    return;
-                }
-                // Kumpulkan data dari formulir pembayaran digital
-                paymentData = {
-                    method: "Digital Payment",
-                    provider: $("#digitalProvider").val(),
-                    mobileNumber: $("#mobileNumber").val()
-                };
-                console.log(paymentData); // Lakukan tindakan dengan data yang dikumpulkan
-                alert("Processing digital payment...");
-                break;
-            case "bankTransferOption":
-                // Kumpulkan data dari formulir transfer bank
-                paymentData = {
-                    method: "Bank Transfer",
-                    bank: $("#bank").val()
-                };
-                console.log(paymentData); // Lakukan tindakan dengan data yang dikumpulkan
-                alert("Processing bank transfer payment...");
-                break;
-            default:
-                // Tindakan jika tidak ada metode pembayaran yang dipilih
-                alert("Please select a payment method.");
+        // Membuat traksaksi ketika pertama kali pindah dari halaman booking ke pembayaran
+        if (id_pesanan2 != null) {
+            createTransaction2(id_pesanan, id_pesanan2);
+        }else{
+            createTransaction(id_pesanan);
         }
-    } else {
-        // Tampilkan pesan jika tidak ada metode pembayaran yang dipilih
-        alert("Please select a payment method before proceeding.");
-    }
-});
-});
+
+        var selectedPaymentMethod = ""; // Variabel untuk menyimpan metode pembayaran yang dipilih
+
+        // Ketika accordion item dibuka
+        $(".accordion-item").on('shown.bs.collapse', function() {
+            // Bersihkan formulir
+            $("input[type='text']").val('');
+            selectedPaymentMethod = $(this).attr("id");;
+            console.log(selectedPaymentMethod) // Reset variabel selectedPaymentMethod
+            $("#bank").val("bca");
+
+        });
+
+        // Ketika tombol "Book Now" diklik
+        $("#bookNowBtn").click(function() {
+            if (selectedPaymentMethod) { // Jika metode pembayaran dipilih
+                switch (selectedPaymentMethod) {
+                    case "creditCardOption":
+                        if ($("#cardHolderName").val() === "" || $("#cardNumber").val() === "" || $("#expiryMonth").val() === "" || $("#expiryYear").val() === "" || $("#cvc").val() === "") {
+                            alert("Please fill in all required fields.");
+                            return;
+                        } else {
+                            checkKartu($("#cardHolderName").val(), $("#cardNumber").val(), $("#expiryMonth").val(), $("#expiryYear").val(), $("#cvc").val(), 200000)
+                            break;
+                        }
+                    case "digitalPaymentOption":
+                        if ($("#mobileNumber").val() === "") {
+                            alert("Please fill in all required fields.");
+                            return;
+                        }
+                        // Kumpulkan data dari formulir pembayaran digital
+                        paymentData = {
+                            method: "Digital Payment",
+                            provider: $("#digitalProvider").val(),
+                            mobileNumber: $("#mobileNumber").val()
+                        };
+                        console.log(paymentData); // Lakukan tindakan dengan data yang dikumpulkan
+                        alert("Processing digital payment...");
+                        break;
+                    case "bankTransferOption":
+                        // // Kumpulkan data dari formulir transfer bank
+                        // paymentData = {
+                        //     method: "Bank Transfer",
+                        //     bank: $("#bank").val()
+                        // };
+                        // console.log(paymentData); // Lakukan tindakan dengan data yang dikumpulkan
+                        // alert("Processing bank transfer payment...");
+                        TransferBank (id_pesanan, $("#bank").val())
+                        break;
+                    default:
+                        // Tindakan jika tidak ada metode pembayaran yang dipilih
+                        alert("Please select a payment method.");
+                }
+            } else {
+                // Tampilkan pesan jika tidak ada metode pembayaran yang dipilih
+                alert("Please select a payment method before proceeding.");
+            }
+        });
+        });
 
         // Fungsi untuk memuat membuat transaksi pertama kali dengan status "initial" 
         function createTransaction(id_pesanan){
@@ -406,6 +374,36 @@ $("#bookNowBtn").click(function() {
                 }
             });
         }
+
+
+        function TransferBank (id_pesanan, bank){
+            console.log('Trying to make a payment with ' + bank+' dengan id pesanan: '+ id_pesanan);
+            $.ajax({
+                url: "fetch-api-BCA.php",
+                method: 'POST',
+                data: {
+                    id_pesanan: id_pesanan,
+                    bank: bank,
+                    // no_telp:  no_telp
+                },
+                success: function(response) {
+                    console.log('Payment bakalan sukses')
+                    if (response.code === 200) {
+                        // $('#isiOtp').text(response.data.va);
+                        $('#successNotif').modal('show'); // Show success modal
+
+                    } else {
+                        $('.error-message').text(response.data.message);
+                        $('#failedNotif').modal('show'); // Show failed modal
+
+                    }
+                },
+                error: function(xhr, status, error){
+                    console.log('Ada yang salah: ', error)
+                }
+            })
+        }
+
 
 
     </script>
