@@ -142,13 +142,16 @@ if (isset($_POST['id_pesanan'])) {
 #untuk cek apakah user sudah milih metode transfer_bank dan jenis bank yang dipilih kemudian mencatat transaksi user berdasarkan bank yang dipilih
 if (isset($_POST['bank']) && isset($_POST['id_pesanan'])){
     // if(isset($_POST['id_pesanan'])){
+    
+        $bank = htmlspecialchars($_POST['bank']);
+        $id_pesanan = htmlspecialchars($_POST['id_pesanan']);
 
         if ($_POST['bank'] == 'BCA'){
 
             $url = "http://localhost:8000/transBCA"; #hasil dari API adalah id_transaksi dan VA
             $postData = array(
-                "no_telp" => $no_telp,
-                "total_transaksi" => $nominal
+                "no_telp" => $no_telp, #sudah di hardcode di atas
+                "total_transaksi" => $nominal #sudah di hardcode di atas
             );
 
             $ch = curl_init();
