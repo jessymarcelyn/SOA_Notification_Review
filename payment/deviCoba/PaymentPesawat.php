@@ -45,7 +45,7 @@
                         </div> -->
                     </section>
 
-                   <!-- Flight Details -->
+                    <!-- Flight Details -->
                     <section class="bookDetail">
                         <h4>Your Flight Details</h4>
                         <div class="mb-3">
@@ -58,8 +58,8 @@
                             <!-- <p class="flight-info">Aircraft: Boeing 737-800</p>
                             <p class="flight-info">Terminal: 1</p> -->
                         </div>
-                        <div class="mb-3" id="returnFlightDetails" >
-                        <!-- <div class="mb-3" id="returnFlightDetails" style="display: none;"> -->
+                        <div class="mb-3" id="returnFlightDetails">
+                            <!-- <div class="mb-3" id="returnFlightDetails" style="display: none;"> -->
                             <h5>Return</h5>
                             <p><strong>Bali (DPS) to Jakarta (CGK)</strong></p>
                             <p>Sun, June 23, 2024</p>
@@ -70,12 +70,12 @@
                             <p class="flight-info">Terminal: 2</p> -->
                         </div>
                         <p style="margin-bottom: 1vh">Additional Information</p>
-                                <div class="checklist">
-                                    <div class="checklist-item">
-                                        <input type="checkbox" id="item1" checked disabled>
-                                        <label for="item1">Included Insurance</label>
-                                        <span id="price">(Rp 1,800,000)</span>
-                                    </div>
+                        <div class="checklist">
+                            <div class="checklist-item">
+                                <input type="checkbox" id="item1" checked disabled>
+                                <label for="item1">Included Insurance</label>
+                                <span id="price">(Rp 1,800,000)</span>
+                            </div>
                     </section>
                     <section class="price">
                         <div id="rincian">
@@ -262,83 +262,82 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script>
-
         $(document).ready(function() {
 
-        // AJAX
-        // NANTI AMBIL DARI ERICKSEN
-        var id_pesanan = 500;
-        var id_pesanan2;
-        // var id_pesanan2 = 8400;
+            // AJAX
+            // NANTI AMBIL DARI ERICKSEN
+            var id_pesanan = 36;
+            var id_pesanan2;
+            // var id_pesanan2 = 8400;
 
-        // Membuat traksaksi ketika pertama kali pindah dari halaman booking ke pembayaran
-        if (id_pesanan2 != null) {
-            createTransaction2(id_pesanan, id_pesanan2);
-        }else{
-            createTransaction(id_pesanan);
-        }
-
-        var selectedPaymentMethod = ""; // Variabel untuk menyimpan metode pembayaran yang dipilih
-
-        // Ketika accordion item dibuka
-        $(".accordion-item").on('shown.bs.collapse', function() {
-            // Bersihkan formulir
-            $("input[type='text']").val('');
-            selectedPaymentMethod = $(this).attr("id");;
-            console.log(selectedPaymentMethod) // Reset variabel selectedPaymentMethod
-            $("#bank").val("bca");
-
-        });
-
-        // Ketika tombol "Book Now" diklik
-        $("#bookNowBtn").click(function() {
-            if (selectedPaymentMethod) { // Jika metode pembayaran dipilih
-                switch (selectedPaymentMethod) {
-                    case "creditCardOption":
-                        if ($("#cardHolderName").val() === "" || $("#cardNumber").val() === "" || $("#expiryMonth").val() === "" || $("#expiryYear").val() === "" || $("#cvc").val() === "") {
-                            alert("Please fill in all required fields.");
-                            return;
-                        } else {
-                            checkKartu($("#cardHolderName").val(), $("#cardNumber").val(), $("#expiryMonth").val(), $("#expiryYear").val(), $("#cvc").val(), 200000)
-                            break;
-                        }
-                    case "digitalPaymentOption":
-                        if ($("#mobileNumber").val() === "") {
-                            alert("Please fill in all required fields.");
-                            return;
-                        }
-                        // Kumpulkan data dari formulir pembayaran digital
-                        paymentData = {
-                            method: "Digital Payment",
-                            provider: $("#digitalProvider").val(),
-                            mobileNumber: $("#mobileNumber").val()
-                        };
-                        console.log(paymentData); // Lakukan tindakan dengan data yang dikumpulkan
-                        alert("Processing digital payment...");
-                        break;
-                    case "bankTransferOption":
-                        // // Kumpulkan data dari formulir transfer bank
-                        // paymentData = {
-                        //     method: "Bank Transfer",
-                        //     bank: $("#bank").val()
-                        // };
-                        // console.log(paymentData); // Lakukan tindakan dengan data yang dikumpulkan
-                        // alert("Processing bank transfer payment...");
-                        TransferBank (id_pesanan, $("#bank").val())
-                        break;
-                    default:
-                        // Tindakan jika tidak ada metode pembayaran yang dipilih
-                        alert("Please select a payment method.");
-                }
-            } else {
-                // Tampilkan pesan jika tidak ada metode pembayaran yang dipilih
-                alert("Please select a payment method before proceeding.");
+            // Membuat traksaksi ketika pertama kali pindah dari halaman booking ke pembayaran
+            if (id_pesanan2 != null) {
+                createTransaction2(id_pesanan, id_pesanan2);
+            }else{
+                createTransaction(id_pesanan);
             }
-        });
+
+            var selectedPaymentMethod = ""; // Variabel untuk menyimpan metode pembayaran yang dipilih
+
+            // Ketika accordion item dibuka
+            $(".accordion-item").on('shown.bs.collapse', function() {
+                // Bersihkan formulir
+                $("input[type='text']").val('');
+                selectedPaymentMethod = $(this).attr("id");;
+                console.log(selectedPaymentMethod) // Reset variabel selectedPaymentMethod
+                $("#bank").val("bca");
+
+            });
+
+            // Ketika tombol "Book Now" diklik
+            $("#bookNowBtn").click(function() {
+                if (selectedPaymentMethod) { // Jika metode pembayaran dipilih
+                    switch (selectedPaymentMethod) {
+                        case "creditCardOption":
+                            if ($("#cardHolderName").val() === "" || $("#cardNumber").val() === "" || $("#expiryMonth").val() === "" || $("#expiryYear").val() === "" || $("#cvc").val() === "") {
+                                alert("Please fill in all required fields.");
+                                return;
+                            } else {
+                                checkKartu($("#cardHolderName").val(), $("#cardNumber").val(), $("#expiryMonth").val(), $("#expiryYear").val(), $("#cvc").val(), 200000)
+                                break;
+                            }
+                        case "digitalPaymentOption":
+                            if ($("#mobileNumber").val() === "") {
+                                alert("Please fill in all required fields.");
+                                return;
+                            }
+                            // Kumpulkan data dari formulir pembayaran digital
+                            paymentData = {
+                                method: "Digital Payment",
+                                provider: $("#digitalProvider").val(),
+                                mobileNumber: $("#mobileNumber").val()
+                            };
+                            console.log(paymentData); // Lakukan tindakan dengan data yang dikumpulkan
+                            alert("Processing digital payment...");
+                            break;
+                        case "bankTransferOption":
+                            // // Kumpulkan data dari formulir transfer bank
+                            // paymentData = {
+                            //     method: "Bank Transfer",
+                            //     bank: $("#bank").val()
+                            // };
+                            // console.log(paymentData); // Lakukan tindakan dengan data yang dikumpulkan
+                            // alert("Processing bank transfer payment...");
+                            TransferBank(id_pesanan, $("#bank").val())
+                            break;
+                        default:
+                            // Tindakan jika tidak ada metode pembayaran yang dipilih
+                            alert("Please select a payment method.");
+                    }
+                } else {
+                    // Tampilkan pesan jika tidak ada metode pembayaran yang dipilih
+                    alert("Please select a payment method before proceeding.");
+                }
+            });
         });
 
         // Fungsi untuk memuat membuat transaksi pertama kali dengan status "initial" 
-        function createTransaction(id_pesanan){
+        function createTransaction(id_pesanan) {
             console.log('id_pesanan: ', id_pesanan);
             $.ajax({
                 url: "fetch-api-BCA.php",
@@ -346,19 +345,19 @@
                 data: {
                     id_pesanan: id_pesanan
                 },
-                success: function(response){
+                success: function(response) {
                     console.log('Full response from server:', response);
 
                     console.log('Berhasil');
                 },
-                error: function(xhr, status, error){
+                error: function(xhr, status, error) {
                     console.log('Failed: ', error)
                 }
             });
         }
 
         // Fungsi untuk memuat membuat transaksi pertama kali dengan status "initial" khusus pesawat PP
-        function createTransaction2(id_pesanan, id_pesanan2){
+        function createTransaction2(id_pesanan, id_pesanan2) {
             console.log('id_pesanan: ', id_pesanan);
             console.log('id_pesanan2: ', id_pesanan2);
             $.ajax({
@@ -368,59 +367,82 @@
                     id_pesanan: id_pesanan,
                     id_pesanan2: id_pesanan2
                 },
-                success: function(response){
+                success: function(response) {
                     console.log('Berhasil');
                 },
-                error: function(xhr, status, error){
+                error: function(xhr, status, error) {
                     console.log('Failed: ', error)
                 }
             });
         }
 
 
-        function TransferBank (id_pesanan, bank){
-            console.log('Trying to make a payment with ' + bank+' dengan id pesanan: '+ id_pesanan);
+        function TransferBank(id_pesanan, bank) {
+            console.log('Trying to make a payment with ' + bank + ' dengan id pesanan: ' + id_pesanan);
             $.ajax({
                 url: "fetch-api-BCA.php",
                 method: 'POST',
                 data: {
                     id_pesanan: id_pesanan,
-                    bank: bank,
-                    // no_telp:  no_telp
+                    bank: "BCA",
                 },
-                // success: function(response) {
-                //     console.log('Payment bakalan sukses')
-                //     console.log('Response from server:', response.data);
-                //     if (response.code === 200) {
-                //         // $('#isiOtp').text(response.data.va);
-                //         $('#successNotif').modal('show'); // Show success modal
-
-                //     } else {
-                //         $('.error-message').text(response.data.message);
-                //         $('#failedNotif').modal('show'); // Show failed modal
-
-                //     }
-                // },
+                dataType: 'json', // Ensures jQuery parses the response as JSON
                 success: function(response) {
                     console.log('Full response from server:', response);
                     console.log('Payment bakalan sukses');
                     if (response.code === 200) {
-                        // $('#successNotif').modal('show'); // Show success modal
-                        console.log('BERHASIL')
+                        console.log('BERHASIL');
                     } else {
-                        // $('.error-message').text(response.message); // Adjust to response.message if response.data is undefined
-                        // $('#failedNotif').modal('show'); // Show failed modal
-                        console.log('GAGAL')
+                        console.log('GAGAL');
                     }
                 },
-                error: function(xhr, status, error){
-                    console.log('Ada yang salah: ', error)
+                error: function(xhr, status, error) {
+                    console.log('Ada yang salah: ', error);
+                    console.log('Full error response: ', xhr.responseText);
                 }
+
+
+
+                // console.log('Trying to make a payment with ' + bank+' dengan id pesanan: '+ id_pesanan);
+                // $.ajax({
+                //     url: "fetch-api-BCA.php",
+                //     method: 'POST',
+                //     data: {
+                //         id_pesanan: id_pesanan,
+                //         bank: bank,
+                //         // no_telp:  no_telp
+                //     },
+                //     dataType: 'json',
+                //     // success: function(response) {
+                //     //     console.log('Payment bakalan sukses')
+                //     //     console.log('Response from server:', response.data);
+                //     //     if (response.code === 200) {
+                //     //         // $('#isiOtp').text(response.data.va);
+                //     //         $('#successNotif').modal('show'); // Show success modal
+
+                //     //     } else {
+                //     //         $('.error-message').text(response.data.message);
+                //     //         $('#failedNotif').modal('show'); // Show failed modal
+
+                //     //     }
+                //     // },
+                //     success: function(response) {
+                //         console.log('Full response from server:', response);
+                //         console.log('Payment bakalan sukses');
+                //         if (response.code === 200) {
+                //             // $('#successNotif').modal('show'); // Show success modal
+                //             console.log('BERHASIL')
+                //         } else {
+                //             // $('.error-message').text(response.message); // Adjust to response.message if response.data is undefined
+                //             // $('#failedNotif').modal('show'); // Show failed modal
+                //             console.log('GAGAL')
+                //         }
+                //     },
+                //     error: function(xhr, status, error){
+                //         console.log('Ada yang salah: ', error)
+                //     }
             })
         }
-
-
-
     </script>
 </body>
 

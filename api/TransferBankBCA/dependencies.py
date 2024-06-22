@@ -111,6 +111,11 @@ class DatabaseWrapper:
 
     # Add Transaksi into tabel transaksi transfer bank
     def create_trans(self, no_telp, nominal, va):
+        print("masuk2")
+        print("no_telp2 : ", no_telp)
+        print("nominal2 : ", nominal)
+        print("va2 : ", va)
+        
         status = 'ongoing'
         try:
             cursor = self.connection.cursor(dictionary=True)
