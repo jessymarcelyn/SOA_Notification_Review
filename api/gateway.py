@@ -339,6 +339,7 @@ class GatewayService:
     def post_pembayaran_ovo(self, request):
         data = json.loads(request.get_data(as_text=True))
         pembayaran = self.ovo_rpc.insert_transaksi(data['no_telp'], data['nominal'])
+        return json.dumps(pembayaran)
          
     @http('GET', '/ovo/status/<string:id_transaksi>') #return status pembayaran
     def get_status_pembayaran_by_id_transaksi_ovo(self, request, id_transaksi):
