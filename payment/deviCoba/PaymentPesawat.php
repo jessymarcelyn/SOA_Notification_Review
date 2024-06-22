@@ -386,16 +386,28 @@
                     bank: bank,
                     // no_telp:  no_telp
                 },
+                // success: function(response) {
+                //     console.log('Payment bakalan sukses')
+                //     console.log('Response from server:', response.data);
+                //     if (response.code === 200) {
+                //         // $('#isiOtp').text(response.data.va);
+                //         $('#successNotif').modal('show'); // Show success modal
+
+                //     } else {
+                //         $('.error-message').text(response.data.message);
+                //         $('#failedNotif').modal('show'); // Show failed modal
+
+                //     }
+                // },
                 success: function(response) {
-                    console.log('Payment bakalan sukses')
+                    console.log('Full response from server:', response);
+                    console.log('Payment bakalan sukses');
                     if (response.code === 200) {
-                        // $('#isiOtp').text(response.data.va);
                         $('#successNotif').modal('show'); // Show success modal
-
                     } else {
-                        $('.error-message').text(response.data.message);
-                        $('#failedNotif').modal('show'); // Show failed modal
-
+                        // $('.error-message').text(response.message); // Adjust to response.message if response.data is undefined
+                        // $('#failedNotif').modal('show'); // Show failed modal
+                        console.log('GAGAL')
                     }
                 },
                 error: function(xhr, status, error){
