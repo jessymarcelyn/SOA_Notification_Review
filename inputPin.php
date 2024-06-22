@@ -180,7 +180,7 @@ $id_user = $_GET['id_user'];
 
         // Example AJAX request to send the hashed PIN to server
         $.ajax({
-          url: 'checkPin.php',
+          url: 'fetch-api-pin.php',
           type: 'POST',
           data: {
             id_pesanan: idPesanan,
@@ -188,12 +188,17 @@ $id_user = $_GET['id_user'];
             pin: hashed,
           },
           success: function (response) {
-            console.log(response);
+            console.log("Responsen:", response);
             if (response == "true") {
               $('#successNotif').modal('show');
             }
             else {
-              // $('#failedNotif').modal('show');
+              const errorMessageElement = document.querySelector('.text-danger');
+
+              // Ganti teks elemen tersebut
+              errorMessageElement.textContent = $response;
+
+              $('#failedNotif').modal('show');
 
             }
           },
