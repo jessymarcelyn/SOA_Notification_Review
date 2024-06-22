@@ -91,7 +91,7 @@ if (isset($_POST['id_pesanan']) && isset($_POST['nama']) && isset($_POST['nomer_
                                 'id_user' => 1,
                                 'id_pesanan' => $id_pesanan,
                                 'tipe_notif' => 'pembayaran',
-                                'judul' => 'Lakukan Pembayaran',
+                                'judul' => 'OTP',
                                 'deskripsi' => "Silahkan lakukan pembayaran dengan OTP ini {$result['data']['otp']}",
                                 'timestamp_masuk' => date('Y-m-d H:i:s'), // Current timestamp
                                 'status' => 0,
@@ -122,7 +122,7 @@ if (isset($_POST['id_pesanan']) && isset($_POST['nama']) && isset($_POST['nomer_
                                             'id_user' => 1,
                                             'id_pesanan' => $id_pesanan,
                                             'tipe_notif' => 'pembayaran',
-                                            'judul' => 'OTP',
+                                            'judul' => 'Lakukan Pembayaran',
                                             'deskripsi' => "Silahkan lakukan pembayaran untuk pesanan $id_pesanan",
                                             'timestamp_masuk' => date('Y-m-d H:i:s'), // Current timestamp
                                             'status' => 0,

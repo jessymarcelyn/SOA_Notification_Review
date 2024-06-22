@@ -561,3 +561,9 @@ class GatewayService:
         notifs = self.notif_rpc.update_notif_link(idNotif)
         return json.dumps(notifs)
     
+    @http('PUT', '/notif/pesanan/<int:id_pesanan>')
+    def update_notif_link_pesanan(self,request, id_pesanan):
+        data = json.loads(request.get_data(as_text=True))
+        notifs = self.notif_rpc.update_notif_link_pesanan(id_pesanan, data['judul'])
+        return json.dumps(notifs)
+    

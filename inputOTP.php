@@ -166,6 +166,10 @@ $id_user = $_GET['id_user'];
           success: function(response) {
             if (response === "1") {
               $('#successNotif').modal('show'); // Show success modal
+              setTimeout(function() {
+                  window.location.href = 'notif_page.php'; // Redirect to notif_page.php after 3 seconds
+                }, 3000);
+                
             } else if (response === "2") {
                $('#error-message').text("We're sorry, but your payment request has expired. Please initiate a new transaction to complete your payment.");
               $('#failedNotif').modal('show'); // Show failed modal

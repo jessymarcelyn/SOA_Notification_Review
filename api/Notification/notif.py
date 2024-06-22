@@ -200,3 +200,11 @@ class Notifservice:
             'code': 200,
             'data': notifs
         }
+    
+    @rpc
+    def update_notif_link_pesanan(self, id_pesanan, judul):
+        notifs = self.database.update_notif_link_pesanan(id_pesanan, judul)
+        return {
+            'code': 200,
+            'data': notifs
+        }

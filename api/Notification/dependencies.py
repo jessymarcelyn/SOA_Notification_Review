@@ -312,6 +312,14 @@ class DatabaseWrapper:
         self.connection.commit()
         cursor.close()
         return True
+
+    def update_notif_link_pesanan(self, id_pesanan, judul):
+        cursor = self.connection.cursor(dictionary=True)
+        sql = "UPDATE notifikasi SET link = null WHERE id_pesanan = %s && judul = %s" 
+        cursor.execute(sql, (id_pesanan, judul, ))
+        self.connection.commit()
+        cursor.close()
+        return True
     
 
 class Database(DependencyProvider):
