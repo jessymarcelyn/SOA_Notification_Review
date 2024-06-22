@@ -133,6 +133,7 @@ class DatabaseWrapper:
             cursor.close()
     
     def update_pembayaran(self, id_pesanan, id_transaksi, jenis_pembayaran, nama_penyedia):
+        print("masuk update2")
         cursor = self.connection.cursor(dictionary=True)
 
         try:

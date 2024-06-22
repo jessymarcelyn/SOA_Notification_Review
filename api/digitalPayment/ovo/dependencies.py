@@ -73,6 +73,9 @@ class DatabaseWrapper:
 
     # aman
     def insert_transaksi(self, no_telp, nominal):
+        print("masuk insert")
+        print("no_telp ", no_telp)
+        print("nominal ", nominal)
         cursor = self.connection.cursor(dictionary=True)
         sql = "INSERT INTO transaksiovo (nomor_telepon, nominal) VALUES (%s, %s)"
         params = (no_telp, nominal)

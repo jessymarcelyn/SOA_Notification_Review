@@ -86,6 +86,7 @@ class Transferservice:
     #update id_transaksi, jenis_pembayaran, nama_penyedia, status berdasarkan id_pesanan
     @rpc
     def update_pembayaran(self, id_pesanan, id_transaksi, jenis_pembayaran, nama_penyedia):
+        print("masuk update1")
         success = self.database.update_pembayaran(id_pesanan, id_transaksi, jenis_pembayaran, nama_penyedia)
         
         if not success:

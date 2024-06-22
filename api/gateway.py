@@ -12,7 +12,7 @@ class GatewayService:
     TransP_rpc = RpcProxy('transaksi_pembayaran_service')
 
     # Get berdasarkan id_pesanan
-    @http('GET', '/Tpembayaran/IDPesanan/<int:IDPesanan>')
+    @http('GET', '/Tpembayaran/pesanan/<int:IDPesanan>')
     def get__byIDPesananTP(self, request, IDPesanan):
         exist = self.TransP_rpc.get__byIDPesanan(IDPesanan)
         if exist:
@@ -21,7 +21,7 @@ class GatewayService:
             return Response(json.dumps('No Transaction found with this ID'), status=404, mimetype='application/json')
         
     # Get berdasarkan id_transaksi
-    @http('GET', '/Tpembayaran/IDTransaksi/<int:IDTransaksi>')
+    @http('GET', '/Tpembayaran/transaksi/<int:IDTransaksi>')
     def get__byIDTransaksiTP(self, request, IDTransaksi):
         exist = self.TransP_rpc.get__byIDTransaksi(IDTransaksi)
         if exist:
@@ -29,8 +29,8 @@ class GatewayService:
         else:
             return Response(json.dumps('No Transaction found with this ID'), status=404, mimetype='application/json')
         
-    # Update berdasarkan id_pesanan (jenis_pembayaran, nama_penyedia)
-    @http('PUT', '/Tpembayaran/updateTrans/<int:IDTransaksi>')
+    # Update berdasarkan id_transaksi (jenis_pembayaran, nama_penyedia)
+    @http('PUT', '/Tpembayaran/transaksi/<int:IDTransaksi>')
     def update__byIDTransaksiTP(self, request, IDTransaksi):
         exist = self.TransP_rpc.get__byIDTransaksi(IDTransaksi)
         if exist:
@@ -212,7 +212,15 @@ class GatewayService:
                 return Response(json.dumps('Wrong phone number'), status=404, mimetype='application/json')
         except Exception as e:
             return 500, json.dumps({"error": str(e)})
-
+        #     va = data.get('VA')
+        #     transaksi = self.mandiri_rpc.create_trans(
+        #         no_telp, nominal, va
+        #     )
+        #     return 200, json.dumps(transaksi)
+        # except Exception as e:
+        #     return 500, json.dumps({"error": str(e)})
+        
+        
     #PUT ada pembayaran jadi update status = success
     @http('PUT', '/transMandiri/<int:idTrans>')
     def pay_transTMandiri(self, request, idTrans):
@@ -321,7 +329,7 @@ class GatewayService:
         pembayaran = self.gopay_rpc.get_status_transaksi(id_transaksi)
         return json.dumps(pembayaran)
     
-    @http('PUT', '/gopay') #check pin dan check saldo
+    @http('PUT', '/gopay/pembayaran') #check pin dan check saldo
     def bayar_gopay(self, request):
         data = json.loads(request.get_data(as_text=True))
         pembayaran = self.gopay_rpc.bayar(data['id_transaksi'], data['pin'])
@@ -335,18 +343,46 @@ class GatewayService:
     # OVO
     ovo_rpc = RpcProxy('ovo_service')
 
-    @http('POST', '/ovo') #cek nomor telepon, return idtransaksi
+    # @http('POST', '/ovo') #cek nomor telepon, return idtransaksi
+    # def post_pembayaran_ovo(self, request):
+    #     data = json.loads(request.get_data(as_text=True))
+    #     pembayaran = self.ovo_rpc.insert_transaksi(data['no_telp'], data['nominal'])
+    #     return json.dumps(pembayaran)
+    @http('POST', '/ovo')
     def post_pembayaran_ovo(self, request):
-        data = json.loads(request.get_data(as_text=True))
-        pembayaran = self.ovo_rpc.insert_transaksi(data['no_telp'], data['nominal'])
-        return json.dumps(pembayaran)
-         
+        try:
+            content_type = request.headers.get('Content-Type')
+            if content_type != 'application/json':
+                return json.dumps({"error": "Content-Type must be application/json"}), 400
+
+            data_str = request.get_data(as_text=True)
+            print(f"Received raw data: {data_str}")  # Log the received data
+
+            if not data_str:
+                return json.dumps({"error": "No data received"}), 400
+
+            try:
+                data = json.loads(data_str)
+            except json.JSONDecodeError as e:
+                return json.dumps({"error": f"Invalid JSON data: {str(e)}"}), 400
+
+            print(f"Decoded JSON data: {data}")
+
+            if 'no_telp' not in data or 'nominal' not in data:
+                return json.dumps({"error": "Missing required fields"}), 400
+
+            pembayaran = self.ovo_rpc.insert_transaksi(data['no_telp'], data['nominal'])
+            return json.dumps(pembayaran), 200
+
+        except Exception as e:
+            return json.dumps({"error": str(e)}), 500
+        
     @http('GET', '/ovo/status/<string:id_transaksi>') #return status pembayaran
     def get_status_pembayaran_by_id_transaksi_ovo(self, request, id_transaksi):
         pembayaran = self.ovo_rpc.get_status_transaksi(id_transaksi)
         return json.dumps(pembayaran)
     
-    @http('PUT', '/ovo') #check pin dan check saldo
+    @http('PUT', '/ovo/pembayaran') #check pin dan check saldo
     def bayar_ovo(self, request):
         data = json.loads(request.get_data(as_text=True))
         pembayaran = self.ovo_rpc.bayar(data['id_transaksi'], data['pin'])
