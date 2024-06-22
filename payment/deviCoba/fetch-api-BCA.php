@@ -138,6 +138,8 @@ if (isset($_POST['id_pesanan'])) {
 
 #untuk cek apakah user sudah milih metode transfer_bank dan jenis bank yang dipilih kemudian mencatat transaksi user berdasarkan bank yang dipilih
 if (isset($_POST['bank']) && isset($_POST['id_pesanan'])) {
+    // var_dump('BANNNNNNNKKKK');
+    // console.log("BANK");
     // if(isset($_POST['id_pesanan'])){
 
     $bank = htmlspecialchars($_POST['bank']);
@@ -177,6 +179,7 @@ if (isset($_POST['bank']) && isset($_POST['id_pesanan'])) {
             } else {
                 // error_log("Else");
                 // echo json_encode($result);
+                var_dump($result);
 
                 //UPDATE Transaksi pembayaran
                 if ($result['code'] == 200) {
