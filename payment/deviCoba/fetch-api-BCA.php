@@ -248,7 +248,8 @@ if (isset($_POST['bank']) && isset($_POST['id_pesanan'])) {
 
                                     if ($postResult === null && json_last_error() !== JSON_ERROR_NONE) {
                                         echo json_encode(['code' => 500, 'message' => 'Error decoding POST response JSON from /notif']);
-                                    } 
+                                    } else {
+
                                         // Respond with the POST request result from /notif
                                         // echo json_encode($postResult);
                                     }
@@ -260,8 +261,8 @@ if (isset($_POST['bank']) && isset($_POST['id_pesanan'])) {
             }
         }
         // $result = sendCurlRequest($url, $postData);
-        var_dump($result); // Debugging output
-        header('Content-Type: application/json');
+        // var_dump($result); // Debugging output
+        // header('Content-Type: application/json');
         echo json_encode($result);
     }
 
