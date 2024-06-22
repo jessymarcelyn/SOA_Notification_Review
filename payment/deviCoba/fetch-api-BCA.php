@@ -142,9 +142,10 @@ if (isset($_POST['id_pesanan'])) {
 #untuk cek apakah user sudah milih metode transfer_bank dan jenis bank yang dipilih kemudian mencatat transaksi user berdasarkan bank yang dipilih
 if (isset($_POST['bank']) && isset($_POST['id_pesanan'])){
     // if(isset($_POST['id_pesanan'])){
-    
+
         $bank = htmlspecialchars($_POST['bank']);
         $id_pesanan = htmlspecialchars($_POST['id_pesanan']);
+        // $nominal = htmlspecialchars($_POST['nominal']); #sementara gk pake ini tapi pake hardcode an dr atas
 
         if ($_POST['bank'] == 'BCA'){
 
