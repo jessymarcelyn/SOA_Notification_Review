@@ -346,7 +346,7 @@ class GatewayService:
         pembayaran = self.ovo_rpc.get_status_transaksi(id_transaksi)
         return json.dumps(pembayaran)
     
-    @http('PUT', '/ovo/bayar') #check pin dan check saldo
+    @http('PUT', '/ovo/pembayaran') #check pin dan check saldo
     def bayar_ovo(self, request):
         data = json.loads(request.get_data(as_text=True))
         pembayaran = self.ovo_rpc.bayar(data['id_transaksi'], data['pin'])
@@ -554,5 +554,10 @@ class GatewayService:
     @http('PUT', '/notif/<int:idNotif>')
     def update_notif_status(self,request, idNotif):
         notifs = self.notif_rpc.update_notif_status(idNotif)
+        return json.dumps(notifs)
+    
+    @http('PUT', '/notif/link/<int:idNotif>')
+    def update_notif_link(self,request, idNotif):
+        notifs = self.notif_rpc.update_notif_link(idNotif)
         return json.dumps(notifs)
     
