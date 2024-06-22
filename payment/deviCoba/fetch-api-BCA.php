@@ -151,7 +151,7 @@ if (isset($_POST['bank']) && isset($_POST['id_pesanan'])) {
             "no_telp" => $no_telp, #sudah di hardcode di atas
             "total_transaksi" => $nominal #sudah di hardcode di atas
         );
-        $postDataJSON = json_encode($postData);
+        // $postDataJSON = json_encode($postData);
 
         $ch = curl_init();
 
@@ -176,7 +176,7 @@ if (isset($_POST['bank']) && isset($_POST['id_pesanan'])) {
                 // echo 'Error decoding JSON response';
             } else {
                 // error_log("Else");
-                echo json_encode($result);
+                // echo json_encode($result);
 
                 //UPDATE Transaksi pembayaran
                 if ($result['code'] == 200) {

@@ -267,9 +267,9 @@
 
         // AJAX
         // NANTI AMBIL DARI ERICKSEN
-        var id_pesanan = 900;
+        var id_pesanan = 500;
         var id_pesanan2;
-        var id_pesanan2 = 8400;
+        // var id_pesanan2 = 8400;
 
         // Membuat traksaksi ketika pertama kali pindah dari halaman booking ke pembayaran
         if (id_pesanan2 != null) {
@@ -347,6 +347,8 @@
                     id_pesanan: id_pesanan
                 },
                 success: function(response){
+                    console.log('Full response from server:', response);
+
                     console.log('Berhasil');
                 },
                 error: function(xhr, status, error){
@@ -403,7 +405,8 @@
                     console.log('Full response from server:', response);
                     console.log('Payment bakalan sukses');
                     if (response.code === 200) {
-                        $('#successNotif').modal('show'); // Show success modal
+                        // $('#successNotif').modal('show'); // Show success modal
+                        console.log('BERHASIL')
                     } else {
                         // $('.error-message').text(response.message); // Adjust to response.message if response.data is undefined
                         // $('#failedNotif').modal('show'); // Show failed modal
