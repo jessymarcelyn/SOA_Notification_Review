@@ -247,7 +247,7 @@
 
             // AJAX
             // NANTI AMBIL DARI ERICKSEN
-            var id_pesanan = 78;
+            var id_pesanan = 81;
             var id_pesanan2;
             // var id_pesanan2 = 2;
 
@@ -362,13 +362,20 @@
                             // alert("Processing digital payment...");
                             break;
                         case "bankTransferOption":
-                            // Kumpulkan data dari formulir transfer bank
+                            // // Kumpulkan data dari formulir transfer bank
                             paymentData = {
                                 method: "Bank Transfer",
                                 bank: $("#bank").val()
                             };
                             console.log(paymentData); // Lakukan tindakan dengan data yang dikumpulkan
-                            alert("Processing bank transfer payment...");
+                            // alert("Processing bank transfer payment...");
+                            // TransferBank(id_pesanan, $("#bank").val())
+                            // if ($("#bank").val() == 'BCA') {
+                            TransferBankBCA(id_pesanan, $("#bank").val())
+                            // } else if ($("#bank").val() == 'Mandiri') {
+                            //     TransferBankMandiri(id_pesanan, $("#bank").val())
+
+                            // }
                             break;
                         default:
                             // Tindakan jika tidak ada metode pembayaran yang dipilih
@@ -457,6 +464,72 @@
                     $('#failedNotif').modal('show'); // Show failed modal due to error
                 }
             });
+        }
+
+        function TransferBankBCA(id_pesanan, bank) {
+            console.log('Trying to make a payment with ' + bank + ' dengan id pesanan: ' + id_pesanan);
+            if (bank == "bca") {
+                $.ajax({
+                    url: "fetch-api-BCA.php",
+                    method: 'POST',
+                    data: {
+                        id_pesanan: id_pesanan,
+                        bank: "BCA",
+                    },
+                    dataType: 'json', // Ensures jQuery parses the response as JSON
+                    success: function(response) {
+                        console.log('Payment bakalan sukses');
+                        console.log('Full response from server:', response);
+
+                        if (response.code === 200) {
+                            $('#isiOtp').text(response.data.va);
+                            $('#successNotif').modal('show'); // Show success modal
+
+                            console.log('BERHASIL');
+                        } else {
+                            $('.error-message').text(response.data.message);
+                            $('#failedNotif').modal('show'); // Show failed modal
+
+                            console.log('GAGAL');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Ada yang salah: ', error);
+                        console.log('Full error response: ', xhr.responseText);
+                    }
+                })
+            } else {
+
+                $.ajax({
+                    url: "fetch-api-BCA.php",
+                    method: 'POST',
+                    data: {
+                        id_pesanan: id_pesanan,
+                        bank: "Mandiri",
+                    },
+                    dataType: 'json', // Ensures jQuery parses the response as JSON
+                    success: function(response) {
+                        console.log('Full response from server:', response);
+                        console.log('Payment bakalan sukses');
+                        if (response.code === 200) {
+                            $('#isiOtp').text(response.data.va);
+                            $('#successNotif').modal('show'); // Show success modal
+
+                            console.log('BERHASIL');
+                        } else {
+                            $('.error-message').text(response.data.message);
+                            $('#failedNotif').modal('show'); // Show failed modal
+
+                            console.log('GAGAL');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Ada yang salah: ', error);
+                        console.log('Full error response: ', xhr.responseText);
+                    }
+                })
+
+            }
         }
     </script>
 
