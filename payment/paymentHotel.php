@@ -4,14 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 
     <!-- Import jquery cdn -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
-    </script>
-    <link rel='icon' href='../images/logo.png' type='images/logo.png'>
-    <title>Booking.com | Payment</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <link rel='icon' href='images/logo.png' type='images/logo.png'>
 
     <!-- Bootstrap CSS  -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
@@ -26,34 +24,9 @@
     <link rel="stylesheet" href="../css/payment.css">
 
 </head>
-<script>
-    $(document).ready(function() {
-        $("#toggleDetails").click(function() {
-            $("#priceInfo").toggle();
-            var text = $(this).text();
-            $(this).text(text == "Hide Details" ? "Show Details" : "Hide Details");
-        });
-        const selectElement = document.getElementById("mySelect");
-
-        const options = selectElement.options;
-
-        for (let i = 0; i < options.length; i++) {
-            const option = options[i];
-            const imageUrl = option.dataset.image;
-
-            if (imageUrl) {
-                const image = document.createElement("img");
-                image.src = imageUrl;
-                image.style.marginRight = "5px"; // Adjust margin as needed
-
-                option.parentNode.insertBefore(image, option);
-            }
-        }
-    });
-</script>
 
 <body>
-
+    <?php include 'notif_pay.php'; ?>
     <div class="container">
         <div class="row">
             <!-- Kolom pertama -->
@@ -174,7 +147,7 @@
                                                     <label>
                                                         <p>CVC/ CVV <span class="asterisk" style="color:red">*</span></p>
                                                     </label>
-                                                    <input id="cvc" type="text" class="form-control" name="name" required style="width:70%">
+                                                    <input id="cvc" type="password" class="form-control" name="name" required style="width:70%">
                                                 </div>
                                             </div>
                                         </div>
@@ -190,8 +163,8 @@
                                                 <p>Digital Payment</p>
                                             </div>
                                             <div class="col-6" style="padding-right: 5%; text-align:right">
-                                                <img src="../icon/ovo.png" class="my-image" style="width:15%;">
-                                                <img src="../icon/gopay.png" class="my-image" style="width: 25%;">
+                                                <img src="../../icon/ovo.png" class="my-image" style="width:15%;">
+                                                <img src="../../icon/gopay.png" class="my-image" style="width: 25%;">
                                             </div>
                                         </div>
                                     </button>
@@ -253,7 +226,8 @@
                         <p style="padding-top: 5vh;">By proceeding with this booking, I agree to SOA’s Terms of Use and Privacy
                             Policy.</p>
                         <div class="col text-end"> <!-- text-end class aligns content to the right -->
-                            <button id="bookNowBtn" type="button" style="margin-top: 1vh; margin-right: 0.5vh; font-size: 14px;" class="btn btn-primary" onclick="window.location.href='PaymentConfirmation.php';">
+                            <!-- <button id="bookNowBtn" type="button" style="margin-top: 1vh; margin-right: 0.5vh; font-size: 14px;" class="btn btn-primary" onclick="window.location.href='PaymentConfirmation.php';"> -->
+                            <button id="bookNowBtn" type="button" style="margin-top: 1vh; margin-right: 0.5vh; font-size: 14px;" class="btn btn-primary">
                                 <i class="fas fa-lock" style="margin-right: 8px;"></i>
                                 PAY NOW!
                             </button>
@@ -265,15 +239,52 @@
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
     <script>
         $(document).ready(function() {
 
-            var selectedPaymentMethod = ""; // Variabel untuk menyimpan metode pembayaran yang dipilih
+            // AJAX
+            // NANTI AMBIL DARI ERICKSEN
+            var id_pesanan = 78;
+            var id_pesanan2;
+            // var id_pesanan2 = 2;
 
+            // Membuat traksaksi ketika pertama kali pindah dari halaman booking ke pembayaran
+            if (id_pesanan2 != null) {
+                createTransaction2(id_pesanan, id_pesanan2);
+            } else {
+                createTransaction(id_pesanan);
+            }
 
+            $('#cardNumber, #cvv, #expiryMonth, #expiryYear, #cvc').on('input', function() {
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+            $('#cvc').on('input', function() {
+                if (this.value.length > 3) {
+                    this.value = this.value.slice(0, 3);
+                }
+            });
+            $('#cardNumber').on('input', function() {
+                if (this.value.length > 16) {
+                    this.value = this.value.slice(0, 16);
+                }
+            });
+
+            $('#expiryMonth').on('input', function() {
+                if (this.value.length > 2) {
+                    this.value = this.value.slice(0, 2);
+                }
+            });
+
+            $('#expiryYear').on('input', function() {
+                if (this.value.length > 4) {
+                    this.value = this.value.slice(0, 4);
+                }
+            });
+
+            var selectedPaymentMethod = ""; // Variabel untuk menyimpan metode pembayaran yang dipili
 
             // Ketika accordion item dibuka
             $(".accordion-item").on('shown.bs.collapse', function() {
@@ -293,32 +304,62 @@
                             if ($("#cardHolderName").val() === "" || $("#cardNumber").val() === "" || $("#expiryMonth").val() === "" || $("#expiryYear").val() === "" || $("#cvc").val() === "") {
                                 alert("Please fill in all required fields.");
                                 return;
+                            } else if ($("#cardNumber").val().length !== 16) {
+                                alert("Card number must be 16 digits long.");
+                                return;
+                            } else if ($("#cvc").val().length !== 3) {
+                                alert("CVV must be 3 digits long.");
+                                return;
+                            } else {
+                                // Kumpulkan data dari formulir kartu kredit/debit
+                                // paymentData = {
+                                //     method: "Credit/Debit Card",
+                                //     cardHolderName: $("#cardHolderName").val(),
+                                //     cardNumber: $("#cardNumber").val(),
+                                //     expiryMonth: $("#expiryMonth").val(),
+                                //     expiryYear: $("#expiryYear").val(),
+                                //     cvc: $("#cvc").val()
+                                // };
+                                checkKartu(id_pesanan, $("#cardHolderName").val(), $("#cardNumber").val(), $("#expiryMonth").val(), $("#expiryYear").val(), $("#cvc").val(), 200000)
+                                // console.log(paymentData); // Lakukan tindakan dengan data yang dikumpulkan
+                                // alert("Processing credit/debit card payment...");
+                                break;
                             }
-                            // Kumpulkan data dari formulir kartu kredit/debit
-                            paymentData = {
-                                method: "Credit/Debit Card",
-                                cardHolderName: $("#cardHolderName").val(),
-                                cardNumber: $("#cardNumber").val(),
-                                expiryMonth: $("#expiryMonth").val(),
-                                expiryYear: $("#expiryYear").val(),
-                                cvc: $("#cvc").val()
-                            };
-                            console.log(paymentData); // Lakukan tindakan dengan data yang dikumpulkan
-                            alert("Processing credit/debit card payment...");
-                            break;
                         case "digitalPaymentOption":
                             if ($("#mobileNumber").val() === "") {
                                 alert("Please fill in all required fields.");
                                 return;
+                            } else {
+                                // Kumpulkan data dari formulir pembayaran digital
+                                var provider = $("#digitalProvider").val();
+                                var mobileNumber = $("#mobileNumber").val();
+                                console.log({
+                                    method: "Digital Payment",
+                                    provider: provider,
+                                    mobileNumber: mobileNumber
+                                });
+
+                                // Contoh pengiriman data ke server
+                                $.ajax({
+                                    url: 'fetch-api-DigitalPayment.php',
+                                    method: 'POST',
+                                    data: {
+                                        id_pesanan: id_pesanan,
+                                        method: "Digital Payment",
+                                        provider: provider,
+                                        mobileNumber: mobileNumber
+                                    },
+                                    success: function(response) {
+                                        console.log(response)
+                                        console.log('Payment data submitted successfully');
+                                    },
+                                    error: function(xhr, status, error) {
+                                        console.error('AJAX Error:', error); // Handle AJAX errors
+                                    }
+                                });
                             }
-                            // Kumpulkan data dari formulir pembayaran digital
-                            paymentData = {
-                                method: "Digital Payment",
-                                provider: $("#digitalProvider").val(),
-                                mobileNumber: $("#mobileNumber").val()
-                            };
-                            console.log(paymentData); // Lakukan tindakan dengan data yang dikumpulkan
-                            alert("Processing digital payment...");
+
+                            // alert("Processing digital payment...");
                             break;
                         case "bankTransferOption":
                             // Kumpulkan data dari formulir transfer bank
@@ -333,27 +374,93 @@
                             // Tindakan jika tidak ada metode pembayaran yang dipilih
                             alert("Please select a payment method.");
                     }
-                    // Contoh pengiriman data ke server
-                    /*
-                    $.ajax({
-                      url: 'your-server-endpoint',
-                      method: 'POST',
-                      data: paymentData,
-                      success: function(response) {
-                        console.log('Payment data submitted successfully');
-                      },
-                      error: function(error) {
-                        console.log('Error submitting payment data', error);
-                      }
-                    });
-                    */
                 } else {
                     // Tampilkan pesan jika tidak ada metode pembayaran yang dipilih
                     alert("Please select a payment method before proceeding.");
                 }
             });
         });
+
+
+        // Fungsi untuk memuat membuat transaksi pertama kali dengan status "initial" 
+        function createTransaction(id_pesanan) {
+            console.log('id_pesanan:', id_pesanan);
+            $.ajax({
+                url: "fetch-api-kartu.php",
+                method: 'POST',
+                data: {
+                    id_pesanan: id_pesanan
+                },
+                success: function(response) {
+                    console.log(response);
+                    console.log('Berhasil buat Initial Transaksi1 ');
+                },
+                error: function(xhr, status, error) {
+                    console.error('Gagal membuat transaksi:', error);
+                }
+            });
+        }
+
+        // Fungsi untuk memuat membuat transaksi pertama kali dengan status "initial" khusus pesawat PP
+        function createTransaction2(id_pesanan, id_pesanan2) {
+            console.log('id_pesanan:', id_pesanan);
+            console.log('id_pesanan2:', id_pesanan2);
+            $.ajax({
+                url: "fetch-api-kartu.php",
+                method: 'POST',
+                data: {
+                    id_pesanan: id_pesanan,
+                    id_pesanan2: id_pesanan2
+                },
+                success: function(response) {
+                    console.log(response);
+                    console.log('Berhasil buat Initial Transaksi2;');
+                },
+                error: function(xhr, status, error) {
+                    console.error('Gagal membuat transaksi:', error);
+                }
+            });
+        }
+
+        function checkKartu(id_pesanan, nama, nomer_kartu, expired_month, expired_year, cvv, nominal) {
+            console.log('Checking kartu...');
+
+            $.ajax({
+                url: "fetch-api-kartu.php",
+                method: 'POST',
+                dataType: 'json', // Specify dataType as json
+                data: {
+                    id_pesanan: id_pesanan,
+                    nama: nama,
+                    nomer_kartu: nomer_kartu,
+                    expired_month: expired_month,
+                    expired_year: expired_year,
+                    cvv: cvv,
+                    nominal: nominal
+                },
+                success: function(response) {
+                    console.log('Response:', response); // Log the response to inspect it
+
+                    // Check if response code is 200 for success
+                    if (response.code === 200) {
+                        $('#isiOtp').text(response.data.otp);
+                        $('#successNotif').modal('show'); // Show success modal
+
+                    } else {
+                        $('.error-message').text(response.data.message);
+                        $('#failedNotif').modal('show'); // Show failed modal
+
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Failed to check user input:', error);
+                    $('#failedNotif').modal('show'); // Show failed modal due to error
+                }
+            });
+        }
     </script>
+
+
 </body>
 
 </html>

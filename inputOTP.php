@@ -55,7 +55,7 @@ $id_user = $_GET['id_user'];
           <input type="password" class="pin-box" maxlength="1" readonly>
         </div>
         <div class="d-flex justify-content-center mt-3">
-          <button id="submitPin" class="btn btn-primary kirim" disabled>Kirim</button>
+          <button id="submitPin" class="btn btn-primary kirim" disabled>Bayar</button>
         </div>
       </div>
     </div>
@@ -177,7 +177,7 @@ $id_user = $_GET['id_user'];
               }, 3000);
             } else if (response === "3") {
               console.log("masuk3 ");
-              $('#error-message').text("We're sorry, but your payment request has expired. Please initiate a new transaction to complete your payment.");
+              $('#error-message').text("You've exceeded the maximum number of attempts. Please initiate a new transaction to complete your payment.");
               $('#failedNotif').modal('show'); // Show failed modal
 
               setTimeout(function() {
