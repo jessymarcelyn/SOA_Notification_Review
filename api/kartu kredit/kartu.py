@@ -106,12 +106,21 @@ class KartuService:
             }
     
     # get OTP berdasarkan id_transaksi    
+    # @rpc
+    # def get_otp(self, id_transaksi):
+    #     otp = self.database.get_otp(id_transaksi)
+    #     return {
+    #             'code': 200,
+    #             'data': otp
+    #         }
+    
+    # get all data berdasarkan id_transaksi
     @rpc
-    def get_otp(self, id_transaksi):
-        otp = self.database.get_otp(id_transaksi)
+    def get_data_Tkartu(self, id_transaksi):
+        data = self.database.get_data_Tkartu(id_transaksi)
         return {
                 'code': 200,
-                'data': otp
+                'data': data
             }
     
     # cek OTP berdasarkan id_transaksi dan otp user   
@@ -133,6 +142,22 @@ class KartuService:
     @rpc
     def change_otp(self, id_transaksi):
         otp = self.database.change_otp(id_transaksi)
+        if otp:
+            return {
+                    'code': 200,
+                    'data': otp
+                }
+        else :
+            return {
+                'code': 404,
+                'data': False
+            }
+            
+    
+    # Update attempt
+    @rpc
+    def update_attempt(self, id_transaksi):
+        otp = self.database.update_attempt(id_transaksi)
         if otp:
             return {
                     'code': 200,

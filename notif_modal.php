@@ -15,7 +15,7 @@
         <div class="text-center">
           <!-- <i class="fas fa-exclamation-circle fa-5x text-danger"></i> -->
           <h1 class="text-danger">Oh no!</h1>
-          <p class="text-danger">We're sorry, but your payment was not processed successfully. Please try again.</p>
+          <p class="text-danger" id="error-message">We're sorry, but your payment was not processed successfully. Please try again.</p>
 
         </div>
         <div class="modal-footer justify-content-center border-0 mt-4">

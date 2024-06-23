@@ -110,8 +110,6 @@ $id_user = $_GET['id_user'];
     const submitOkButton = document.getElementById('submitOk');
 
     let currentInputIndex = 0;
-    let attemptCount = 0;
-    const maxAttempts = 3;
 
     const handleInput = (keyValue) => {
       if (keyValue === 'clear') {
@@ -147,7 +145,6 @@ $id_user = $_GET['id_user'];
     };
 
     const submitPin = async () => {
-      attemptCount++;
       const pin = getPinValue();
       console.log('PIN:', pin); // Handle PIN value here as needed (e.g., send it to the server)
 
@@ -171,24 +168,25 @@ $id_user = $_GET['id_user'];
                 }, 3000);
                 
             } else if (response === "2") {
-               $('#error-message').text("We're sorry, but your payment request has expired. Please initiate a new transaction to complete your payment.");
+              console.log("masuk2");
+              $('#error-message').text("We're sorry, but your payment request has expired. Please initiate a new transaction to complete your payment.");
               $('#failedNotif').modal('show'); // Show failed modal
 
-              setTimeout(function() {
-                window.location.href = 'notif_page.php'; // Redirect to notif_page.php after 3 seconds
-              }, 3000);
-            } else {
+              // setTimeout(function() {
+              //   window.location.href = 'notif_page.php'; // Redirect to notif_page.php after 3 seconds
+              // }, 3000);
+            } else if (response === "3") {
+              console.log("masuk3 ");
+              $('#error-message').text("We're sorry, but your payment request has expired. Please initiate a new transaction to complete your payment.");
+              // $('#error-message').text("You've exceeded the maximum number of attempts. Please initiate a new transaction to complete your payment.");
+              $('#failedNotif').modal('show'); // Show failed modal
 
-              if (attemptCount === maxAttempts) {
-                $('#error-message').text("You've exceeded the maximum number of attempts. Please initiate a new transaction to complete your payment.");
+              // setTimeout(function() {
+              //   window.location.href = 'notif_page.php'; // Redirect to notif_page.php after 3 seconds
+              // }, 3000);
+            }
+            else {
                 $('#failedNotif').modal('show'); // Show failed modal
-
-                setTimeout(function() {
-                  window.location.href = 'notif_page.php'; // Redirect to notif_page.php after 3 seconds
-                }, 3000);
-              } else {
-                $('#failedNotif').modal('show'); // Show failed modal
-              }
             }
             console.log("res ", response);
             console.log('Berhasil checkOTP ');

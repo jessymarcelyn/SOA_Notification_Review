@@ -249,6 +249,28 @@ class DatabaseWrapper:
         
         return decrypted_otp
     
+    # get OTP berdasarkan id_transaksi
+    def get_data_Tkartu(self, id_transaksi):
+        cursor = self.connection.cursor(dictionary=True)        
+        result = []
+        sql = "SELECT * FROM transaksi_kartu WHERE id_transaksi = %s"
+        cursor.execute(sql, (id_transaksi,))
+
+        for row in cursor.fetchall():
+            result.append({
+                'nomer_kartu' : row['nomer_kartu'],
+                'nominal': float(row['nominal']),
+                'timestamp' : row['timestamp'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp'], datetime) else row['timestamp'],
+                'otp_timestamp' : row['otp_timestamp'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp'], datetime) else row['timestamp'],
+                'status' : row['status'],
+                'attempt' : row['attempt']
+            })
+        cursor.close()
+        if result:
+            return result
+        else:
+            return None
+    
     # cek OTP berdasarkan id_transaksi dan otp user
     def cek_otp(self, id_transaksi, otp):
         cursor = self.connection.cursor(dictionary=True)
@@ -286,6 +308,29 @@ class DatabaseWrapper:
             print(f"Error: {err}")
             cursor.close()
             return False
+        
+    
+    # Update update_attempt berdasarkan id_transaksi 
+    # def update_attempt(self, id_transaksi):
+    #     cursor = self.connection.cursor(dictionary=True)
+    #     sql = ("UPDATE transaksi_kartu SET otp = %s, otp_timestamp = %s WHERE id_transaksi= %s")
+    #     otp = self.generate_otp()
+    #     encrypted_otp = self.encryption_helper.encrypt(otp)
+    #     timestamp = datetime.now()
+    #     val = (encrypted_otp, timestamp, id_transaksi)
+        
+    #     print("otp {}".format(otp))
+        
+    #     try:
+    #         cursor.execute(sql, val)
+    #         self.connection.commit()
+    #         cursor.close()
+    #         return otp
+        
+    #     except mysql.connector.Error as err:
+    #         print(f"Error: {err}")
+    #         cursor.close()
+    #         return False
 
     #cek_nomer_kartu untuk update_card_limit
     def cek_id_transaksi(self, id_transaksi):

@@ -401,13 +401,24 @@ class GatewayService:
         return transaksi['code'],json.dumps(transaksi['data'])
     
     #get OTP berdasarkan id_transaksi
+    # @http('GET', '/kartu_kredit/transaksi/<int:id_transaksi>')
+    # def get_otp(self, request, id_transaksi):
+    #     cek_id_transaksi = self.kartu_rpc.cek_id_transaksi(id_transaksi)
+    #     if cek_id_transaksi:
+    #         otp = self.kartu_rpc.get_otp(id_transaksi)
+    #         if otp :
+    #             return otp['code'],json.dumps(otp['data'])
+    #     else:
+    #         return cek_id_transaksi['code'],json.dumps(cek_id_transaksi['data'])
+    
+    # get all data berdasarkan id_transaksi
     @http('GET', '/kartu_kredit/transaksi/<int:id_transaksi>')
-    def get_otp(self, request, id_transaksi):
+    def get_data_Tkartu(self, request, id_transaksi):
         cek_id_transaksi = self.kartu_rpc.cek_id_transaksi(id_transaksi)
         if cek_id_transaksi:
-            otp = self.kartu_rpc.get_otp(id_transaksi)
-            if otp :
-                return otp['code'],json.dumps(otp['data'])
+            data = self.kartu_rpc.get_data_Tkartu(id_transaksi)
+            if data :
+                return data['code'],json.dumps(data['data'])
         else:
             return cek_id_transaksi['code'],json.dumps(cek_id_transaksi['data'])
         
@@ -423,11 +434,21 @@ class GatewayService:
             return cek_id_transaksi['code'],json.dumps(cek_id_transaksi['data'])
         
     # Update timestamp_otp dan otp berdasarkan id_transaksi 
+    # @http('PUT', '/kartu_kredit/transaksi/<string:id_transaksi>')
+    # def change_otp(self, request, id_transaksi):
+    #     kartu = self.kartu_rpc.cek_id_transaksi(id_transaksi)
+    #     if kartu:
+    #         transaksi = self.kartu_rpc.change_otp(id_transaksi)
+    #         return transaksi['code'],json.dumps(transaksi['data'])
+    #     else:
+    #         return kartu['code'],json.dumps(kartu['data'])
+    
+    # Update attempt
     @http('PUT', '/kartu_kredit/transaksi/<string:id_transaksi>')
-    def change_otp(self, request, id_transaksi):
+    def update_attempt(self, request, id_transaksi):
         kartu = self.kartu_rpc.cek_id_transaksi(id_transaksi)
         if kartu:
-            transaksi = self.kartu_rpc.change_otp(id_transaksi)
+            transaksi = self.kartu_rpc.update_attempt(id_transaksi)
             return transaksi['code'],json.dumps(transaksi['data'])
         else:
             return kartu['code'],json.dumps(kartu['data'])

@@ -50,7 +50,8 @@ if (isset($_POST['id_pesanan']) && isset($_POST['otp'])) {
             if ($difference_minutes <= 2) {
                 // echo $idTrans;
 
-                $url = "http://localhost:8000//kartu_kredit/transaksi/{$idTrans}/otp/{$otp}";
+                // cek attempt dari user udah 3 blm
+                $url = "http://localhost:8000/kartu_kredit/transaksi/{$idTrans}";
 
                 // Initialize cURL
                 $ch = curl_init();
@@ -71,51 +72,47 @@ if (isset($_POST['id_pesanan']) && isset($_POST['otp'])) {
                     curl_close($ch);
 
                     // Decode response JSON to associative array
-                    $resultOTP = json_decode($response, true);
+                    $resultAttempt = json_decode($response, true);
 
-                    if ($resultOTP === null && json_last_error() !== JSON_ERROR_NONE) {
+                    if ($resultAttempt === null && json_last_error() !== JSON_ERROR_NONE) {
                         echo 'Error decoding JSON response';
                     } else {
-                        echo $resultOTP;
-
                         // update transaksi pembayaran
-                        if ($resultOTP == true) {
+                        if ($resultAttempt[0]['attempt'] < 3) {
 
-                            $putUrl = "http://localhost:8000/Tpembayaran/pesanan/$id_pesanan/status/success";
 
-                            // Initialize cURL session
-                            $chPut = curl_init();
+                            $url = "http://localhost:8000//kartu_kredit/transaksi/{$idTrans}/otp/{$otp}";
 
-                            // Set cURL options for PUT request
-                            curl_setopt($chPut, CURLOPT_URL, $putUrl);
-                            curl_setopt($chPut, CURLOPT_CUSTOMREQUEST, "PUT");
-                            curl_setopt($chPut, CURLOPT_RETURNTRANSFER, true);
-                            curl_setopt($chPut, CURLOPT_HTTPHEADER, [
-                                'Content-Type: application/json',
-                                // You may need to set Content-Length depending on your data
-                            ]);
+                            // Initialize cURL
+                            $ch = curl_init();
 
-                            // Execute cURL and capture the response
-                            $putResponse = curl_exec($chPut);
+                            // Set cURL options for GET request
+                            curl_setopt($ch, CURLOPT_URL, $url);
+                            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+
+                            // Execute cURL and get the response
+                            $response = curl_exec($ch);
 
                             // Check for cURL errors
-                            if (curl_errno($chPut)) {
-                                echo json_encode(['code' => 500, 'message' => 'Error executing PUT request: ' . curl_error($chPut)]);
+                            if (curl_errno($ch)) {
+                                echo 'Error:' . curl_error($ch);
                             } else {
-                                // update status dan limit transaksi provider kartu
-                                curl_close($chPut);
+                                // Close cURL
+                                curl_close($ch);
 
-                                // Decode response JSON
-                                $putResult = json_decode($putResponse, true);
+                                // Decode response JSON to associative array
+                                $resultOTP = json_decode($response, true);
 
-                                // Check if JSON decoding was successful
-                                if ($putResult === null && json_last_error() !== JSON_ERROR_NONE) {
-                                    echo json_encode(['code' => 500, 'message' => 'Error decoding PUT response JSON']);
+                                if ($resultOTP === null && json_last_error() !== JSON_ERROR_NONE) {
+                                    echo 'Error decoding JSON response';
                                 } else {
-                                    // Check if update was successful based on $putResult being true or false
-                                    if ($putResult === true) {
-                                        // echo json_encode(['code' => 200, 'message' => 'Booking status updated successfully']);
-                                        $putUrl = "http://localhost:8000/kartu_kredit/transaksi/{$idTrans}/status/success";
+                                    echo $resultOTP;
+
+                                    // update transaksi pembayaran
+                                    if ($resultOTP == true) {
+
+                                        $putUrl = "http://localhost:8000/Tpembayaran/pesanan/$id_pesanan/status/success";
 
                                         // Initialize cURL session
                                         $chPut = curl_init();
@@ -136,7 +133,7 @@ if (isset($_POST['id_pesanan']) && isset($_POST['otp'])) {
                                         if (curl_errno($chPut)) {
                                             echo json_encode(['code' => 500, 'message' => 'Error executing PUT request: ' . curl_error($chPut)]);
                                         } else {
-                                            // Close cURL session
+                                            // update status dan limit transaksi provider kartu
                                             curl_close($chPut);
 
                                             // Decode response JSON
@@ -146,54 +143,24 @@ if (isset($_POST['id_pesanan']) && isset($_POST['otp'])) {
                                             if ($putResult === null && json_last_error() !== JSON_ERROR_NONE) {
                                                 echo json_encode(['code' => 500, 'message' => 'Error decoding PUT response JSON']);
                                             } else {
-                                                //POST NOTIFIKASI
-                                                $chPost = curl_init();
-
-                                                curl_setopt($chPost, CURLOPT_URL, 'http://localhost:8000/notif');
-                                                curl_setopt($chPost, CURLOPT_POST, 1);
-                                                curl_setopt($chPost, CURLOPT_RETURNTRANSFER, true);
-                                                curl_setopt($chPost, CURLOPT_POSTFIELDS, json_encode(array(
-                                                    'id_user' => 1,
-                                                    'id_pesanan' => $id_pesanan,
-                                                    'tipe_notif' => 'pembayaran',
-                                                    'judul' => 'Pembayaran Berhasil',
-                                                    'deskripsi' => "Pembayaran untuk pesanan $id_pesanan berhasil",
-                                                    'timestamp_masuk' => date('Y-m-d H:i:s'), // Current timestamp
-                                                    'status' => 0,
-                                                    'link' => null
-                                                )));
-                                                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-
-                                                $postResponse = curl_exec($chPost);
-
-                                                if (curl_errno($chPost)) {
-                                                    echo json_encode(['code' => 500, 'message' => 'Error executing POST request to /notif']);
-                                                } else {
-                                                    // GANTI LINK NOTIF
-                                                    $putData = [
-                                                        'judul' => 'Lakukan Pembayaran'
-                                                    ];
-
-                                                    // Encode data as JSON
-                                                    $putDataJson = json_encode($putData);
-
-                                                    // URL for the PUT request, assuming localhost and port 8000
-                                                    $putUrl = "http://localhost:8000/notif/pesanan/{$id_pesanan}";
+                                                // Check if update was successful based on $putResult being true or false
+                                                if ($putResult === true) {
+                                                    // echo json_encode(['code' => 200, 'message' => 'Booking status updated successfully']);
+                                                    $putUrl = "http://localhost:8000/kartu_kredit/transaksi/{$idTrans}/status/success";
 
                                                     // Initialize cURL session
                                                     $chPut = curl_init();
 
-                                                    // Set cURL options
+                                                    // Set cURL options for PUT request
                                                     curl_setopt($chPut, CURLOPT_URL, $putUrl);
                                                     curl_setopt($chPut, CURLOPT_CUSTOMREQUEST, "PUT");
-                                                    curl_setopt($chPut, CURLOPT_POSTFIELDS, $putDataJson);
                                                     curl_setopt($chPut, CURLOPT_RETURNTRANSFER, true);
                                                     curl_setopt($chPut, CURLOPT_HTTPHEADER, [
                                                         'Content-Type: application/json',
-                                                        'Content-Length: ' . strlen($putDataJson)
+                                                        // You may need to set Content-Length depending on your data
                                                     ]);
 
-                                                    // Execute cURL session
+                                                    // Execute cURL and capture the response
                                                     $putResponse = curl_exec($chPut);
 
                                                     // Check for cURL errors
@@ -210,15 +177,86 @@ if (isset($_POST['id_pesanan']) && isset($_POST['otp'])) {
                                                         if ($putResult === null && json_last_error() !== JSON_ERROR_NONE) {
                                                             echo json_encode(['code' => 500, 'message' => 'Error decoding PUT response JSON']);
                                                         } else {
-                                                          
+                                                            //POST NOTIFIKASI
+                                                            $chPost = curl_init();
+
+                                                            curl_setopt($chPost, CURLOPT_URL, 'http://localhost:8000/notif');
+                                                            curl_setopt($chPost, CURLOPT_POST, 1);
+                                                            curl_setopt($chPost, CURLOPT_RETURNTRANSFER, true);
+                                                            curl_setopt($chPost, CURLOPT_POSTFIELDS, json_encode(array(
+                                                                'id_user' => 1,
+                                                                'id_pesanan' => $id_pesanan,
+                                                                'tipe_notif' => 'pembayaran',
+                                                                'judul' => 'Pembayaran Berhasil',
+                                                                'deskripsi' => "Pembayaran untuk pesanan $id_pesanan berhasil",
+                                                                'timestamp_masuk' => date('Y-m-d H:i:s'), // Current timestamp
+                                                                'status' => 0,
+                                                                'link' => null
+                                                            )));
+                                                            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+
+                                                            $postResponse = curl_exec($chPost);
+
+                                                            if (curl_errno($chPost)) {
+                                                                echo json_encode(['code' => 500, 'message' => 'Error executing POST request to /notif']);
+                                                            } else {
+                                                                // GANTI LINK NOTIF
+                                                                $putData = [
+                                                                    'judul' => 'Lakukan Pembayaran'
+                                                                ];
+
+                                                                // Encode data as JSON
+                                                                $putDataJson = json_encode($putData);
+
+                                                                // URL for the PUT request, assuming localhost and port 8000
+                                                                $putUrl = "http://localhost:8000/notif/pesanan/{$id_pesanan}";
+
+                                                                // Initialize cURL session
+                                                                $chPut = curl_init();
+
+                                                                // Set cURL options
+                                                                curl_setopt($chPut, CURLOPT_URL, $putUrl);
+                                                                curl_setopt($chPut, CURLOPT_CUSTOMREQUEST, "PUT");
+                                                                curl_setopt($chPut, CURLOPT_POSTFIELDS, $putDataJson);
+                                                                curl_setopt($chPut, CURLOPT_RETURNTRANSFER, true);
+                                                                curl_setopt($chPut, CURLOPT_HTTPHEADER, [
+                                                                    'Content-Type: application/json',
+                                                                    'Content-Length: ' . strlen($putDataJson)
+                                                                ]);
+
+                                                                // Execute cURL session
+                                                                $putResponse = curl_exec($chPut);
+
+                                                                // Check for cURL errors
+                                                                if (curl_errno($chPut)) {
+                                                                    echo json_encode(['code' => 500, 'message' => 'Error executing PUT request: ' . curl_error($chPut)]);
+                                                                } else {
+                                                                    // Close cURL session
+                                                                    curl_close($chPut);
+
+                                                                    // Decode response JSON
+                                                                    $putResult = json_decode($putResponse, true);
+
+                                                                    // Check if JSON decoding was successful
+                                                                    if ($putResult === null && json_last_error() !== JSON_ERROR_NONE) {
+                                                                        echo json_encode(['code' => 500, 'message' => 'Error decoding PUT response JSON']);
+                                                                    } else {
+                                                                    }
+                                                                }
+                                                            }
                                                         }
                                                     }
                                                 }
                                             }
                                         }
+                                    }else{
+                                        //tambah attempt karena otp salah
+
                                     }
                                 }
                             }
+                        }else{
+                            echo "3";
                         }
                     }
                 }
