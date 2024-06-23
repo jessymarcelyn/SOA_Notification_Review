@@ -172,18 +172,17 @@ $id_user = $_GET['id_user'];
               $('#error-message').text("We're sorry, but your payment request has expired. Please initiate a new transaction to complete your payment.");
               $('#failedNotif').modal('show'); // Show failed modal
 
-              // setTimeout(function() {
-              //   window.location.href = 'notif_page.php'; // Redirect to notif_page.php after 3 seconds
-              // }, 3000);
+              setTimeout(function() {
+                window.location.href = 'notif_page.php'; // Redirect to notif_page.php after 3 seconds
+              }, 3000);
             } else if (response === "3") {
               console.log("masuk3 ");
               $('#error-message').text("We're sorry, but your payment request has expired. Please initiate a new transaction to complete your payment.");
-              // $('#error-message').text("You've exceeded the maximum number of attempts. Please initiate a new transaction to complete your payment.");
               $('#failedNotif').modal('show'); // Show failed modal
 
-              // setTimeout(function() {
-              //   window.location.href = 'notif_page.php'; // Redirect to notif_page.php after 3 seconds
-              // }, 3000);
+              setTimeout(function() {
+                window.location.href = 'notif_page.php'; // Redirect to notif_page.php after 3 seconds
+              }, 3000);
             }
             else {
                 $('#failedNotif').modal('show'); // Show failed modal

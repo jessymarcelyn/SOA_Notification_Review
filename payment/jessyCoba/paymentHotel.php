@@ -247,7 +247,7 @@
 
             // AJAX
             // NANTI AMBIL DARI ERICKSEN
-            var id_pesanan = 60;
+            var id_pesanan = 71;
             var id_pesanan2;
             // var id_pesanan2 = 2;
 

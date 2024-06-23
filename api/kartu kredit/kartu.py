@@ -157,11 +157,11 @@ class KartuService:
     # Update attempt
     @rpc
     def update_attempt(self, id_transaksi):
-        otp = self.database.update_attempt(id_transaksi)
-        if otp:
+        attempt = self.database.update_attempt(id_transaksi)
+        if attempt:
             return {
                     'code': 200,
-                    'data': otp
+                    'data': True
                 }
         else :
             return {

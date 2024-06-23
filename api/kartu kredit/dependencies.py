@@ -311,26 +311,34 @@ class DatabaseWrapper:
         
     
     # Update update_attempt berdasarkan id_transaksi 
-    # def update_attempt(self, id_transaksi):
-    #     cursor = self.connection.cursor(dictionary=True)
-    #     sql = ("UPDATE transaksi_kartu SET otp = %s, otp_timestamp = %s WHERE id_transaksi= %s")
-    #     otp = self.generate_otp()
-    #     encrypted_otp = self.encryption_helper.encrypt(otp)
-    #     timestamp = datetime.now()
-    #     val = (encrypted_otp, timestamp, id_transaksi)
-        
-    #     print("otp {}".format(otp))
-        
-    #     try:
-    #         cursor.execute(sql, val)
-    #         self.connection.commit()
-    #         cursor.close()
-    #         return otp
-        
-    #     except mysql.connector.Error as err:
-    #         print(f"Error: {err}")
-    #         cursor.close()
-    #         return False
+    def update_attempt(self, id_transaksi):
+        cursor = self.connection.cursor(dictionary=True)
+        sql = "SELECT * FROM transaksi_kartu WHERE id_transaksi = %s"
+        cursor.execute(sql, (id_transaksi,))
+        result = cursor.fetchone()  # Fetch a single result
+
+        if result:
+            attempt = result['attempt'] + 1  # Correctly increment the attempt
+
+            update_sql = "UPDATE transaksi_kartu SET attempt = %s WHERE id_transaksi = %s"
+            val = (attempt, id_transaksi)
+
+            try:
+                cursor.execute(update_sql, val)
+                self.connection.commit()
+                return True
+
+            except mysql.connector.Error as err:
+                print(f"Error: {err}")
+                return False
+
+            finally:
+                cursor.close()
+
+        else:
+            cursor.close()
+            print(f"No transaction found with id_transaksi = {id_transaksi}")
+            return False
 
     #cek_nomer_kartu untuk update_card_limit
     def cek_id_transaksi(self, id_transaksi):
