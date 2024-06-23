@@ -4,6 +4,44 @@ if (!isset($_SESSION)) {
     session_start();
 }
 
+function post_notif($id_pesanan)
+{
+    $ch = curl_init();
+
+    curl_setopt($ch, CURLOPT_URL, 'http://localhost:8000/notif');
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt(
+        $ch,
+        CURLOPT_POSTFIELDS,
+        json_encode(
+            array(
+                'id_user' => 1,
+                'id_pesanan' => $id_pesanan,
+                'tipe_notif' => 'pembayaran',
+                'judul' => 'Pembayaran Berhasil',
+                'deskripsi' => "Pembayaran untuk pesanan $id_pesanan berhasil",
+                'timestamp_masuk' => date('Y-m-d H:i:s'), // Current timestamp
+                'status' => 0,
+                'link' => null
+            )
+        )
+    );
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+
+    $postResponse = curl_exec($ch);
+
+    if (curl_errno($ch)) {
+        echo json_encode(['code' => 500, 'message' => 'Error executing POST request to /notif']);
+    } else {
+
+        curl_close($ch);
+
+        // Decod
+    }
+}
+
+
 function getIDTransaksi_NamaPenyedia($id_pesanan)
 {
     $url = "http://localhost:8000/Tpembayaran/pesanan/" . $id_pesanan;
@@ -43,35 +81,39 @@ function getIDTransaksi_NamaPenyedia($id_pesanan)
 
                 $timestamp = $row['timestamp'];
 
-                if ($timestamp) {
-                    // Convert the timestamp to a Unix timestamp
-                    $timestamp_unix = strtotime($timestamp);
+                date_default_timezone_set('Asia/Jakarta');
+                // Convert timestamp to Unix timestamp
+                $timestamp_unix = strtotime($timestamp);
 
-                    // Get the current time as a Unix timestamp
-                    $current_time = time();
 
-                    // Calculate the difference in seconds
-                    $time_difference = $current_time - $timestamp_unix;
+                $current_time = date('Y-m-d H:i:s');
+                $current_timee = strtotime($current_time);
 
-                    // Check if the difference is greater than 2 minutes (120 seconds)
-                    if ($time_difference > 12000) {
-                        // The timestamp is older than 2 minutes
-                        // echo "The timestamp is older than 2 minutes.";
-                        $data = false;
-                    } else {
-                        $data = array(
-                            'id_transaksi' => $row['id_transaksi'],
-                            'nama_penyedia' => $row['nama_penyedia']
-                        );
-                        // echo "The timestamp is within the last 2 minutes.";
-                    }
-                    // echo $timestamp_unix, "<br>";
+                $difference_seconds = abs($current_timee - $timestamp_unix);
+                $difference_minutes = $difference_seconds / 60;
 
-                    // echo $time_difference;
-                    // echo $timestamp , "<br>";
-                    // echo $current_time;
+
+
+                // Check if the difference is greater than 2 minutes (120 seconds)
+                if ($difference_minutes > 2) {
+                    // The timestamp is older than 2 minutes
+                    // echo "The timestamp is older than 2 minutes.";
+                    $data = false;
+                } else {
+                    $data = array(
+                        'id_transaksi' => $row['id_transaksi'],
+                        'nama_penyedia' => $row['nama_penyedia']
+                    );
+                    // echo "The timestamp is within the last 2 minutes.";
+
 
                 }
+
+                // echo $timestamp_unix, "<br>";
+
+                //     echo $difference_minutes, "<br>";
+                //     echo $timestamp, "<br>";
+                //     echo $current_time;
 
 
                 // }
@@ -91,6 +133,7 @@ if (isset($_POST['id_pesanan']) && isset($_POST['pin'])) {
     $pin = htmlspecialchars($_POST['pin']);
 
     $data = getIDTransaksi_NamaPenyedia($id_pesanan);
+
 
     if ($data != false) {
         $nama_penyedia = strtolower($data['nama_penyedia']);
@@ -131,15 +174,14 @@ if (isset($_POST['id_pesanan']) && isset($_POST['pin'])) {
             // Tutup cURL
             curl_close($ch);
             // Tampilkan respons dari server
+            post_notif($id_pesanan);
             echo $response;
             // return $response;
         }
+    } else {
+        echo "Your time has expired";
     }
-    
-    else{
-        return "Your time has expired. Please try again.";
-    }
-    
+
 
 }
 // elseif()

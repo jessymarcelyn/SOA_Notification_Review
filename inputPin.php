@@ -193,10 +193,10 @@ $id_user = $_GET['id_user'];
               $('#successNotif').modal('show');
             }
             else {
-              const errorMessageElement = document.querySelector('.text-danger');
-
+              const errorMessageElement = document.querySelector('p.text-danger');
               // Ganti teks elemen tersebut
-              errorMessageElement.textContent = $response;
+              errorMessageElement.textContent = response;
+              
 
               $('#failedNotif').modal('show');
 
