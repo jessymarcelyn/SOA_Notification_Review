@@ -69,7 +69,7 @@
                         </div> -->
                     </section>
 
-                   <!-- Flight Details -->
+                    <!-- Flight Details -->
                     <section class="bookDetail">
                         <h4>Your Flight Details</h4>
                         <div class="mb-3">
@@ -82,8 +82,8 @@
                             <!-- <p class="flight-info">Aircraft: Boeing 737-800</p>
                             <p class="flight-info">Terminal: 1</p> -->
                         </div>
-                        <div class="mb-3" id="returnFlightDetails" >
-                        <!-- <div class="mb-3" id="returnFlightDetails" style="display: none;"> -->
+                        <div class="mb-3" id="returnFlightDetails">
+                            <!-- <div class="mb-3" id="returnFlightDetails" style="display: none;"> -->
                             <h5>Return</h5>
                             <p><strong>Bali (DPS) to Jakarta (CGK)</strong></p>
                             <p>Sun, June 23, 2024</p>
@@ -94,12 +94,12 @@
                             <p class="flight-info">Terminal: 2</p> -->
                         </div>
                         <p style="margin-bottom: 1vh">Additional Information</p>
-                                <div class="checklist">
-                                    <div class="checklist-item">
-                                        <input type="checkbox" id="item1" checked disabled>
-                                        <label for="item1">Included Insurance</label>
-                                        <span id="price">(Rp 1,800,000)</span>
-                                    </div>
+                        <div class="checklist">
+                            <div class="checklist-item">
+                                <input type="checkbox" id="item1" checked disabled>
+                                <label for="item1">Included Insurance</label>
+                                <span id="price">(Rp 1,800,000)</span>
+                            </div>
                     </section>
                     <section class="price">
                         <div id="rincian">
@@ -368,7 +368,154 @@
                 }
             });
         });
+
+
+
+        // Fungsi untuk memuat membuat transaksi pertama kali dengan status "initial" 
+        function createTransaction(id_pesanan) {
+            console.log('id_pesanan:', id_pesanan);
+            $.ajax({
+                url: "fetch-api-kartu.php",
+                method: 'POST',
+                data: {
+                    id_pesanan: id_pesanan
+                },
+                success: function(response) {
+                    console.log(response);
+                    console.log('Berhasil buat Initial Transaksi1 ');
+                },
+                error: function(xhr, status, error) {
+                    console.error('Gagal membuat transaksi:', error);
+                }
+            });
+        }
+
+        // Fungsi untuk memuat membuat transaksi pertama kali dengan status "initial" khusus pesawat PP
+        function createTransaction2(id_pesanan, id_pesanan2) {
+            console.log('id_pesanan:', id_pesanan);
+            console.log('id_pesanan2:', id_pesanan2);
+            $.ajax({
+                url: "fetch-api-kartu.php",
+                method: 'POST',
+                data: {
+                    id_pesanan: id_pesanan,
+                    id_pesanan2: id_pesanan2
+                },
+                success: function(response) {
+                    console.log(response);
+                    console.log('Berhasil buat Initial Transaksi2;');
+                },
+                error: function(xhr, status, error) {
+                    console.error('Gagal membuat transaksi:', error);
+                }
+            });
+        }
+
+        function checkKartu(id_pesanan, nama, nomer_kartu, expired_month, expired_year, cvv, nominal) {
+            console.log('Checking kartu...');
+
+            $.ajax({
+                url: "fetch-api-kartu.php",
+                method: 'POST',
+                dataType: 'json', // Specify dataType as json
+                data: {
+                    id_pesanan: id_pesanan,
+                    nama: nama,
+                    nomer_kartu: nomer_kartu,
+                    expired_month: expired_month,
+                    expired_year: expired_year,
+                    cvv: cvv,
+                    nominal: nominal
+                },
+                success: function(response) {
+                    console.log('Response:', response); // Log the response to inspect it
+
+                    // Check if response code is 200 for success
+                    if (response.code === 200) {
+                        $('#isiOtp').text(response.data.otp);
+                        $('#successNotif').modal('show'); // Show success modal
+
+                    } else {
+                        $('.error-message').text(response.data.message);
+                        $('#failedNotif').modal('show'); // Show failed modal
+
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Failed to check user input:', error);
+                    $('#failedNotif').modal('show'); // Show failed modal due to error
+                }
+            });
+        }
+
+        function TransferBankBCA(id_pesanan, bank) {
+            console.log('Trying to make a payment with ' + bank + ' dengan id pesanan: ' + id_pesanan);
+            if (bank == "bca") {
+                $.ajax({
+                    url: "fetch-api-TransferBank.php",
+                    method: 'POST',
+                    data: {
+                        id_pesanan: id_pesanan,
+                        bank: "BCA",
+                    },
+                    dataType: 'json', // Ensures jQuery parses the response as JSON
+                    success: function(response) {
+                        console.log('Payment bakalan sukses');
+                        console.log('Full response from server:', response);
+
+                        if (response.code === 200) {
+                            $('#isiOtp').text(response.data.va);
+                            $('#successNotifVA').modal('show'); // Show success modal
+
+                            console.log('BERHASIL');
+                        } else {
+                            $('.error-message').text(response.data.message);
+                            $('#failedNotif').modal('show'); // Show failed modal
+
+                            console.log('GAGAL');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Ada yang salah: ', error);
+                        console.log('Full error response: ', xhr.responseText);
+                    }
+                })
+            } else {
+
+                $.ajax({
+                    url: "fetch-api-TransferBank.php",
+                    method: 'POST',
+                    data: {
+                        id_pesanan: id_pesanan,
+                        bank: "Mandiri",
+                    },
+                    dataType: 'json', // Ensures jQuery parses the response as JSON
+                    success: function(response) {
+                        console.log('Full response from server:', response);
+                        console.log('Payment bakalan sukses');
+                        if (response.code === 200) {
+                            $('#isiOtp').text(response.data.va);
+                            $('#successNotifVA').modal('show'); // Show success modal
+
+                            console.log('BERHASIL');
+                        } else {
+                            $('.error-message').text(response.data.message);
+                            $('#failedNotif').modal('show'); // Show failed modal
+
+                            console.log('GAGAL');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Ada yang salah: ', error);
+                        console.log('Full error response: ', xhr.responseText);
+                    }
+                })
+
+            }
+        }
     </script>
+
+
 </body>
 
 </html>

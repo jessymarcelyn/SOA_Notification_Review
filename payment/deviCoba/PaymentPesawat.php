@@ -402,7 +402,7 @@
 
                         if (response.code === 200) {
                             $('#isiOtp').text(response.data.va);
-                            $('#successNotif').modal('show'); // Show success modal
+                            $('#successNotifVA').modal('show'); // Show success modal
 
                             console.log('BERHASIL');
                         } else {
@@ -432,7 +432,7 @@
                         console.log('Payment bakalan sukses');
                         if (response.code === 200) {
                             $('#isiOtp').text(response.data.va);
-                            $('#successNotif').modal('show'); // Show success modal
+                            $('#successNotifVA').modal('show'); // Show success modal
 
                             console.log('BERHASIL');
                         } else {

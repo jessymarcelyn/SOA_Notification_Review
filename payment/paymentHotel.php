@@ -470,7 +470,7 @@
             console.log('Trying to make a payment with ' + bank + ' dengan id pesanan: ' + id_pesanan);
             if (bank == "bca") {
                 $.ajax({
-                    url: "fetch-api-BCA.php",
+                    url: "fetch-api-TransferBank.php",
                     method: 'POST',
                     data: {
                         id_pesanan: id_pesanan,
@@ -483,7 +483,7 @@
 
                         if (response.code === 200) {
                             $('#isiOtp').text(response.data.va);
-                            $('#successNotif').modal('show'); // Show success modal
+                            $('#successNotifVA').modal('show'); // Show success modal
 
                             console.log('BERHASIL');
                         } else {
@@ -501,7 +501,7 @@
             } else {
 
                 $.ajax({
-                    url: "fetch-api-BCA.php",
+                    url: "fetch-api-TransferBank.php",
                     method: 'POST',
                     data: {
                         id_pesanan: id_pesanan,
@@ -513,7 +513,7 @@
                         console.log('Payment bakalan sukses');
                         if (response.code === 200) {
                             $('#isiOtp').text(response.data.va);
-                            $('#successNotif').modal('show'); // Show success modal
+                            $('#successNotifVA').modal('show'); // Show success modal
 
                             console.log('BERHASIL');
                         } else {

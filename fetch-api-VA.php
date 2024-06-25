@@ -156,7 +156,41 @@ if (isset($_POST['id_pesanan']) && isset($_POST['va']) && isset($_POST['pin'])) 
                                                 echo json_encode(['code' => 500, 'message' => 'Error decoding PUT response JSON']);
                                             } 
                                             else {
+                                                $chPost = curl_init();
 
+                                                curl_setopt($chPost, CURLOPT_URL, 'http://localhost:8000/notif');
+                                                curl_setopt($chPost, CURLOPT_POST, 1);
+                                                curl_setopt($chPost, CURLOPT_RETURNTRANSFER, true);
+                                                curl_setopt($chPost, CURLOPT_POSTFIELDS, json_encode(array(
+                                                    'id_user' => 1,
+                                                    'id_pesanan' => $id_pesanan,
+                                                    'tipe_notif' => 'keuangan',
+                                                    'judul' => 'VA',
+                                                    'deskripsi' => "Pembayaran untuk pesanan $id_pesanan telah berhasil",
+                                                    'timestamp_masuk' => date('Y-m-d H:i:s'), // Current timestamp
+                                                    'status' => 0,
+                                                    'link' => ""
+                                                )));
+
+                                                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+
+                                                $postResponse = curl_exec($chPost);
+
+                                                if (curl_errno($chPost)) {
+                                                    echo json_encode(['code' => 500, 'message' => 'Error executing POST request to /notif']);
+                                                }
+                                                else {
+                                                    curl_close($chPost);
+                                                    $postResult = json_decode($postResponse, true);
+
+                                                    if ($postResult === null && json_last_error() !== JSON_ERROR_NONE) {
+                                                        echo json_encode(['code' => 500, 'message' => 'Error decoding POST response JSON from /notif']);
+                                                    } else {
+
+                                                        // Respond with the POST request result from /notif
+                                                        // echo json_encode($postResult);
+                                                    }
+                                                }
                                             }
                                         }
                                     }
