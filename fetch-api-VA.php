@@ -110,7 +110,7 @@ if (isset($_POST['id_pesanan']) && isset($_POST['va']) && isset($_POST['pin'])) 
 
                                         #update tras_bca dan update trans_pembayaran
                                         if ($bank=='BCA'){
-                                            $urlPutBank = "http://localhost:8000/transBCA/{$id_transaksi}";
+                                            $urlPutBank = "http://localhost:8000/transBCA/{$id_pesanan}";
                                             $putData = [
                                                 'jenis' => 'Transfer Bank',
                                                 'nama_penyedia'  => 'BCA',
@@ -119,7 +119,7 @@ if (isset($_POST['id_pesanan']) && isset($_POST['va']) && isset($_POST['pin'])) 
     
                                         }
                                         else if ($bank=='Mandiri'){
-                                            $urlPutBank = "http://localhost:8000/transMandiri/{$id_transaksi}";
+                                            $urlPutBank = "http://localhost:8000/transMandiri/{$id_pesanan}";
                                             // $putData = [
                                             //     'jenis' => 'Transfer Bank',
                                             //     'nama_penyedia'  => 'Mandiri',

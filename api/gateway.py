@@ -323,8 +323,10 @@ class GatewayService:
     @http('PUT', '/transBCA/<int:idTrans>')
     def pay_transTBCA(self, request, idTrans):
         exist = self.BBCA_rpc.get_byIDTrans(idTrans)
+        status = "succes"
         if exist :
-            api_url = f'http://localhost:8000/Tpembayaran/pesanan/{idTrans}'
+            api_url = f'http://localhost:8000/Tpembayaran/pesanan/{idTrans}/status/{status}'
+            # api_url = f'http://localhost:8000/Tpembayaran/pesanan/{idTrans}'
             # api_url = f'http://127.0.0.1:8000/Tpembayaran/pesanan/{idTrans}'
             payload = {
                 'jenis': 'Transfer Bank',
@@ -430,8 +432,10 @@ class GatewayService:
     @http('PUT', '/transMandiri/<int:idTrans>')
     def pay_transTMandiri(self, request, idTrans):
         exist = self.BMandiri_RPC.get_byIDTrans(idTrans)
+        status = "success"
         if exist :
-            api_url = f'http://localhost:8000/Tpembayaran/pesanan/{idTrans}'
+            api_url = f'http://localhost:8000/Tpembayaran/pesanan/{idTrans}/status/{status}'
+            # api_url = f'http://localhost:8000/Tpembayaran/pesanan/{idTrans}'
             payload = {
                 'jenis': 'Transfer Bank',
                 'nama_penyedia': 'BCA',

@@ -132,12 +132,41 @@ class DatabaseWrapper:
         finally:
             cursor.close()
     
-    def update_pembayaran(self, id_pesanan, id_transaksi, jenis_pembayaran, nama_penyedia):
+    def update_pembayaran(self, id_pesanan, id_transaksi, jenis_pembayaran, nama_penyedia, status):
         print("masuk update2")
         cursor = self.connection.cursor(dictionary=True)
 
         try:
             status = "ongoing"
+            timestamp = datetime.now()
+            sql = "UPDATE trans_pembayaran SET id_transaksi = %s, jenis_pembayaran = %s,  nama_penyedia = %s, status= %s, timestamp = %s WHERE id_pesanan = %s"
+            val = (id_transaksi, jenis_pembayaran, nama_penyedia, status, timestamp, id_pesanan)
+            print("id_transaksi ", id_transaksi)
+            print("jenis_pembayaran ", jenis_pembayaran)
+            print("nama_penyedia ", nama_penyedia)
+            print("status ", status)
+            print("timestamp ", timestamp)
+            print("id_pesanan ", id_pesanan)
+
+            cursor.execute(sql, val)
+            self.connection.commit()
+            
+            return True
+
+        except mysql.connector.Error as err:
+            print(f"Error: {err}")
+            return False
+
+        finally:
+            print("status sukses")
+            cursor.close()
+
+    def update_pembayaransukses(self, id_pesanan, id_transaksi, jenis_pembayaran, nama_penyedia, status):
+        print("masuk update2")
+        cursor = self.connection.cursor(dictionary=True)
+
+        try:
+            status = "success"
             timestamp = datetime.now()
             sql = "UPDATE trans_pembayaran SET id_transaksi = %s, jenis_pembayaran = %s,  nama_penyedia = %s, status= %s, timestamp = %s WHERE id_pesanan = %s"
             val = (id_transaksi, jenis_pembayaran, nama_penyedia, status, timestamp, id_pesanan)
