@@ -36,6 +36,8 @@
 
 <body>
 
+<?php include '../../notif_modal.php'; ?>
+
   <div class="container">
     <div class="row">
       <!-- Kolom pertama -->
@@ -277,6 +279,7 @@
 
       var id_pesanan = 1;
       var id_pesanan2;
+      var nominal = 10000;
 
       // Ketika accordion item dibuka
       $(".accordion-item").on('shown.bs.collapse', function () {
@@ -331,11 +334,25 @@
                     id_pesanan: id_pesanan,
                     method: "Digital Payment",
                     provider: provider,
-                    mobileNumber: mobileNumber
+                    mobileNumber: mobileNumber,
+                    nominal: nominal
                   },
                   success: function (response) {
-                    console.log(response)
-                    console.log('Payment data submitted successfully');
+                    console.log(response, "1");
+                    if (response == "true") {
+                      // console.log(response, "2")
+                      console.log('Payment data submitted successfully');
+                      $('#successNotif').modal('show');
+
+                  
+                    } else {
+                      const errorMessageElement = document.querySelector('p.text-danger');
+                      errorMessageElement.textContent = response;
+                      // console.log('Error submitting payment data');
+                      $('#failedNotif').modal('show');
+
+                    }
+
                   },
                   error: function (xhr, status, error) {
                     console.error('AJAX Error:', error); // Handle AJAX errors
