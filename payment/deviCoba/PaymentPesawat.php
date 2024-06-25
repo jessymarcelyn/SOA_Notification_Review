@@ -266,7 +266,7 @@
 
             // AJAX
             // NANTI AMBIL DARI ERICKSEN
-            var id_pesanan = 36;
+            var id_pesanan = 562;
             var id_pesanan2;
             // var id_pesanan2 = 8400;
 
@@ -346,7 +346,7 @@
         function createTransaction(id_pesanan) {
             console.log('id_pesanan: ', id_pesanan);
             $.ajax({
-                url: "fetch-api-BCA.php",
+                url: "fetch-api-TransferBank.php",
                 method: 'POST',
                 data: {
                     id_pesanan: id_pesanan
@@ -367,7 +367,7 @@
             console.log('id_pesanan: ', id_pesanan);
             console.log('id_pesanan2: ', id_pesanan2);
             $.ajax({
-                url: "fetch-api-BCA.php",
+                url: "fetch-api-TransferBank.php",
                 method: 'POST',
                 data: {
                     id_pesanan: id_pesanan,
@@ -389,7 +389,7 @@
             console.log('Trying to make a payment with ' + bank + ' dengan id pesanan: ' + id_pesanan);
             if (bank == "bca") {
                 $.ajax({
-                    url: "fetch-api-BCA.php",
+                    url: "fetch-api-TransferBank.php",
                     method: 'POST',
                     data: {
                         id_pesanan: id_pesanan,
@@ -420,7 +420,7 @@
             } else {
 
                 $.ajax({
-                    url: "fetch-api-BCA.php",
+                    url: "fetch-api-TransferBank.php",
                     method: 'POST',
                     data: {
                         id_pesanan: id_pesanan,
@@ -451,11 +451,6 @@
             }
         }
 
-        // }
-        // else if(bank == 'Mandiri'){
-
-
-        // }
     </script>
 </body>
 

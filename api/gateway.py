@@ -147,8 +147,8 @@ class GatewayService:
     # def pay_transTBCA(self, request, idTrans):
     #     exist = self.bca_rpc.get_byIDTrans(idTrans)
     #     if exist :
-    #         api_url = f'http://localhost:8000/Tpembayaran/updateTrans/{idTrans}'
-    #         # api_url = f'http://127.0.0.1:8000/Tpembayaran/updateTrans/{idTrans}'
+    #         api_url = f'http://localhost:8000/Tpembayaran/pesanan/{idTrans}'
+    #         # api_url = f'http://127.0.0.1:8000/Tpembayaran/pesanan/{idTrans}'
     #         payload = {
     #             'jenis': 'Transfer Bank',
     #             'nama_penyedia': 'BCA',
@@ -218,7 +218,7 @@ class GatewayService:
     # def pay_transTMandiri(self, request, idTrans):
     #     exist = self.mandiri_rpc.get_byIDTrans(idTrans)
     #     if exist :
-    #         api_url = f'http://localhost:8000/Tpembayaran/updateTrans/{idTrans}'
+    #         api_url = f'http://localhost:8000/Tpembayaran/pesanan/{idTrans}'
     #         payload = {
     #             'jenis': 'Transfer Bank',
     #             'nama_penyedia': 'BCA',
@@ -324,8 +324,8 @@ class GatewayService:
     def pay_transTBCA(self, request, idTrans):
         exist = self.BBCA_rpc.get_byIDTrans(idTrans)
         if exist :
-            api_url = f'http://localhost:8000/Tpembayaran/updateTrans/{idTrans}'
-            # api_url = f'http://127.0.0.1:8000/Tpembayaran/updateTrans/{idTrans}'
+            api_url = f'http://localhost:8000/Tpembayaran/pesanan/{idTrans}'
+            # api_url = f'http://127.0.0.1:8000/Tpembayaran/pesanan/{idTrans}'
             payload = {
                 'jenis': 'Transfer Bank',
                 'nama_penyedia': 'BCA',
@@ -431,7 +431,7 @@ class GatewayService:
     def pay_transTMandiri(self, request, idTrans):
         exist = self.BMandiri_RPC.get_byIDTrans(idTrans)
         if exist :
-            api_url = f'http://localhost:8000/Tpembayaran/updateTrans/{idTrans}'
+            api_url = f'http://localhost:8000/Tpembayaran/pesanan/{idTrans}'
             payload = {
                 'jenis': 'Transfer Bank',
                 'nama_penyedia': 'BCA',

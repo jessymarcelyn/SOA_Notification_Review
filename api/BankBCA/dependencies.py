@@ -74,22 +74,23 @@ class DatabaseWrapper:
             cursor.close()
 
         if stored_pin and stored_pin == hash_pin:
+            print("pin sama dengan input")
             return True
         else:
             return False
     
-    @staticmethod
-    def generate_key():
-        return Fernet.generate_key()
+    # @staticmethod
+    # def generate_key():
+    #     return Fernet.generate_key()
 
-    def encrypt_value(self, value):
-        return self.cipher_suite.encrypt(value.encode()).decode()
+    # def encrypt_value(self, value):
+    #     return self.cipher_suite.encrypt(value.encode()).decode()
 
-    def decrypt_value(self, encrypted_value):
-        return self.cipher_suite.decrypt(encrypted_value.encode()).decode()
+    # def decrypt_value(self, encrypted_value):
+    #     return self.cipher_suite.decrypt(encrypted_value.encode()).decode()
 
-    def hash_value(self, value):
-        return hashlib.sha256(value.encode()).hexdigest()
+    # def hash_value(self, value):
+    #     return hashlib.sha256(value.encode()).hexdigest()
     
     #GET berdasarkan id_transaksi
     def get_byIDTrans(self, idTrans):
@@ -99,7 +100,7 @@ class DatabaseWrapper:
         cursor.execute(sql)
         for row in cursor.fetchall():
             result.append({
-                'id' : row['id'],
+                'id_transaksi' : row['id'],
                 'timestamp_trans' : row['timestamp_trans'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_trans'], datetime) else row['timestamp_trans'],
                 'no_telp' : row['no_telp'],
                 'nominal' : row['nominal'],
@@ -108,6 +109,7 @@ class DatabaseWrapper:
             })
         cursor.close()
         if result:
+            print("ada hasil maka return va")
             return result
         else:
             return None
@@ -206,6 +208,7 @@ class DatabaseWrapper:
         cursor.execute(sql)
         self.connection.commit()
         cursor.close()
+        print("status di db success")
         return {'status': "Status updated to success. Payment is already paid."}
 
 class Database(DependencyProvider):

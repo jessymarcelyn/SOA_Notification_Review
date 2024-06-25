@@ -40,17 +40,17 @@
                     </form>
                     <div class="content2 mt-4">
                         <p style="margin-bottom: -5vh; text-align:center; margin-top:10px">Enter PIN</p>
-                            <div id="pinInputs">
-                                <input type="password" class="pin-box" maxlength="1" readonly>
-                                <input type="password" class="pin-box" maxlength="1" readonly>
-                                <input type="password" class="pin-box" maxlength="1" readonly>
-                                <input type="password" class="pin-box" maxlength="1" readonly>
-                                <input type="password" class="pin-box" maxlength="1" readonly>
-                                <input type="password" class="pin-box" maxlength="1" readonly>
-                            </div>
-                            <div class="d-flex justify-content-center mt-3">
-                                <button id="submitPin" class="btn btn-primary kirim" type="submit" disabled>Kirim</button>
-                            </div>
+                        <div id="pinInputs">
+                            <input type="password" class="pin-box" maxlength="1" readonly>
+                            <input type="password" class="pin-box" maxlength="1" readonly>
+                            <input type="password" class="pin-box" maxlength="1" readonly>
+                            <input type="password" class="pin-box" maxlength="1" readonly>
+                            <input type="password" class="pin-box" maxlength="1" readonly>
+                            <input type="password" class="pin-box" maxlength="1" readonly>
+                        </div>
+                        <div class="d-flex justify-content-center mt-3">
+                            <button id="submitPin" class="btn btn-primary kirim" type="submit" disabled>Kirim</button>
+                        </div>
                         </form>
                     </div>
                 </div>
@@ -76,14 +76,18 @@
     </div>
 
     <script>
+        $(document).ready(function() {
+            // You might need to set id_pesanan dynamically
+            var id_pesanan = 562; // Example static value
+            console.log("id_pesanan: "+ id_pesanan);
+        });
+
         document.addEventListener('DOMContentLoaded', () => {
             const VAInput = document.getElementById('VAInput');
             const pinInputs = document.querySelectorAll('.pin-box');
             const keys = document.querySelectorAll('.key');
             const submitPinButton = document.getElementById('submitPin');
             const submitOkButton = document.getElementById('submitOk');
-            const pinForm = document.getElementById('pinForm');
-
             let currentPinIndex = 0;
 
             const handlePinInput = (keyValue) => {
@@ -102,7 +106,7 @@
             };
 
             const checkIfAllFieldsAreFilled = () => {
-                const VAInputFilled = VAInput.value.trim().length === 16;
+                const VAInputFilled = VAInput.value.trim().length === 15;
                 const pinInputsFilled = Array.from(pinInputs).every(input => input.value.trim() !== '');
                 submitPinButton.disabled = !(VAInputFilled && pinInputsFilled);
                 submitOkButton.disabled = !(VAInputFilled && pinInputsFilled);
@@ -110,7 +114,11 @@
 
             const submitPin = () => {
                 if (!submitPinButton.disabled) {
-                    pinForm.submit();
+                    const va = VAInput.value.trim();
+                    const pin = Array.from(pinInputs).map(input => input.value.trim()).join('');
+                    const id_pesanan = 562; // Replace with the actual id_pesanan value
+
+                    pay(id_pesanan, va, pin);
                 }
             };
 
@@ -148,6 +156,30 @@
                 checkIfAllFieldsAreFilled();
             });
         });
+
+        // Fungsi untuk bayar (cek va dan pin)
+        function pay(id_pesanan, va, pin) {
+            console.log('id_pesanan: ', id_pesanan);
+            console.log('VA: ', va);
+            console.log('pin: ', pin);
+            $.ajax({
+                url: "fetch-api-VA.php",
+                method: 'POST',
+                data: {
+                    id_pesanan: id_pesanan,
+                    va: va,
+                    pin: pin
+                },
+                success: function(response) {
+                    console.log('Response:', response);
+                    console.log('Berhasil');
+                },
+                error: function(xhr, status, error) {
+                    console.log('Ada yang salah: ', error);
+                    console.log('Full error response: ', xhr.responseText);
+                }
+            });
+        }
     </script>
 </body>
 

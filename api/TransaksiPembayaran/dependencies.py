@@ -158,6 +158,7 @@ class DatabaseWrapper:
             return False
 
         finally:
+            print("status sukses")
             cursor.close()
         
 class Database(DependencyProvider):

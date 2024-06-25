@@ -100,7 +100,7 @@ class DatabaseWrapper:
         for row in cursor.fetchall():
             # unhashed_no_rek = self.decrypt_value(row['no_rek'])
             result.append({
-                'id' : row['id_trans'],
+                'id_transaksi' : row['id_trans'],
                 'timestamp_trans' : row['timestamp_trans'].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row['timestamp_trans'], datetime) else row['timestamp_trans'],
                 'no_telp' : row['no_telp'],
                 'nominal' : row['nominal'],
