@@ -78,8 +78,8 @@
     <script>
         $(document).ready(function() {
             // You might need to set id_pesanan dynamically
-            var id_pesanan = 9821; // Example static value
-            console.log("id_pesanan: " + id_pesanan);
+            var id_pesanan = 98; // Example static value
+            console.log("id_pesanan: "+ id_pesanan);
         });
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -89,7 +89,6 @@
             const submitPinButton = document.getElementById('submitPin');
             const submitOkButton = document.getElementById('submitOk');
             let currentPinIndex = 0;
-            let attempt = 0; // Variable to track attempts
 
             const handlePinInput = (keyValue) => {
                 if (keyValue === 'backspace') {
@@ -117,7 +116,7 @@
                 if (!submitPinButton.disabled) {
                     const va = VAInput.value.trim();
                     const pin = Array.from(pinInputs).map(input => input.value.trim()).join('');
-                    const id_pesanan = 9821; // Replace with the actual id_pesanan value
+                    const id_pesanan = 98; // Replace with the actual id_pesanan value
 
                     pay(id_pesanan, va, pin);
                 }
