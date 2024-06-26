@@ -183,7 +183,7 @@ if (isset($_POST['id_pesanan'])) {
                             }
                         }
                     } else {
-                    // } else if ($resultGetTime == False) {
+                        // } else if ($resultGetTime == False) {
                         //ubah notif
                         $putNotifData = [
                             'judul' => 'Pembayaran Gagal'
@@ -217,35 +217,35 @@ if (isset($_POST['id_pesanan'])) {
                             if ($putNotifResult === null && json_last_error() !== JSON_ERROR_NONE) {
                                 echo json_encode(['code' => 500, 'message' => 'Error decoding PUT response JSON']);
                             } else {
-                            }
-                        }
-                        //ubah status di trans_pembayaran jadi failed
-                    
-                        $statusUpdate = 'failed';
-                        $putFailedUrl = "http://localhost:8000/Tpembayaran/pesanan/{$id_pesanan}/status/{$statusUpdate}";
-                        $chF = curl_init();
 
-                        // Set cURL options for GET request
-                        // curl_setopt($chF, CURLOPT_URL, $putFailedUrl);
-                        // curl_setopt($chF, CURLOPT_RETURNTRANSFER, true);
-                        // curl_setopt($chF, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-                        curl_setopt($chF, CURLOPT_URL, $putFailedUrl);
-                        curl_setopt($chF, CURLOPT_RETURNTRANSFER, true);
+                                //ubah status di trans_pembayaran jadi failed
+
+                                $statusUpdate = 'failed';
+                                $putFailedUrl = "http://localhost:8000/Tpembayaran/pesanan/{$id_pesanan}/status/{$statusUpdate}";
+                                $chF = curl_init();
+
+                                // Set cURL options for GET request
+                                // curl_setopt($chF, CURLOPT_URL, $putFailedUrl);
+                                // curl_setopt($chF, CURLOPT_RETURNTRANSFER, true);
+                                // curl_setopt($chF, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+                                curl_setopt($chF, CURLOPT_URL, $putFailedUrl);
+                                curl_setopt($chF, CURLOPT_RETURNTRANSFER, true);
 
 
-                        // Execute cURL and get the response
-                        $responseF = curl_exec($chF);
+                                // Execute cURL and get the response
+                                $responseF = curl_exec($chF);
 
-                        // Check for cURL errors
-                        if (curl_errno($chF)) {
-                            echo 'Error:' . curl_error($chF);
-                        } else {
-                            curl_close($chF);
-                            $resultF = json_decode($responseF, true);
-                            if ($resultF === null && json_last_error() !== JSON_ERROR_NONE) {
-                                echo 'Error decoding JSON response';
-                            } else {
-
+                                // Check for cURL errors
+                                if (curl_errno($chF)) {
+                                    echo 'Error:' . curl_error($chF);
+                                } else {
+                                    curl_close($chF);
+                                    $resultF = json_decode($responseF, true);
+                                    if ($resultF === null && json_last_error() !== JSON_ERROR_NONE) {
+                                        echo 'Error decoding JSON response';
+                                    } else {
+                                    }
+                                }
                             }
                         }
                     }
