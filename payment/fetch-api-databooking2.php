@@ -1,4 +1,6 @@
 <?php
+$provider_name="";
+
 if (isset($_POST['id_booking'])) {
     $id_booking = $_POST['id_booking'];
     $url = "http://3.226.141.243:8004/bookingDetails/" . $id_booking;
@@ -87,9 +89,27 @@ if (isset($_POST['id_booking'])) {
     echo json_encode($result);
 }
 
-function getHotel($id_hotel)
+function getHotel($id_hotel, $provider_name)
 {
-    $url = "http:// ";
+    if ($provider_name == 'merlynn park hotel' ){
+        $url = "http://52.200.174.164:8003";
+    }
+    else if ($provider_name == 'jayakarta sp hotel' ){
+        $url = "http://44.218.207.165:8009";
+    }
+    else if ($provider_name == 'artotel suites bianti' ){
+        $url = "http://50.16.176.111:8005";
+    }
+    else if ($provider_name == 'Yogyakarta mariott' ){
+        $url = "http://3.215.46.161:8011";
+    }
+    else if ($provider_name == 'Hilton bali resort' ){
+        $url = "http://3.215.46.161:8013";
+    }
+    else if ($provider_name == 'Borobudur hotel Jakarta' ){
+        $url = "http://100.28.104.239:8007";
+    }
+    // $url = "http:// ";
     $ch = curl_init();
     // Setel opsi cURL
     curl_setopt($ch, CURLOPT_URL, $url);
@@ -126,7 +146,8 @@ function getHotel($id_hotel)
 
 function getPesawat($id_pesawat)
 {
-    $url = "http:// ";
+    $url = " http://3.226.141.243:8004/
+    ";
     $ch = curl_init();
     // Setel opsi cURL
     curl_setopt($ch, CURLOPT_URL, $url);
