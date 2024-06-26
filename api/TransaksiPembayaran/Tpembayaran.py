@@ -9,8 +9,8 @@ class Transferservice:
 
     # Get berdasarkan id_pesanan
     @rpc
-    def get__byIDPesanan(self, IDPesanan):
-        trans = self.database.get__byIDPesanan(IDPesanan)
+    def get_byIDPesanan(self, IDPesanan):
+        trans = self.database.get_byIDPesanan(IDPesanan)
         return {
             'code' : 200,
             'data' : trans
@@ -18,8 +18,8 @@ class Transferservice:
 
     # Get berdasarkan id_transaksi    
     @rpc
-    def get__byIDTransaksi(self, IDTransaksi):
-        trans = self.database.get__byIDTransaksi(IDTransaksi)
+    def get_byIDTransaksi(self, IDTransaksi):
+        trans = self.database.get_byIDTransaksi(IDTransaksi)
         return {
             'code' : 200,
             'data' : trans
@@ -27,8 +27,8 @@ class Transferservice:
 
     # Update berdasarkget__byIDTransaksiid_pesanan ( jenis_pembayaran, nama_penyedia, status)
     @rpc
-    def update__byIDTransaksi(self, IDTransaksi, jenis_pembayaran, nama_penyedia, status):
-        trans = self.database.update__byIDTransaksi(IDTransaksi, jenis_pembayaran, nama_penyedia, status)
+    def update_byIDTransaksi(self, IDTransaksi, jenis_pembayaran, nama_penyedia, status):
+        trans = self.database.update_byIDTransaksi(IDTransaksi, jenis_pembayaran, nama_penyedia, status)
         return {
             'code' : 200,
             'data' : trans

@@ -14,7 +14,7 @@ class GatewayService:
     # Get berdasarkan id_pesanan
     @http('GET', '/Tpembayaran/pesanan/<int:IDPesanan>')
     def get__byIDPesananTP(self, request, IDPesanan):
-        exist = self.TransP_rpc.get__byIDPesanan(IDPesanan)
+        exist = self.TransP_rpc.get_byIDPesanan(IDPesanan)
         if exist:
             return Response(json.dumps(exist), status=200, mimetype='application/json')
         else:
@@ -23,7 +23,7 @@ class GatewayService:
     # Get berdasarkan id_transaksi
     @http('GET', '/Tpembayaran/transaksi/<int:IDTransaksi>')
     def get__byIDTransaksiTP(self, request, IDTransaksi):
-        exist = self.TransP_rpc.get__byIDTransaksi(IDTransaksi)
+        exist = self.TransP_rpc.get_byIDTransaksi(IDTransaksi)
         if exist:
             return Response(json.dumps(exist), status=200, mimetype='application/json')
         else:
@@ -32,7 +32,7 @@ class GatewayService:
     # Update berdasarkan id_transaksi (jenis_pembayaran, nama_penyedia)
     @http('PUT', '/Tpembayaran/transaksi/<int:IDTransaksi>')
     def update__byIDTransaksiTP(self, request, IDTransaksi):
-        exist = self.TransP_rpc.get__byIDTransaksi(IDTransaksi)
+        exist = self.TransP_rpc.get_byIDTransaksi(IDTransaksi)
         if exist:
             try:
                 data = json.loads(request.get_data(as_text=True))
@@ -262,7 +262,7 @@ class GatewayService:
         except Exception as e:
             return 500, json.dumps({"error": str(e)})
         
-    @http('GET', '/BCA/pin/<string:VA>/<string:pin>')
+    @http('GET', '/BCA/VA/<string:VA>/pin/<string:pin>')
     def CheckPinBCA(self, request, VA, pin):
         no = VA[3:]
         check = self.BBCA_rpc.CheckPin(no, pin)
@@ -372,7 +372,7 @@ class GatewayService:
         except Exception as e:
             return 500, json.dumps({"error": str(e)})
         
-    @http('GET', '/Mandiri/pin/<string:VA>/<string:pin>')
+    @http('GET', '/Mandiri/VA/<string:VA>/pin/<string:pin>')
     def CheckPinMandiri(self, request, VA, pin):
         no = VA[3:]
         check = self.BMandiri_RPC.CheckPin(no, pin)

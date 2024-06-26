@@ -159,9 +159,13 @@ class DatabaseWrapper:
             else:   
                 if current_time - timestamp_local > timedelta(minutes=2):
                     self.set_failed(idTrans)
-                    return {'status': 'failed'}
+                    print("gagal melebihi 2 menit")
+                    return False
+                    # return {'status': 'failed'}
                 else:
-                    return {'status': 'Still Waiting For Payment'}
+                    print("masih bisa bayar <2 menit")
+                    return True
+                    # return {'status': 'Still Waiting For Payment'}
 
     # Add Transaksi into tabel transaksi transfer bank
     def create_trans(self, no_telp, nominal, va):
