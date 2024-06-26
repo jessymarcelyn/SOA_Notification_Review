@@ -146,8 +146,7 @@ function getHotel($id_hotel, $provider_name)
 
 function getPesawat($id_pesawat)
 {
-    $url = " http://3.226.141.243:8004/
-    ";
+    $url = "http://3.226.141.243:8004/";
     $ch = curl_init();
     // Setel opsi cURL
     curl_setopt($ch, CURLOPT_URL, $url);

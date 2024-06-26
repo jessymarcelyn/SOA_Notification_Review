@@ -270,7 +270,7 @@ if (isset($_POST['id_pesanan']) && isset($_POST['otp'])) {
                                                                             curl_close($chEric);
                                                                             $resultEric = json_decode($responseEric, true);
                                                                             if ($resultEric === null && json_last_error() !== JSON_ERROR_NONE) {
-                                                                                echo json_encode(['code' => 500, 'message' => 'Error decoding JSON response failed trans_pembayaran']);
+                                                                                echo json_encode(['code' => 500, 'message' => 'Error decoding JSON response failed Ericksen']);
                                                                             } else {
                                                                             }
                                                                         }
