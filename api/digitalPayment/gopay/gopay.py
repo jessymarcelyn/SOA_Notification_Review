@@ -31,10 +31,11 @@ class PaymentService:
     @rpc
     def bayar(self, id_transaksi, pin):
         nomer_telepon = self.get_nomer_telepon(id_transaksi)
-        # print(nomer_telepon)
+        print(nomer_telepon)
         nominal =  self.database.get_nominal_by_transaksi(id_transaksi)
         # print(transaksi['nomor_telepon'])
         boolean_pin = self.database.check_pin(nomer_telepon, pin)
+        print(boolean_pin)
         if boolean_pin == True:
             # print(transaksi)
             boolean_saldo = self.database.check_saldo(nomer_telepon, nominal )
