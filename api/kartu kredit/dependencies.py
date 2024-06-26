@@ -249,7 +249,7 @@ class DatabaseWrapper:
         
         return decrypted_otp
     
-    # get OTP berdasarkan id_transaksi
+    # get data transakasi kartu berdasarkan id_transaksi
     def get_data_Tkartu(self, id_transaksi):
         cursor = self.connection.cursor(dictionary=True)        
         result = []
