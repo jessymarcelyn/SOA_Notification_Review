@@ -1,3 +1,12 @@
+<?php
+session_start();
+require "connect.php";
+
+$id_pesanan = $_GET['id_pesanan'];
+$id_user = $_GET['id_user'];
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
