@@ -79,7 +79,7 @@
         $(document).ready(function() {
             // You might need to set id_pesanan dynamically
             var id_pesanan = 9821; // Example static value
-            console.log("id_pesanan: "+ id_pesanan);
+            console.log("id_pesanan: " + id_pesanan);
         });
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -89,6 +89,7 @@
             const submitPinButton = document.getElementById('submitPin');
             const submitOkButton = document.getElementById('submitOk');
             let currentPinIndex = 0;
+            let attempt = 0; // Variable to track attempts
 
             const handlePinInput = (keyValue) => {
                 if (keyValue === 'backspace') {
