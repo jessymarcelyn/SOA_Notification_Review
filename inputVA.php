@@ -78,7 +78,7 @@
     <script>
         $(document).ready(function() {
             // You might need to set id_pesanan dynamically
-            var id_pesanan = 541; // Example static value
+            var id_pesanan = 855; // Example static value
             console.log("id_pesanan: "+ id_pesanan);
         });
 
@@ -116,7 +116,7 @@
                 if (!submitPinButton.disabled) {
                     const va = VAInput.value.trim();
                     const pin = Array.from(pinInputs).map(input => input.value.trim()).join('');
-                    const id_pesanan = 541; // Replace with the actual id_pesanan value
+                    const id_pesanan = 855; // Replace with the actual id_pesanan value
 
                     pay(id_pesanan, va, pin);
                 }

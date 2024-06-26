@@ -158,6 +158,7 @@ class DatabaseWrapper:
             else:   
                 if current_time - timestamp_local > timedelta(minutes=2):
                     self.set_failed(idTrans)
+                    print("gagal karena lebih dari 2 menit")
                     return {'status': 'failed'}
                 else:
                     return {'status': 'Still Waiting For Payment'}

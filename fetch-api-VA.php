@@ -59,7 +59,9 @@ if (isset($_POST['id_pesanan'])) {
                     curl_close($chGetTime);
                     $resultGetTime = json_decode($responseGetTime, true);
 
-                    if ($resultGetTime == True && $status === 'failed') {
+
+                    if ($resultGetTime['data'] === true && $status !== 'failed' ) {
+                    // if ($resultGetTime == True && $status != 'failed' ) {
                         if (isset($_POST['va']) && isset($_POST['pin'])) {
 
                             $va = htmlspecialchars($_POST['va']);
@@ -205,7 +207,7 @@ if (isset($_POST['id_pesanan'])) {
                                                                         if ($putNotifResult === null && json_last_error() !== JSON_ERROR_NONE) {
                                                                             echo json_encode(['code' => 500, 'message' => 'Error decoding PUT response JSON']);
                                                                         } else {
-                                                                            echo json_encode($resultGet2);
+                                                                            // echo json_encode($resultGet2);
                                                                             $statusUpdate = 'success';
                                                                             $putSUrl = "http://localhost:8000/Tpembayaran/pesanan/{$id_pesanan}/status/{$statusUpdate}";
                                                                             $chS = curl_init();
@@ -312,6 +314,7 @@ if (isset($_POST['id_pesanan'])) {
                                     if ($resultF === null && json_last_error() !== JSON_ERROR_NONE) {
                                         echo json_encode(['code' => 500, 'message' => 'Error decoding JSON response failed trans_pembayaran']);
                                     } else {
+                                        echo json_encode($resultGetTime);
                                     }
                                 }
                             }
