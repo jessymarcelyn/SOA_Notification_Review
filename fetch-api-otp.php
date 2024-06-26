@@ -241,6 +241,39 @@ if (isset($_POST['id_pesanan']) && isset($_POST['otp'])) {
                                                                     if ($putResult === null && json_last_error() !== JSON_ERROR_NONE) {
                                                                         echo json_encode(['code' => 500, 'message' => 'Error decoding PUT response JSON']);
                                                                     } else {
+
+                                                                        $putEricData = [
+                                                                            'status' => 1
+                                                                        ];
+
+                                                                        $putEricDataJson = json_encode($putNoputEricDatatifData);
+
+                                                                        $urlEric =  "http://localhost:8000/kartu_kredit/transaksi/{$idTrans}/status/failed";
+
+                                                                        $chEric = curl_init();
+                                                                        // Set cURL options
+                                                                        curl_setopt($chEric, CURLOPT_URL, $urlEric);
+                                                                        curl_setopt($chEric, CURLOPT_CUSTOMREQUEST, "PUT");
+                                                                        curl_setopt($chEric, CURLOPT_POSTFIELDS, $putEricDataJson);
+                                                                        curl_setopt($chEric, CURLOPT_RETURNTRANSFER, true);
+                                                                        curl_setopt($chEric, CURLOPT_HTTPHEADER, [
+                                                                            'Content-Type: application/json',
+                                                                            'Content-Length: ' . strlen($putEricDataJson)
+                                                                        ]);
+
+                                                                        $responseEric = curl_exec($chEric);
+
+                                                                        // Check for cURL errors
+                                                                        if (curl_errno($chEric)) {
+                                                                            echo 'Error:' . curl_error($chEric);
+                                                                        } else {
+                                                                            curl_close($chEric);
+                                                                            $resultEric = json_decode($responseEric, true);
+                                                                            if ($resultEric === null && json_last_error() !== JSON_ERROR_NONE) {
+                                                                                echo json_encode(['code' => 500, 'message' => 'Error decoding JSON response failed trans_pembayaran']);
+                                                                            } else {
+                                                                            }
+                                                                        }
                                                                     }
                                                                 }
                                                             }
@@ -638,3 +671,4 @@ if (isset($_POST['id_pesanan']) && isset($_POST['otp'])) {
 } else {
     echo json_encode(array('status' => 'failed', 'message' => 'id_pesanan is required.'));
 }
+?>
