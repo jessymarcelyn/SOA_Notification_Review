@@ -247,7 +247,7 @@
 
             // AJAX
             // NANTI AMBIL DARI ERICKSEN
-            var id_pesanan = 4;
+            var id_pesanan = 10;
             var id_pesanan2;
             // var id_pesanan2 = 2;
 
@@ -352,9 +352,11 @@
                                     success: function(response) {
                                         console.log(response)
                                         console.log('Payment data submitted successfully');
+                                        $('#successNotif').modal('show'); 
                                     },
                                     error: function(xhr, status, error) {
                                         console.error('AJAX Error:', error); // Handle AJAX errors
+                                        $('#failedNotif').modal('show');
                                     }
                                 });
                             }

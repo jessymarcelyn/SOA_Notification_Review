@@ -132,7 +132,7 @@ class DatabaseWrapper:
         finally:
             cursor.close()
     
-    def update_pembayaran(self, id_pesanan, id_transaksi, jenis_pembayaran, nama_penyedia, status):
+    def update_pembayaran(self, id_pesanan, id_transaksi, jenis_pembayaran, nama_penyedia):
         print("masuk update2")
         cursor = self.connection.cursor(dictionary=True)
 
@@ -161,7 +161,7 @@ class DatabaseWrapper:
             print("status sukses")
             cursor.close()
 
-    def update_pembayaransukses(self, id_pesanan, id_transaksi, jenis_pembayaran, nama_penyedia, status):
+    def update_pembayaransukses(self, id_pesanan, id_transaksi, jenis_pembayaran, nama_penyedia):
         print("masuk update2")
         cursor = self.connection.cursor(dictionary=True)
 
