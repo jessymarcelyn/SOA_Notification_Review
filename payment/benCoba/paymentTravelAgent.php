@@ -338,7 +338,7 @@
                     nominal: nominal
                   },
                   success: function (response) {
-                    console.log(response, "1");
+                    console.log(response);
                     if (response == "true") {
                       // console.log(response, "2")
                       console.log('Payment data submitted successfully');
