@@ -5,7 +5,7 @@ if (isset($_POST['id_pesanan'])) {
 
     // $data = getCar(8001, "1") ;
     // $data = getRental(8001);
-    
+
     $id_booking = $_POST['id_pesanan'];
     $url = "http://3.226.141.243:8004/bookingDetails/" . $id_booking;
 
@@ -35,6 +35,9 @@ if (isset($_POST['id_pesanan'])) {
             $resultData = $result['booking details'];
             $resultData = "Rental";
             if ($resultData['booking_type'] == "Hotel") {
+                $extraDataHotel = get_address($resultData['room_type'], $resultData['provider_name']);
+                $room_type = $extraDataHotel['room_type'];
+                $address = $extraDataHotel['address'];
                 $data = array(
                     'booking_type' => $resultData['booking_type'],
                     'provider_name' => $resultData['provider_name'],
@@ -42,11 +45,14 @@ if (isset($_POST['id_pesanan'])) {
                     'check_out' => $resultData['check_out_date'],
                     'number_of_rooms' => $resultData['number_of_rooms'],
                     'number_of_nights' => $resultData['number_of_nights'],
-                    'room_type_id' => $resultData['room_type'],
                     'total_price' => $resultData['total_price'],
+                    'address' => $address,
+                    'room_type' => $room_type,
+
                 );
 
             } else if ($resultData['booking_type'] == "Airline") {
+
                 $data = array(
                     'booking_type' => $resultData['booking_type'],
                     'provider_name' => $resultData['provider_name'],
@@ -58,6 +64,14 @@ if (isset($_POST['id_pesanan'])) {
                 );
 
             } else if ($resultData['booking_type'] == "Attraction") {
+                $data = array(
+                    'booking_type' => $resultData['booking_type'],
+                    'provider_name' => $resultData['provider_name'],
+                    'paket_attraction_id' => $resultData['paket_attraction_id'],
+                    'visit_date' => $resultData['visit_date'],
+                    'total_price' => $resultData['total_price'],
+                    'total_tickets' => $resultData['total_tickets'],
+                );
 
             } else if ($resultData['booking_type'] == "Rental") {
                 $nama = $resultData['provider_name'];
@@ -104,13 +118,187 @@ if (isset($_POST['id_pesanan'])) {
     }
 
     echo json_encode($data);
-}else{
-    echo "nana";
+} else {
+    echo json_encode(['code' => 500, 'message' => 'Error executing ']);
 }
 
-function getHotel($id_hotel)
+
+
+function getAttraction($attraction, $id_paket)
 {
-    $url = "http:// ";
+    if ($attraction == 'dufan') {
+        $url = "http://3.217.250.166:8003";
+    } else if ($attraction == 'balizoo') {
+        $url = "http://52.6.192.248:8003";
+    } else if ($attraction == 'waterboom') {
+        $url = "http://44.222.16.57:8003";
+    } else if ($attraction == 'seaworld') {
+        $url = "http:// 34.194.127.109:8003";
+    } else if ($attraction == 'prambanan') {
+        $url = "http:// 34.193.181.49:8003";
+
+    } else if ($attraction == 'trans studio') {
+        $url = "http://34.193.181.49:8007";
+    }
+    $url = $url . "/api/atraksi/paket/" . $id_paket;
+    $ch = curl_init();
+
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+
+    $response = curl_exec($ch);
+    $packageName = "";
+
+    if (curl_errno($ch)) {
+        echo 'Error:' . curl_error($ch);
+    } else {
+        curl_close($ch);
+
+        $result = json_decode($response, true);
+
+        $packageName = $result['package_name'];
+
+        return $packageName;
+
+    }
+
+}
+
+
+function get_address($id_type, $provider_name)
+{
+    if ($provider_name == 'merlynn park hotel') {
+        $url = "http://52.200.174.164:8003";
+    } else if ($provider_name == 'jayakarta sp hotel') {
+        $url = "http://44.218.207.165:8009";
+    } else if ($provider_name == 'artotel suites bianti') {
+        $url = "http://50.16.176.111:8005";
+    } else if ($provider_name == 'Yogyakarta mariott') {
+        $url = "http://3.215.46.161:8011";
+    } else if ($provider_name == 'Hilton bali resort') {
+        $url = "http://3.215.46.161:8013";
+    } else if ($provider_name == 'Borobudur hotel Jakarta') {
+        $url = "http://100.28.104.239:8007";
+    }
+    $url = $url . "/hotel";
+
+
+    $ch = curl_init();
+
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+
+    $response = curl_exec($ch);
+    $dataHotel = array();
+    $room_type = get_room_type($id_type, $url);
+
+    if (curl_errno($ch)) {
+        echo 'Error:' . curl_error($ch);
+    } else {
+        curl_close($ch);
+
+        $result = json_decode($response, true);
+
+        $dataHotel = array(
+            'address' => $result['address'],
+            'room_type' => $room_type,
+        );
+
+
+        return $dataHotel;
+
+    }
+
+}
+function get_room_type($id_type, $url)
+{
+
+
+    $url = $url . "/hotel/room_type/" . $id_type;
+
+    $ch = curl_init();
+    // Setel opsi cURL
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    // Eksekusi cURL dan ambil hasilnya
+    $response = curl_exec($ch);
+    $tipe_kamar = "";
+
+    if (curl_errno($ch)) {
+        echo 'Error:' . curl_error($ch);
+    } else {
+        curl_close($ch);
+
+        $result = json_decode($response, true);
+
+        $tipe_kamar = $result['type'];
+
+        //  if (isset($result['data'])) {
+        //      $resultData = $result['data'];
+
+        //  $HotelDetail = array(
+        //      'hotel_id' => $resultData['hotel_id'],
+        //      'type' => $resultData['type'],
+        //      'image' => $resultData['image'],
+        //      'detail' => $resultData['detail'],
+        //      'facilities' => $resultData['facilities'],
+        //      'total_room' => $resultData['total_room'],
+        //      'capacity' => $resultData['capacity'],
+        //      'price' => $resultData['price'],
+        //  );
+
+        return $tipe_kamar;
+
+    }
+
+
+}
+
+function getPesawat($id_pesawat)
+{
+    $url = " http://3.226.141.243:8004/
+    ";
+    $ch = curl_init();
+    // Setel opsi cURL
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    // Eksekusi cURL dan ambil hasilnya
+    $response = curl_exec($ch);
+    $PesawatDetail = array();
+
+    if (curl_errno($ch)) {
+        echo 'Error:' . curl_error($ch);
+    } else {
+        curl_close($ch);
+
+        $result = json_decode($response, true);
+
+        if (isset($result['data'])) {
+            $resultData = $result['data'];
+
+            $PesawatlDetail = array(
+                'flight_code' => $resultData['flight_code'],
+                'airport_origin_name' => $resultData['airport_origin_name'],
+                'airport_origin_location_code' => $resultData['airport_origin_location_code'],
+                'airport_origin_city_name' => $resultData['airport_origin_city_name'],
+                'airport_destination_name' => $resultData['airport_destination_name'],
+                'airport_destination_location_code' => $resultData['airport_destination_location_code'],
+                'airport_destination_city_name' => $resultData['airport_destination_city_name'],
+                'start_time' => $resultData['start_time'],
+                'end_time' => $resultData['end_time'],
+                'class_name' => $resultData['class_name'],
+                'price' => $resultData['price'],
+                'date' => $resultData['date'],
+                'weight' => $resultData['weight'],
+                'delay' => $resultData['delay'],
+            );
+
+            return $PesawatDetail;
+        }
+    }
+
 
 }
 
