@@ -4,6 +4,36 @@ if (!isset($_SESSION)) {
     session_start();
 }
 
+function update_status_idpesanan($status, $id_pesanan)
+{
+    $putUrl = "http://localhost:8000/Tpembayaran/pesanan/$id_pesanan/status/$status";
+
+    // Initialize cURL session
+    $chPut = curl_init();
+
+    // Set cURL options for PUT request
+    curl_setopt($chPut, CURLOPT_URL, $putUrl);
+    curl_setopt($chPut, CURLOPT_CUSTOMREQUEST, "PUT");
+    curl_setopt($chPut, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($chPut, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json',
+        // You may need to set Content-Length depending on your data
+    ]);
+
+    // Execute cURL and capture the response
+    $putResponse = curl_exec($chPut);
+
+    // Check for cURL errors
+    if (curl_errno($chPut)) {
+        echo json_encode(['code' => 500, 'message' => 'Error executing PUT request: ' . curl_error($chPut)]);
+    } else {
+        // update
+
+        curl_close($chPut);
+
+    }
+}
+
 function post_notif($id_pesanan)
 {
     $ch = curl_init();
@@ -175,10 +205,12 @@ if (isset($_POST['id_pesanan']) && isset($_POST['pin'])) {
             curl_close($ch);
             // Tampilkan respons dari server
             post_notif($id_pesanan);
+            update_status_idpesanan('success', $id_pesanan);
             echo $response;
             // return $response;
         }
     } else {
+        update_status_idpesanan('failed', $id_pesanan);
         echo "Your time has expired";
     }
 
