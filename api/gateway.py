@@ -267,7 +267,7 @@ class GatewayService:
         no = VA[3:]
         check = self.BBCA_rpc.CheckPin(no, pin)
         if check: 
-            return Response(json.dumps('hhh'), status=200, mimetype='application/json')
+            return Response(json.dumps('Pembayaran Berhasil'), status=200, mimetype='application/json')
         else:
             return Response(json.dumps('Wrong VA or PIN Please try again'), status=404, mimetype='application/json')
 
@@ -377,7 +377,7 @@ class GatewayService:
         no = VA[3:]
         check = self.BMandiri_RPC.CheckPin(no, pin)
         if check: 
-            return Response(json.dumps('hhh'), status=200, mimetype='application/json')
+            return Response(json.dumps('Pembayaran Berhasil'), status=200, mimetype='application/json')
         else:
             return Response(json.dumps('Wrong VA or PIN Please try again'), status=404, mimetype='application/json')
 

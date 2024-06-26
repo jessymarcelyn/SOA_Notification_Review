@@ -169,8 +169,9 @@ if (isset($_POST['id_pesanan'])) {
                                                                     echo json_encode(['code' => 500, 'message' => 'Error decoding POST response JSON from /notif']);
                                                                 } else {
 
-                                                                    // Respond with the POST request result from /notif
                                                                     // echo json_encode($postResult);
+                                                                    echo json_encode($resultGet2);
+                                                                    
                                                                 }
                                                             }
                                                         }
@@ -225,11 +226,15 @@ if (isset($_POST['id_pesanan'])) {
                                 $chF = curl_init();
 
                                 // Set cURL options for GET request
+                                curl_setopt($chF, CURLOPT_URL, $putFailedUrl);
+                                curl_setopt($chF, CURLOPT_CUSTOMREQUEST, "PUT");
+                                curl_setopt($chF, CURLOPT_RETURNTRANSFER, true);
+                                curl_setopt($chF, CURLOPT_HTTPHEADER, [
+                                    'Content-Type: application/json',
+                                    // You may need to set Content-Length depending on your data
+                                ]);
                                 // curl_setopt($chF, CURLOPT_URL, $putFailedUrl);
                                 // curl_setopt($chF, CURLOPT_RETURNTRANSFER, true);
-                                // curl_setopt($chF, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-                                curl_setopt($chF, CURLOPT_URL, $putFailedUrl);
-                                curl_setopt($chF, CURLOPT_RETURNTRANSFER, true);
 
 
                                 // Execute cURL and get the response
@@ -242,8 +247,9 @@ if (isset($_POST['id_pesanan'])) {
                                     curl_close($chF);
                                     $resultF = json_decode($responseF, true);
                                     if ($resultF === null && json_last_error() !== JSON_ERROR_NONE) {
-                                        echo 'Error decoding JSON response';
+                                        echo json_encode(['code' => 500, 'message' => 'Error decoding JSON response failed trans_pembayaran']);
                                     } else {
+
                                     }
                                 }
                             }
