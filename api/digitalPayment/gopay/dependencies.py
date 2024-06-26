@@ -27,7 +27,7 @@ class DatabaseWrapper:
         if result['count'] == 1:
             return True # Nomor telepon tersedia di database
         else:
-            return False, "Nomer tidak terdaftar"  # Nomor telepon tidak tersedia di database
+            return False # Nomor telepon tidak tersedia di database
        
     
 
@@ -40,10 +40,10 @@ class DatabaseWrapper:
         # print(result['pin'])
         # hashed_pin = hashlib.sha256(pin.encode()).hexdigest()
       
-        if result['pin'] == pin:
+        if result['pin'].lower() == pin:
             return True
         else:
-            return False, "Pin tidak valid"
+            return False
         
     #aman 
     def check_saldo(self, no_telp, nominal):
@@ -59,7 +59,7 @@ class DatabaseWrapper:
         if result['saldo'] >= nominal:
             return True
         else:
-            return False, "Saldo tidak cukup"
+            return False
         
     #aman 
     def update_saldo(self, no_telp, nominal):
@@ -171,12 +171,18 @@ class DatabaseWrapper:
         else:
             return False
         
-    def get_timestamp(self, id_transaksi):
+    def get_timestamp_by_transaksi(self, id_transaksi):
         cursor = self.connection.cursor(dictionary=True)
         sql = "SELECT timestamp FROM transaksigopay WHERE id = %s"
         cursor.execute(sql, (id_transaksi,))
         result = cursor.fetchone()
-        return result['timestamp']  # Return only timestamp
+        if result:
+            timestamp = result['timestamp']
+            if isinstance(timestamp, datetime):
+                return timestamp.strftime('%Y-%m-%d %H:%M:%S')
+            else:
+                return timestamp
+        return None # Return only timestamp
 
 
 
