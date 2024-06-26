@@ -170,8 +170,71 @@ if (isset($_POST['id_pesanan'])) {
                                                                 } else {
 
                                                                     // echo json_encode($postResult);
-                                                                    echo json_encode($resultGet2);
-                                                                    
+                                                                    // echo json_encode($resultGet2);
+
+                                                                    //update status notif 
+                                                                    $putNotifData = [
+                                                                        'judul' => 'Pembayaran sudah dilakukan'
+                                                                    ];
+
+                                                                    $putNotifDataJson = json_encode($putNotifData);
+
+                                                                    $putNotifurl = "http://localhost:8000/notif/pesanan/{$id_pesanan}";
+
+                                                                    $chPutNotif = curl_init();
+
+                                                                    // Set cURL options
+                                                                    curl_setopt($chPutNotif, CURLOPT_URL, $putNotifurl);
+                                                                    curl_setopt($chPutNotif, CURLOPT_CUSTOMREQUEST, "PUT");
+                                                                    curl_setopt($chPutNotif, CURLOPT_POSTFIELDS, $putNotifDataJson);
+                                                                    curl_setopt($chPutNotif, CURLOPT_RETURNTRANSFER, true);
+                                                                    curl_setopt($chPutNotif, CURLOPT_HTTPHEADER, [
+                                                                        'Content-Type: application/json',
+                                                                        'Content-Length: ' . strlen($putNotifDataJson)
+                                                                    ]);
+
+                                                                    $putNotifResponse = curl_exec($chPutNotif);
+                                                                    if (curl_errno($chPutNotif)) {
+                                                                        echo json_encode(['code' => 500, 'message' => 'Error executing PUT request: ' . curl_error($chPut)]);
+                                                                    } else {
+                                                                        curl_close($chPutNotif);
+
+                                                                        // Decode response JSON
+                                                                        $putNotifResult = json_decode($putNotifResponse, true);
+
+                                                                        if ($putNotifResult === null && json_last_error() !== JSON_ERROR_NONE) {
+                                                                            echo json_encode(['code' => 500, 'message' => 'Error decoding PUT response JSON']);
+                                                                        } else {
+                                                                            echo json_encode($resultGet2);
+                                                                            $statusUpdate = 'success';
+                                                                            $putSUrl = "http://localhost:8000/Tpembayaran/pesanan/{$id_pesanan}/status/{$statusUpdate}";
+                                                                            $chS = curl_init();
+
+                                                                            curl_setopt($chS, CURLOPT_URL, $putSUrl);
+                                                                            curl_setopt($chS, CURLOPT_CUSTOMREQUEST, "PUT");
+                                                                            curl_setopt($chS, CURLOPT_RETURNTRANSFER, true);
+                                                                            curl_setopt($chS, CURLOPT_HTTPHEADER, [
+                                                                                'Content-Type: application/json',
+                                                                                // You may need to set Content-Length depending on your data
+                                                                            ]);
+
+                                                                            $responseS = curl_exec($chS);
+
+                                                                            // Check for cURL errors
+                                                                            if (curl_errno($chS)) {
+                                                                                echo 'Error:' . curl_error($chS);
+                                                                            } else {
+                                                                                curl_close($chS);
+                                                                                $resultS = json_decode($responseS, true);
+                                                                                if ($resultS === null && json_last_error() !== JSON_ERROR_NONE) {
+                                                                                    echo json_encode(['code' => 500, 'message' => 'Error decoding JSON response failed trans_pembayaran']);
+                                                                                } else {
+                                                                                    echo json_encode($resultGet2);
+
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
                                                                 }
                                                             }
                                                         }
@@ -249,7 +312,6 @@ if (isset($_POST['id_pesanan'])) {
                                     if ($resultF === null && json_last_error() !== JSON_ERROR_NONE) {
                                         echo json_encode(['code' => 500, 'message' => 'Error decoding JSON response failed trans_pembayaran']);
                                     } else {
-
                                     }
                                 }
                             }
