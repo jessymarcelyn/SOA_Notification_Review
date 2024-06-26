@@ -5,6 +5,11 @@ if (isset($_POST['id_pesanan'])) {
 
     // $data = getCar(8001, "1") ;
     // $data = getRental(8001);
+    // $data = array(
+    //     "brand" => "Toyota",
+    //     "nama" => "Avanza",
+    //     "tahun" => "2019"
+    // );
 
     $id_booking = $_POST['id_pesanan'];
     $url = "http://3.226.141.243:8004/bookingDetails/" . $id_booking;
@@ -53,14 +58,27 @@ if (isset($_POST['id_pesanan'])) {
 
             } else if ($resultData['booking_type'] == "Airline") {
 
+
+                $extraData = getPesawat($resultData['flight_id']);
+                $resultAsuransi = getAsuransi($id_user, $resultData['asuransi_id']);
+
+
                 $data = array(
                     'booking_type' => $resultData['booking_type'],
                     'provider_name' => $resultData['provider_name'],
                     'departure_date' => $resultData['departure_date'],
                     'arrival_date' => $resultData['arrival_date'],
-                    'departure_city' => $resultData['departure_city'],
-                    'arrival_city' => $resultData['arrival_city'],
+                    'booking_code' => $extraData['booking_code'],
+                    'airport_origin_location_code' => $extraData['airport_origin_location_code'],
+                    'airport_origin_city_name' => $extraData['airport_origin_city_name'],
+                    'airport_destination_location_code' => $extraData['airport_destination_location_code'],
+                    'airport_destination_city_name' => $extraData['airport_destination_city_name'],
+                    'class'=> $extraData['class_name'],
+                    'start_time' => $extraData['start_time'],
+                    'end_time' => $extraData['end_time'],
+                    'asuransi' => $resultAsuransi,
                     'total_price' => $resultData['total_price'],
+
                 );
 
             } else if ($resultData['booking_type'] == "Attraction") {
@@ -157,13 +175,15 @@ function getAttraction($attraction, $id_paket)
 
         $result = json_decode($response, true);
 
-        $packageName = $result['package_name'];
+        $packageName = $result['title'];
 
         return $packageName;
 
     }
 
 }
+
+
 
 
 function get_address($id_type, $provider_name)
@@ -258,8 +278,7 @@ function get_room_type($id_type, $url)
 
 function getPesawat($id_pesawat)
 {
-    $url = " http://3.226.141.243:8004/
-    ";
+    $url = "http://107.20.145.163:8003/airlines/airport_origin_location_code/-/airport_destination_location_code/-/minprice/-/maxprice/-/date/-/start_time/-/end_time/-/sort/-";
     $ch = curl_init();
     // Setel opsi cURL
     curl_setopt($ch, CURLOPT_URL, $url);
@@ -278,7 +297,7 @@ function getPesawat($id_pesawat)
         if (isset($result['data'])) {
             $resultData = $result['data'];
 
-            $PesawatlDetail = array(
+            $PesawatDetail = array(
                 'flight_code' => $resultData['flight_code'],
                 'airport_origin_name' => $resultData['airport_origin_name'],
                 'airport_origin_location_code' => $resultData['airport_origin_location_code'],
@@ -289,10 +308,8 @@ function getPesawat($id_pesawat)
                 'start_time' => $resultData['start_time'],
                 'end_time' => $resultData['end_time'],
                 'class_name' => $resultData['class_name'],
-                'price' => $resultData['price'],
+                // 'price' => $resultData['price'],
                 'date' => $resultData['date'],
-                'weight' => $resultData['weight'],
-                'delay' => $resultData['delay'],
             );
 
             return $PesawatDetail;

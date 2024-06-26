@@ -1,9 +1,9 @@
 <?php
-session_start();
-require "connect.php";
+// session_start();
+// require "connect.php";
 
-$id_pesanan = $_GET['id_pesanan'];
-$id_user = $_GET['id_user'];
+// $id_pesanan = $_GET['id_pesanan'];
+// $id_user = $_GET['id_user'];
 
 ?>
 
@@ -47,7 +47,12 @@ $id_user = $_GET['id_user'];
 
 <body>
 
-  <div class="container" data-id-pesanan="<?php echo htmlspecialchars($id_pesanan); ?>">
+  <!-- <div class="container" data-id-pesanan="<?php echo htmlspecialchars($id_pesanan); ?>">
+     -->
+
+  <div class="container">
+
+
     <div class="row">
       <!-- Kolom pertama -->
       <div class="col-md-4 col-12">
@@ -55,7 +60,7 @@ $id_user = $_GET['id_user'];
           <!-- Kolom 1: Konten pertama -->
           <section class="hotel">
             <p>Travel Agent</p>
-            <H4>Golden Rama</H4>
+            <H4 id="judul">Golden Rama</H4>
             <div id="location">
               <p>08123456789 | goldenrama@gmail.com</p>
             </div>
@@ -276,16 +281,15 @@ $id_user = $_GET['id_user'];
     </div>
   </div>
 
-  <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> -->
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
   <script>
-    $(document).ready(function () {
 
-      const pinInputsDiv = document.querySelector('.pinInputs'); // Menggunakan selector yang benar
-      const idPesanan = pinInputsDiv.getAttribute('data-id-pesanan');
-      // AJAX
-
+    function loadData(id_pesanan) {
+      console.log("ID Pesanan: ", id_pesanan);  // Debugging
       $.ajax({
         url: 'fetch-api-databooking.php',
         method: 'POST',
@@ -293,31 +297,33 @@ $id_user = $_GET['id_user'];
           id_pesanan: id_pesanan,
         },
         success: function (response) {
-
-          console.log(response);
-          if (response == "true") {
-            // console.log(response, "2")
-            console.log('Payment data submitted successfully');
-            $('#successNotifPin').modal('show');
-
-
-          } else {
-            const errorMessageElement = document.querySelector('p.text-danger');
-            errorMessageElement.textContent = response;
-            // console.log('Error submitting payment data');
-            $('#failedNotif').modal('show');
-
-          }
+          console.log(response);  
+          const data = JSON.parse(response);
+          console.log(data['brand']);  
+          $brand = data['brand'];// Debugging
+          $('#judul').text(data['brand']);
+       
         },
         error: function (xhr, status, error) {
-          console.error('AJAX Error:', error); // Handle AJAX errors
+          console.error('AJAX Error:', error);  // Handle AJAX errors
           $('#failedNotif').modal('show');
         }
       });
+    }
+
+    $(document).ready(function () {
+
+      // const pinInputsDiv = document.querySelector('.pinInputs'); // Menggunakan selector yang benar
+      // const idPesanan = pinInputsDiv.getAttribute('data-id-pesanan');
+      // AJAX
+
+
       // NANTI AMBIL DARI ERICKSEN
       var id_pesanan = 16;
       var id_pesanan2;
       // var id_pesanan2 = 2;
+
+      loadData(id_pesanan);
 
       // Membuat traksaksi ketika pertama kali pindah dari halaman booking ke pembayaran
       if (id_pesanan2 != null) {
