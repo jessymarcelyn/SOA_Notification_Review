@@ -69,7 +69,7 @@
           <!-- <i class="fas fa-exclamation-circle fa-5x text-danger"></i> -->
           <h1 class="text-success">Success !</h1>
           <p class="text-success">Thank you for your order! Your payment has been successfully processed.</p>
-          <p class="text-success2">This is your VA: <b><span id="isiOtp"></span></b></p>
+          <p class="text-success2">This is your VA: <b><span id="isiVA"></span></b></p>
 
         </div>
         <div class="modal-footer justify-content-center border-0 mt-4">

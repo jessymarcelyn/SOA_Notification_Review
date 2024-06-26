@@ -450,7 +450,7 @@
             console.log('Full response from server:', response);
 
             if (response.code === 200) {
-              $('#isiOtp').text(response.data.va);
+              $('#isiVA').text(response.data.va);
               $('#successNotifVA').modal('show'); // Show success modal
 
               console.log('BERHASIL');
@@ -480,7 +480,7 @@
             console.log('Full response from server:', response);
             console.log('Payment bakalan sukses');
             if (response.code === 200) {
-              $('#isiOtp').text(response.data.va);
+              $('#isiVA').text(response.data.va);
               $('#successNotifVA').modal('show'); // Show success modal
 
               console.log('BERHASIL');
