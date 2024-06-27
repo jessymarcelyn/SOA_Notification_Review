@@ -197,8 +197,8 @@
                                                 <p>Digital Payment</p>
                                             </div>
                                             <div class="col-6" style="padding-right: 5%; text-align:right">
-                                                <img src="../../icon/ovo.png" class="my-image" style="width:15%;">
-                                                <img src="../../icon/gopay.png" class="my-image" style="width: 25%;">
+                                                <img src="../icon/ovo.png" class="my-image" style="width:15%;">
+                                                <img src="../icon/gopay.png" class="my-image" style="width: 25%;">
                                             </div>
                                         </div>
                                     </button>
