@@ -116,7 +116,7 @@
                 if (!submitPinButton.disabled) {
                     const va = VAInput.value.trim();
                     const pin = Array.from(pinInputs).map(input => input.value.trim()).join('');
-                    const id_pesanan = 98; // Replace with the actual id_pesanan value
+                    // const id_pesanan = 98; // Replace with the actual id_pesanan value
 
                     pay(id_pesanan, va, pin);
                 }

@@ -102,7 +102,7 @@
         </div>
         <div class="modal-footer justify-content-center border-0 mt-4">
           <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
-          <button type="button" class="btn btn-success" data-bs-dismiss="modal" aria-label="Close" onclick="window.location.href='inputPin.php';"> Okay </button>
+          <button type="button" class="btn btn-success" data-bs-dismiss="modal" aria-label="Close"> Okay </button>
         </div>
       </div>
     </div>

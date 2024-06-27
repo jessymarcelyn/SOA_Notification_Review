@@ -3,22 +3,7 @@ session_start();
 require "connect.php";
 
 $id_pesanan = $_GET['id_pesanan'];
-// echo 'ID Pesanan:', $id_transaksi;
 $id_user = $_GET['id_user'];
-
-// Ambil nilai dari URL menggunakan $_SERVER['REQUEST_URI']
-// $url_components = parse_url($_SERVER['REQUEST_URI']);
-// parse_str($url_components['query'], $params);
-
-// $id_pesanan = isset($params['id_pesanan']) ? $params['id_pesanan'] : null;
-// $id_user = isset($params['id_user']) ? $params['id_user'] : null;
-
-// echo "<script>";
-// echo "const idPesanan = " . json_encode($id_pesanan) . ";"; // Simpan nilai di JavaScript
-// echo "const idUser = " . json_encode($id_user) . ";";
-// echo "console.log('ID Pesanan:', idPesanan);";
-// echo "console.log('ID User:', idUser);";
-// echo "</script>";
 
 
 ?>
@@ -191,6 +176,9 @@ $id_user = $_GET['id_user'];
             console.log("Responsen:", response);
             if (response == "true") {
               $('#successNotif').modal('show');
+              setTimeout(function() {
+                  window.location.href = 'notif_page.php'; // Redirect to notif_page.php after 3 seconds
+                }, 3000);
             }
             else {
               const errorMessageElement = document.querySelector('p.text-danger');

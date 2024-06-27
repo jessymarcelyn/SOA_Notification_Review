@@ -126,7 +126,7 @@ if (isset($_POST['id_pesanan']) && isset($_POST['nama']) && isset($_POST['nomer_
                                             'deskripsi' => "Silahkan lakukan pembayaran untuk pesanan $id_pesanan",
                                             'timestamp_masuk' => date('Y-m-d H:i:s'), // Current timestamp
                                             'status' => 0,
-                                            'link' => "../../inputOTP.php"
+                                            'link' => "inputOTP.php"
                                         )));
                                         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
 

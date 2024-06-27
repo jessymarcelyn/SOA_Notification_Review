@@ -30,6 +30,7 @@ function update_status_idpesanan($status, $id_pesanan)
         // update
 
         curl_close($chPut);
+
     }
 }
 
@@ -205,39 +206,6 @@ if (isset($_POST['id_pesanan']) && isset($_POST['pin'])) {
             // Tampilkan respons dari server
             post_notif($id_pesanan);
             update_status_idpesanan('success', $id_pesanan);
-            $putEricData = [
-                'status' => 1
-            ];
-
-            $putEricDataJson = json_encode($putNoputEricDatatifData);
-
-            $urlEric =  "http://localhost:8000/kartu_kredit/transaksi/{$idTrans}/status/failed";
-
-            $chEric = curl_init();
-            // Set cURL options
-            curl_setopt($chEric, CURLOPT_URL, $urlEric);
-            curl_setopt($chEric, CURLOPT_CUSTOMREQUEST, "PUT");
-            curl_setopt($chEric, CURLOPT_POSTFIELDS, $putEricDataJson);
-            curl_setopt($chEric, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($chEric, CURLOPT_HTTPHEADER, [
-                'Content-Type: application/json',
-                'Content-Length: ' . strlen($putEricDataJson)
-            ]);
-
-            $responseEric = curl_exec($chEric);
-
-            // Check for cURL errors
-            if (curl_errno($chEric)) {
-                echo 'Error:' . curl_error($chEric);
-            } else {
-                curl_close($chEric);
-                $resultEric = json_decode($responseEric, true);
-                if ($resultEric === null && json_last_error() !== JSON_ERROR_NONE) {
-                    echo json_encode(['code' => 500, 'message' => 'Error decoding JSON response failed Ericksen']);
-                } else {
-                    echo json_encode($resultGet2);
-                }
-            }
             echo $response;
             // return $response;
         }
@@ -245,6 +213,9 @@ if (isset($_POST['id_pesanan']) && isset($_POST['pin'])) {
         update_status_idpesanan('failed', $id_pesanan);
         echo "Your time has expired";
     }
+
+
 }
 // elseif()
+
 ?>

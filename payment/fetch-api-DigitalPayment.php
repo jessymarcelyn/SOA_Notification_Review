@@ -88,6 +88,7 @@ if (isset($_POST['id_pesanan']) && isset($_POST['method']) && isset($_POST['prov
         // echo "valid $result ok";
         // echo $result;
         $data = array(
+            'id_transaksi' => $result,
             'jenis_pembayaran' => 'Digital Payment',
             'nama_penyedia' => $provider,
             'status' => 'ongoing'
