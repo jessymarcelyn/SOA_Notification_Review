@@ -231,39 +231,38 @@ if (isset($_POST['id_pesanan'])) {
                                                                                 if ($resultS === null && json_last_error() !== JSON_ERROR_NONE) {
                                                                                     echo json_encode(['code' => 500, 'message' => 'Error decoding JSON response failed trans_pembayaran']);
                                                                                 } else {
-                                                                                    $putEricData = [
-                                                                                        'status' => 1
-                                                                                    ];
+                                                                                    // $putEricData = [
+                                                                                    //     'status' => 1
+                                                                                    // ];
 
-                                                                                    $putEricDataJson = json_encode($putNoputEricDatatifData);
+                                                                                    // $putEricDataJson = json_encode($putNoputEricDatatifData);
 
-                                                                                    $urlEric =  "http://localhost:8000/kartu_kredit/transaksi/{$idTrans}/status/failed";
+                                                                                    // $urlEric =  " http://3.226.141.243:8004/{$id_pesanan}";
+                                                                                    // $chEric = curl_init();
+                                                                                    // // Set cURL options
+                                                                                    // curl_setopt($chEric, CURLOPT_URL, $urlEric);
+                                                                                    // curl_setopt($chEric, CURLOPT_CUSTOMREQUEST, "PUT");
+                                                                                    // curl_setopt($chEric, CURLOPT_POSTFIELDS, $putEricDataJson);
+                                                                                    // curl_setopt($chEric, CURLOPT_RETURNTRANSFER, true);
+                                                                                    // curl_setopt($chEric, CURLOPT_HTTPHEADER, [
+                                                                                    //     'Content-Type: application/json',
+                                                                                    //     'Content-Length: ' . strlen($putEricDataJson)
+                                                                                    // ]);
 
-                                                                                    $chEric = curl_init();
-                                                                                    // Set cURL options
-                                                                                    curl_setopt($chEric, CURLOPT_URL, $urlEric);
-                                                                                    curl_setopt($chEric, CURLOPT_CUSTOMREQUEST, "PUT");
-                                                                                    curl_setopt($chEric, CURLOPT_POSTFIELDS, $putEricDataJson);
-                                                                                    curl_setopt($chEric, CURLOPT_RETURNTRANSFER, true);
-                                                                                    curl_setopt($chEric, CURLOPT_HTTPHEADER, [
-                                                                                        'Content-Type: application/json',
-                                                                                        'Content-Length: ' . strlen($putEricDataJson)
-                                                                                    ]);
+                                                                                    // $responseEric = curl_exec($chEric);
 
-                                                                                    $responseEric = curl_exec($chEric);
-
-                                                                                    // Check for cURL errors
-                                                                                    if (curl_errno($chEric)) {
-                                                                                        echo 'Error:' . curl_error($chEric);
-                                                                                    } else {
-                                                                                        curl_close($chEric);
-                                                                                        $resultEric = json_decode($responseEric, true);
-                                                                                        if ($resultEric === null && json_last_error() !== JSON_ERROR_NONE) {
-                                                                                            echo json_encode(['code' => 500, 'message' => 'Error decoding JSON response failed Ericksen']);
-                                                                                        } else {
-                                                                                            echo json_encode($resultGet2);
-                                                                                        }
-                                                                                    }
+                                                                                    // // Check for cURL errors
+                                                                                    // if (curl_errno($chEric)) {
+                                                                                    //     echo 'Error:' . curl_error($chEric);
+                                                                                    // } else {
+                                                                                    //     curl_close($chEric);
+                                                                                    //     $resultEric = json_decode($responseEric, true);
+                                                                                    //     if ($resultEric === null && json_last_error() !== JSON_ERROR_NONE) {
+                                                                                    //         echo json_encode(['code' => 500, 'message' => 'Error decoding JSON response failed Ericksen']);
+                                                                                    //     } else {
+                                                                                    //         echo json_encode($resultGet2);
+                                                                                    //     }
+                                                                                    // }
                                                                                 }
                                                                             }
                                                                         }
