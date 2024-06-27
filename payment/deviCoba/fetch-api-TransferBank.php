@@ -22,7 +22,7 @@ if (isset($_POST['bank']) && isset($_POST['id_pesanan'])) {
 
     if ($_POST['bank'] == 'BCA') {
 
-        $url = "http://127.0.0.1:5672/transBCA";
+        $url = "http://localhost:8000/transBCA";
         $postData = array(
             "no_telp" => $no_telp,
             "nominal" => $nominal
@@ -55,7 +55,7 @@ if (isset($_POST['bank']) && isset($_POST['id_pesanan'])) {
             } else {
                 echo json_encode($result);
                 //UPDATE Transaksi pembayaran
-                // if ($result['code'] == 200) {
+                if ($result['code'] == 200) {
                     // Construct the PUT request data
                     $putData = [
                         'id_transaksi' => $result['data']['id_transaksi'],
@@ -135,7 +135,7 @@ if (isset($_POST['bank']) && isset($_POST['id_pesanan'])) {
                 }
             }
         }
-    // }
+    }
 
     if ($_POST['bank'] == 'Mandiri') {
 
@@ -172,7 +172,7 @@ if (isset($_POST['bank']) && isset($_POST['id_pesanan'])) {
             } else {
                 echo json_encode($result);
                 //UPDATE Transaksi pembayaran
-                // if ($result['code'] == 200) {
+                if ($result['code'] == 200) {
                     // Construct the PUT request data
                     $putData = [
                         'id_transaksi' => $result['data']['id_transaksi'],
@@ -253,7 +253,7 @@ if (isset($_POST['bank']) && isset($_POST['id_pesanan'])) {
             }
         }
     }
-// }
+}
 
 #Untuk cek id_pesanan dan post di tabel transaksi_pembayaran dengan status initial
 else if (isset($_POST['id_pesanan'])) {

@@ -22,7 +22,7 @@ if (isset($_POST['bank']) && isset($_POST['id_pesanan'])) {
 
     if ($_POST['bank'] == 'BCA') {
 
-        $url = "http://@127.0.0.1:5672/transBCA";
+        $url = "http://localhost:8000/transBCA";
         $postData = array(
             "no_telp" => $no_telp,
             "nominal" => $nominal
@@ -103,12 +103,12 @@ if (isset($_POST['bank']) && isset($_POST['id_pesanan'])) {
                                 curl_setopt($chPost, CURLOPT_POSTFIELDS, json_encode(array(
                                     'id_user' => 1,
                                     'id_pesanan' => $id_pesanan,
-                                    'tipe_notif' => 'keuangan',
+                                    'tipe_notif' => 'pembayaran',
                                     'judul' => 'VA',
                                     'deskripsi' => "Silahkan lakukan pembayaran untuk pesanan $id_pesanan dengan VA ini {$result['data']['va']}",
                                     'timestamp_masuk' => date('Y-m-d H:i:s'), // Current timestamp
                                     'status' => 0,
-                                    'link' => "../inputVA.php"
+                                    'link' => "inputVA.php"
                                 )));
                                 curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
 
@@ -172,7 +172,7 @@ if (isset($_POST['bank']) && isset($_POST['id_pesanan'])) {
             } else {
                 echo json_encode($result);
                 //UPDATE Transaksi pembayaran
-                // if ($result['code'] == 200) {
+                if ($result['code'] == 200) {
                     // Construct the PUT request data
                     $putData = [
                         'id_transaksi' => $result['data']['id_transaksi'],
@@ -220,7 +220,7 @@ if (isset($_POST['bank']) && isset($_POST['id_pesanan'])) {
                                 curl_setopt($chPost, CURLOPT_POSTFIELDS, json_encode(array(
                                     'id_user' => 1,
                                     'id_pesanan' => $id_pesanan,
-                                    'tipe_notif' => 'info',
+                                    'tipe_notif' => 'pembayaran',
                                     'judul' => 'VA',
                                     'deskripsi' => "Silahkan lakukan pembayaran untuk pesanan $id_pesanan dengan VA ini {$result['data']['va']}",
                                     'timestamp_masuk' => date('Y-m-d H:i:s'), // Current timestamp
@@ -253,7 +253,7 @@ if (isset($_POST['bank']) && isset($_POST['id_pesanan'])) {
             }
         }
     }
-// }
+}
 
 #Untuk cek id_pesanan dan post di tabel transaksi_pembayaran dengan status initial
 else if (isset($_POST['id_pesanan'])) {

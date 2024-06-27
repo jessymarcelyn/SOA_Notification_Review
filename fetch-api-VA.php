@@ -237,7 +237,8 @@ if (isset($_POST['id_pesanan'])) {
 
                                                                                     // $putEricDataJson = json_encode($putNoputEricDatatifData);
 
-                                                                                    // $urlEric =  " http://3.226.141.243:8004/{$id_pesanan}";
+                                                                                    // $urlEric =  "http://localhost:8000/kartu_kredit/transaksi/{$idTrans}/status/failed";
+
                                                                                     // $chEric = curl_init();
                                                                                     // // Set cURL options
                                                                                     // curl_setopt($chEric, CURLOPT_URL, $urlEric);
@@ -260,7 +261,7 @@ if (isset($_POST['id_pesanan'])) {
                                                                                     //     if ($resultEric === null && json_last_error() !== JSON_ERROR_NONE) {
                                                                                     //         echo json_encode(['code' => 500, 'message' => 'Error decoding JSON response failed Ericksen']);
                                                                                     //     } else {
-                                                                                    //         echo json_encode($resultGet2);
+                                                                                            echo json_encode($resultGet2);
                                                                                     //     }
                                                                                     // }
                                                                                 }

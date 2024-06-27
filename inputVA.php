@@ -1,3 +1,14 @@
+<?php
+session_start();
+require "connect.php";
+
+$id_pesanan = $_GET['id_pesanan'];
+$id_user = $_GET['id_user'];
+
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -27,7 +38,8 @@
 </head>
 
 <body>
-    <div class="container-fluid full-screen">
+<?php include 'notif_modal.php'; ?>
+    <div class="container-fluid full-screen pinInputs" data-id-pesanan="<?php echo htmlspecialchars($id_pesanan); ?>">
         <div class="row">
             <div class="content">
                 <h2>Virtual Account Number</h2>
@@ -76,11 +88,13 @@
     </div>
 
     <script>
-        $(document).ready(function() {
-            // You might need to set id_pesanan dynamically
-            var id_pesanan = 98; // Example static value
-            console.log("id_pesanan: "+ id_pesanan);
-        });
+        const pinInputsDiv = document.querySelector('.pinInputs'); // Menggunakan selector yang benar
+        const idPesanan = pinInputsDiv.getAttribute('data-id-pesanan');
+        // $(document).ready(function() {
+        //     // You might need to set id_pesanan dynamically
+        //     var id_pesanan = 98; // Example static value
+        //     console.log("id_pesanan: "+ id_pesanan);
+        // });
 
         document.addEventListener('DOMContentLoaded', () => {
             const VAInput = document.getElementById('VAInput');
@@ -118,7 +132,7 @@
                     const pin = Array.from(pinInputs).map(input => input.value.trim()).join('');
                     // const id_pesanan = 98; // Replace with the actual id_pesanan value
 
-                    pay(id_pesanan, va, pin);
+                    pay(idPesanan, va, pin);
                 }
             };
 
@@ -173,10 +187,15 @@
                 success: function(response) {
                     console.log('Response:', response);
                     console.log('Berhasil');
-                    if (response.code === 200) {
+                    if (response === "Pembayaran Berhasil") {
                         console.log("bisa");
-                    }else{
+                        $('#successNotif').modal('show');
+                        setTimeout(function() {
+                            window.location.href = 'notif_page.php'; // Redirect to notif_page.php after 3 seconds
+                        }, 3000);
+                    } else {
                         console.log("gagal bayar?")
+                        $('#failedNotif').modal('show');
                     }
                 },
                 error: function(xhr, status, error) {
