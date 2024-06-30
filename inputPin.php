@@ -168,9 +168,9 @@ $id_user = $_GET['id_user'];
             console.log("Responsen:", response);
             if (response == "true") {
               $('#successNotif').modal('show');
-              // setTimeout(function() {
-              //   window.location.href = 'notif_page.php'; // Redirect to notif_page.php after 3 seconds
-              // }, 3000);
+              setTimeout(function() {
+                window.location.href = 'notif_page.php'; // Redirect to notif_page.php after 3 seconds
+              }, 3000);
             } else {
               const errorMessageElement = document.querySelector('p.text-danger');
               // Ganti teks elemen tersebut
@@ -178,9 +178,9 @@ $id_user = $_GET['id_user'];
 
 
               $('#failedNotif').modal('show');
-              // setTimeout(function() {
-              //   window.location.href = 'notif_page.php'; // Redirect to notif_page.php after 3 seconds
-              // }, 3000);
+              setTimeout(function() {
+                window.location.href = 'notif_page.php'; // Redirect to notif_page.php after 3 seconds
+              }, 3000);
 
             }
           },
