@@ -36,6 +36,7 @@ class GatewayService:
         if exist:
             try:
                 data = json.loads(request.get_data(as_text=True))
+                # timestamp = data.get('timestamp')
                 jenis_pembayaran = data.get('jenis')
                 nama_penyedia = data.get('nama_penyedia')
                 status = data.get('status')
@@ -83,6 +84,7 @@ class GatewayService:
         id_transaksi = data.get('id_transaksi')
         jenis_pembayaran = data.get('jenis_pembayaran') 
         nama_penyedia = data.get('nama_penyedia')
+    
         transaksi = self.TransP_rpc.update_pembayaran(id_pesanan, id_transaksi, jenis_pembayaran, nama_penyedia)
         if transaksi :
             return transaksi['code'],json.dumps(transaksi['data'])
@@ -241,6 +243,7 @@ class GatewayService:
         if exist:
             va += '122'
             va  += noTelp
+            # va.append(str(noTelp))
             return Response(json.dumps(va), status=200, mimetype='application/json')
         else:
             return Response(json.dumps('No Bank Account is found with this phone number'), status=404, mimetype='application/json')
@@ -320,6 +323,8 @@ class GatewayService:
         status = "succes"
         if exist :
             api_url = f'http://localhost:8000/Tpembayaran/pesanan/{idTrans}/status/{status}'
+            # api_url = f'http://localhost:8000/Tpembayaran/pesanan/{idTrans}'
+            # api_url = f'http://127.0.0.1:8000/Tpembayaran/pesanan/{idTrans}'
             payload = {
                 'jenis': 'Transfer Bank',
                 'nama_penyedia': 'BCA',
@@ -424,9 +429,10 @@ class GatewayService:
         status = "success"
         if exist :
             api_url = f'http://localhost:8000/Tpembayaran/pesanan/{idTrans}/status/{status}'
+            # api_url = f'http://localhost:8000/Tpembayaran/pesanan/{idTrans}'
             payload = {
                 'jenis': 'Transfer Bank',
-                'nama_penyedia': 'Mandiri',
+                'nama_penyedia': 'BCA',
                 'status' : 'success'
             }       
             response = requests.put(api_url, json=payload)

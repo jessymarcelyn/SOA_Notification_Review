@@ -203,8 +203,10 @@ if (isset($_POST['id_pesanan']) && isset($_POST['pin'])) {
             // Tutup cURL
             curl_close($ch);
             // Tampilkan respons dari server
-            post_notif($id_pesanan);
-            update_status_idpesanan('success', $id_pesanan);
+            if($response == "true"){
+                post_notif($id_pesanan);
+                update_status_idpesanan('success', $id_pesanan);
+            }
             echo $response;
             // return $response;
         }
