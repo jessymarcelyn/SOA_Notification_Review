@@ -4,6 +4,37 @@ if (!isset($_SESSION)) {
     session_start();
 }
 
+function deleteLink_notif($id_pesanan)
+{
+
+    $putNotifData = [
+        'judul' => 'Lakukan Pembayaran'
+    ];
+
+    $putNotifDataJson = json_encode($putNotifData);
+
+    $putNotifurl = "http://localhost:8000/notif/pesanan/{$id_pesanan}";
+
+    $chPutNotif = curl_init();
+
+    // Set cURL options
+    curl_setopt($chPutNotif, CURLOPT_URL, $putNotifurl);
+    curl_setopt($chPutNotif, CURLOPT_CUSTOMREQUEST, "PUT");
+    curl_setopt($chPutNotif, CURLOPT_POSTFIELDS, $putNotifDataJson);
+    curl_setopt($chPutNotif, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($chPutNotif, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json',
+        'Content-Length: ' . strlen($putNotifDataJson)
+    ]);
+
+    $putNotifResponse = curl_exec($chPutNotif);
+    if (curl_errno($chPutNotif)) {
+        echo json_encode(['code' => 500, 'message' => 'Error executing PUT request: ' . curl_error($chPutNotif)]);
+    } else {
+        curl_close($chPutNotif);
+    }
+
+}
 function update_status_idpesanan($status, $id_pesanan)
 {
     $putUrl = "http://localhost:8000/Tpembayaran/pesanan/$id_pesanan/status/$status";
@@ -129,6 +160,7 @@ function getIDTransaksi_NamaPenyedia($id_pesanan)
                     // The timestamp is older than 2 minutes
                     // echo "The timestamp is older than 2 minutes.";
                     $data = false;
+                    deleteLink_notif($id_pesanan);
                 } else {
                     $data = array(
                         'id_transaksi' => $row['id_transaksi'],
@@ -206,6 +238,7 @@ if (isset($_POST['id_pesanan']) && isset($_POST['pin'])) {
             if($response == "true"){
                 post_notif($id_pesanan);
                 update_status_idpesanan('success', $id_pesanan);
+                deleteLink_notif($id_pesanan);
             }
             echo $response;
             // return $response;
