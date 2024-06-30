@@ -38,7 +38,7 @@ $id_user = $_GET['id_user'];
 </head>
 
 <body>
-<?php include 'notif_modal.php'; ?>
+    <?php include 'notif_modal.php'; ?>
     <div class="container-fluid full-screen pinInputs" data-id-pesanan="<?php echo htmlspecialchars($id_pesanan); ?>">
         <div class="row">
             <div class="content">
@@ -187,7 +187,15 @@ $id_user = $_GET['id_user'];
                 success: function(response) {
                     console.log('Response:', response);
                     console.log('Berhasil');
-                    if (response === "Pembayaran Berhasil") {
+                    if (response === 2) {
+                        console.log("expired");
+                        $('#error-message').text("We're sorry, but your payment request has expired. Please initiate a new transaction to complete your payment.");
+                        $('#failedNotif').modal('show');
+                        setTimeout(function() {
+                            window.location.href = 'notif_page.php'; // Redirect to notif_page.php after 3 seconds
+                        }, 3000);
+                    }
+                    else if (response.data == true) {
                         console.log("bisa");
                         $('#successNotif').modal('show');
                         setTimeout(function() {

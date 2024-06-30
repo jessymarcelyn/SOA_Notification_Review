@@ -164,8 +164,7 @@ if (isset($_POST['id_pesanan']) && isset($_POST['pin'])) {
 
     $data = getIDTransaksi_NamaPenyedia($id_pesanan);
 
-
-    if ($data != false) {
+    if ($data  != false) {
         $nama_penyedia = strtolower($data['nama_penyedia']);
 
         $id_transaksi = $data['id_transaksi'];

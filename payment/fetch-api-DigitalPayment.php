@@ -75,6 +75,8 @@ function checkNumber($number, $provider, $nominal)
 
 
 if (isset($_POST['id_pesanan']) && isset($_POST['method']) && isset($_POST['provider']) && isset($_POST['mobileNumber']) && isset($_POST['nominal'])) {
+    date_default_timezone_set('Asia/Jakarta');
+    
     $id_pesanan = htmlspecialchars($_POST['id_pesanan']);
     $provider = htmlspecialchars($_POST['provider']);
     $mobileNumber = htmlspecialchars($_POST['mobileNumber']);

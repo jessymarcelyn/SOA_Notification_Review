@@ -152,7 +152,9 @@ class DatabaseWrapper:
         self.connection.commit()
         cursor.close()
         return {"status": "Status updated to success. Payment is already paid."}
-
+    
+    def __del__(self):
+       self.connection.close()
 class Database(DependencyProvider):
 
     connection_pool = None

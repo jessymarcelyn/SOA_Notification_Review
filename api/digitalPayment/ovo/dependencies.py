@@ -183,6 +183,9 @@ class DatabaseWrapper:
             else:
                 return timestamp
         return None# Return only timestamp
+    
+    def __del__(self):
+       self.connection.close()
 
 
 

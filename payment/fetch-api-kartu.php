@@ -10,6 +10,7 @@ error_log("HALO1");
 header('Content-Type: application/json');
 
 if (isset($_POST['id_pesanan']) && isset($_POST['nama']) && isset($_POST['nomer_kartu']) && isset($_POST['expired_month']) && isset($_POST['expired_year']) && isset($_POST['cvv']) && isset($_POST['nominal'])) {
+    date_default_timezone_set('Asia/Jakarta');
     $id_pesanan = htmlspecialchars($_POST['id_pesanan']);
     $nama = htmlspecialchars($_POST['nama']);
     $nomer_kartu = htmlspecialchars($_POST['nomer_kartu']);
@@ -161,9 +162,37 @@ if (isset($_POST['id_pesanan']) && isset($_POST['nama']) && isset($_POST['nomer_
     $id_pesanan = htmlspecialchars($_POST['id_pesanan']);
     $id_pesanan2 = htmlspecialchars($_POST['id_pesanan2']);
 
-    // Hardcoded nominal for example purposes
-    $nominal = 200000;
-
+    $id_booking = $_POST['id_pesanan'];
+    $url = "http://3.226.141.243:8004/bookingDetails/" . $id_booking;
+    
+    // Inisialisasi cURL
+    $ch = curl_init();
+    
+    // Setel opsi cURL
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    
+    // Eksekusi cURL dan ambil hasilnya
+    $response = curl_exec($ch);
+    
+    // Periksa kesalahan cURL
+    if (curl_errno($ch)) {
+        echo 'Error:' . curl_error($ch);
+        $nominal = 100000; // Default value in case of cURL error
+    } else {
+        // Decode response JSON menjadi array asosiatif
+        $result = json_decode($response, true);
+    
+        if (isset($result['booking details'])) {
+            $resultData = $result['booking details'];
+            $nominal = $resultData['total_price'];
+        } else {
+            // Hardcode nominal if booking details not found
+            $nominal = 200000;
+        }
+    }
+    curl_close($ch);
+    
     // URL endpoint API
     $url = "http://localhost:8000/Tpembayaran";
 
@@ -205,10 +234,39 @@ if (isset($_POST['id_pesanan']) && isset($_POST['nama']) && isset($_POST['nomer_
 } else if (isset($_POST['id_pesanan'])) {
     $id_pesanan = htmlspecialchars($_POST['id_pesanan']);
 
-    // Hardcoded nominal for example purposes
-    $nominal = 100000;
 
-    // URL endpoint API
+    $id_booking = $_POST['id_pesanan'];
+    $url = "http://3.226.141.243:8004/bookingDetails/" . $id_booking;
+    
+    // Inisialisasi cURL
+    $ch = curl_init();
+    
+    // Setel opsi cURL
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    
+    // Eksekusi cURL dan ambil hasilnya
+    $response = curl_exec($ch);
+    
+    // Periksa kesalahan cURL
+    if (curl_errno($ch)) {
+        echo 'Error:' . curl_error($ch);
+        $nominal = 100000; // Default value in case of cURL error
+    } else {
+        // Decode response JSON menjadi array asosiatif
+        $result = json_decode($response, true);
+    
+        if (isset($result['booking details'])) {
+            $resultData = $result['booking details'];
+            $nominal = $resultData['total_price'];
+        } else {
+            // Hardcode nominal if booking details not found
+            $nominal = 100000;
+        }
+    }
+
+    curl_close($ch);
+
     $url = "http://localhost:8000/Tpembayaran";
 
     // Initialize cURL
