@@ -161,19 +161,12 @@ class DatabaseWrapper:
                     self.set_failed(idTrans)
                     print("gagal melebihi 2 menit")
                     return False
-                    # return {'status': 'failed'}
                 else:
                     print("masih bisa bayar <2 menit")
                     return True
-                    # return {'status': 'Still Waiting For Payment'}
 
     # Add Transaksi into tabel transaksi transfer bank
     def create_trans(self, no_telp, nominal, va):
-        print("masuk2")
-        print("no_telp2 : ", no_telp)
-        print("nominal2 : ", nominal)
-        print("va2 : ", va)
-        
         status = 'ongoing'
         try:
             cursor = self.connection.cursor(dictionary=True)
@@ -193,7 +186,6 @@ class DatabaseWrapper:
             """
             cursor.execute(sql_select_va, (id_transaksi,))
             result = cursor.fetchone()
-            
             if result:
                 va_from_db = result['va']
                 cursor.close()
@@ -201,7 +193,6 @@ class DatabaseWrapper:
             else:
                 cursor.close()
                 return {"error": "Failed to fetch VA from database"}
-        
         except Exception as e:
             return {"error": str(e)}
 
