@@ -16,6 +16,8 @@ if (isset($_POST['bank']) && isset($_POST['id_pesanan'])) {
     // console.log("BANK");
     // if(isset($_POST['id_pesanan'])){
 
+    date_default_timezone_set('Asia/Jakarta');
+    
     $bank = htmlspecialchars($_POST['bank']);
     $id_pesanan = htmlspecialchars($_POST['id_pesanan']);
     // $nominal = htmlspecialchars($_POST['nominal']); #sementara gk pake ini tapi pake hardcode an dr atas
@@ -225,7 +227,7 @@ if (isset($_POST['bank']) && isset($_POST['id_pesanan'])) {
                                     'deskripsi' => "Silahkan lakukan pembayaran untuk pesanan $id_pesanan dengan VA ini {$result['data']['va']}",
                                     'timestamp_masuk' => date('Y-m-d H:i:s'), // Current timestamp
                                     'status' => 0,
-                                    'link' => "../inputVA.php"
+                                    'link' => "inputVA.php"
                                 )));
                                 curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
 

@@ -30,12 +30,12 @@ class BankBCAService:
         if check is True:
              return {
             'code' : 200,
-            'data' : check
+            'data' : True
         }
         else:
             return {
                 'code' : 404,
-                'data' : check
+                'data' : False
             }
         #     return True
         # else:

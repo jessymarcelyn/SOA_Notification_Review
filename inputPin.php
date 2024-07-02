@@ -16,8 +16,7 @@ $id_user = $_GET['id_user'];
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Booking.com</title>
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 
   <!-- Import jquery cdn -->
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -25,19 +24,13 @@ $id_user = $_GET['id_user'];
   <link rel='icon' href='images/logo.png' type='images/logo.png'>
 
   <!-- Bootstrap CSS  -->
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
-    integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
-    integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
-    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-    integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet" href="css/inputPin.css">
 
@@ -91,7 +84,6 @@ $id_user = $_GET['id_user'];
 
 
 <script>
-
   const pinInputsDiv = document.querySelector('.pinInputs'); // Menggunakan selector yang benar
   const idPesanan = pinInputsDiv.getAttribute('data-id-pesanan');
   // console.log('ID Pesanan:', idPesanan);
@@ -172,25 +164,27 @@ $id_user = $_GET['id_user'];
             // id_transaksi: 2,
             pin: hashed,
           },
-          success: function (response) {
+          success: function(response) {
             console.log("Responsen:", response);
             if (response == "true") {
               $('#successNotif').modal('show');
               setTimeout(function() {
-                  window.location.href = 'notif_page.php'; // Redirect to notif_page.php after 3 seconds
-                }, 3000);
-            }
-            else {
+                window.location.href = 'notif_page.php'; // Redirect to notif_page.php after 3 seconds
+              }, 3000);
+            } else {
               const errorMessageElement = document.querySelector('p.text-danger');
               // Ganti teks elemen tersebut
-              errorMessageElement.textContent = response;
-              
+              // errorMessageElement.textContent = response;
+
 
               $('#failedNotif').modal('show');
+              setTimeout(function() {
+                window.location.href = 'notif_page.php'; // Redirect to notif_page.php after 3 seconds
+              }, 3000);
 
             }
           },
-          error: function (xhr, status, error) {
+          error: function(xhr, status, error) {
             console.error('AJAX Error:', error); // Handle AJAX errors
           }
         });
@@ -248,5 +242,4 @@ $id_user = $_GET['id_user'];
     submitPinButton.addEventListener('click', submitPin);
 
   });
-
 </script>

@@ -291,7 +291,7 @@ require "connect.php";
 
             // AJAX
             // NANTI AMBIL DARI ERICKSEN
-            var id_pesanan = 19;
+            var id_pesanan = 23;
             var id_pesanan2;
             // var id_pesanan2 = 2;
 

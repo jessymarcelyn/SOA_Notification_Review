@@ -72,8 +72,9 @@ class DatabaseWrapper:
         
         finally:
             cursor.close()
-
-        if stored_pin and stored_pin == hash_pin:
+        
+        print("storedpin: " + str(stored_pin))
+        if stored_pin == hash_pin:
             print("pin sama dengan input")
             return True
         else:
@@ -205,7 +206,10 @@ class DatabaseWrapper:
         cursor.close()
         print("status di db success")
         return {'status': "Status updated to success. Payment is already paid."}
-
+    
+    def __del__(self):
+       self.connection.close()
+       
 class Database(DependencyProvider):
 
     connection_pool = None

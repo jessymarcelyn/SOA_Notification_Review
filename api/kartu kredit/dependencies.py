@@ -432,8 +432,9 @@ class DatabaseWrapper:
 
         finally:
             cursor.close()
-
-
+    
+    def __del__(self):
+       self.connection.close()
     
 class Database(DependencyProvider):
     encryption_key = b'\x01\x23\x45\x67\x89\xab\xcd\xef\x01\x23\x45\x67\x89\xab\xcd\xef\x01\x23\x45\x67\x89\xab\xcd\xef\x01\x23\x45\x67\x89\xab\xcd\xef'
